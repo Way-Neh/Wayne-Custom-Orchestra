@@ -3,7 +3,7 @@
   "activeMode": "Wayne Custom 2.0",
   "modes": {
     "Wayne Custom 2.0": {
-      "description": "Adaptive multi-agent swarm with dynamic task sizing (S_task), criteria-mapped adversarial QA, machine blackboard contracts, and zero direct labor for Tier 3.",
+      "description": "Adaptive multi-agent swarm integrating Kye Gomez Swarms topologies (Hierarchical Swarm, LLM Council / Consensus, Swarm Router, Mixture of Agents, Bounded Cyclic Self-Healing), dynamic task sizing (S_task), criteria-mapped adversarial QA, machine blackboard contracts, and zero direct labor for Tier 3.",
       "taskSizing": {
         "tier1": "Direct Solo (S_task <= 5)",
         "tier2": "Targeted Specialist (S_task 6-8)",
@@ -15,6 +15,17 @@
         "scheduled": false
       },
       "blackboardEnabled": true,
+      "swarmTopologies": [
+        "Hierarchical Swarm",
+        "LLM Council / Consensus",
+        "Swarm Router",
+        "Mixture of Agents (MoA)",
+        "Cyclic Self-Healing"
+      ],
+      "cyclicSelfHealing": {
+        "enabled": true,
+        "maxIterations": 3
+      },
       "corePillars": [
         "The Orchestrator",
         "pm-agent",
@@ -28,7 +39,278 @@
         "analytics-agent",
         "image-agent",
         "docs-agent"
-      ]
+      ],
+      "agentSkillBoundaries": {
+        "The Orchestrator": {
+          "assignedSkills": [
+            "dispatching-parallel-agents",
+            "brainstorming"
+          ],
+          "excludedSkills": [
+            "all direct implementation",
+            "UI styling",
+            "code editing"
+          ]
+        },
+        "pm-agent": {
+          "assignedSkills": [
+            "writing-plans",
+            "brainstorming"
+          ],
+          "excludedSkills": [
+            "code editing",
+            "UI styling",
+            "debugging"
+          ]
+        },
+        "design-agent": {
+          "assignedSkills": [
+            "ui-ux-pro-max (tokens only)",
+            "design-system"
+          ],
+          "excludedSkills": [
+            "animate",
+            "animate-expo",
+            "code implementation"
+          ]
+        },
+        "architect-agent": {
+          "assignedSkills": [
+            "architecture & schema design",
+            "api contracts"
+          ],
+          "excludedSkills": [
+            "frontend CSS",
+            "UI styling",
+            "browser test tools"
+          ]
+        },
+        "builder-agent": {
+          "assignedSkills": [
+            "modern-web-guidance",
+            "animate",
+            "systematic-debugging",
+            "ui-styling"
+          ],
+          "excludedSkills": [
+            "brand",
+            "slides",
+            "canvas-design",
+            "open-ended design discovery"
+          ]
+        },
+        "qa-adversary-agent": {
+          "assignedSkills": [
+            "a11y-debugging",
+            "chrome-devtools",
+            "verification-before-completion"
+          ],
+          "excludedSkills": [
+            "file writing",
+            "creative design",
+            "feature implementation"
+          ]
+        },
+        "seo-agent": {
+          "assignedSkills": [
+            "search console",
+            "metadata validators",
+            "json-ld"
+          ],
+          "excludedSkills": [
+            "UI layout",
+            "CSS",
+            "backend database"
+          ]
+        },
+        "analytics-agent": {
+          "assignedSkills": [
+            "GA4 api",
+            "sql adapters",
+            "event taxonomy"
+          ],
+          "excludedSkills": [
+            "visual design",
+            "application code"
+          ]
+        },
+        "image-agent": {
+          "assignedSkills": [
+            "search_web",
+            "generate_image",
+            "banner-design"
+          ],
+          "excludedSkills": [
+            "code editing",
+            "refactoring"
+          ]
+        },
+        "docs-agent": {
+          "assignedSkills": [
+            "markdown documentation",
+            "api markdown"
+          ],
+          "excludedSkills": [
+            "heavy runtime skills",
+            "execution tools"
+          ]
+        }
+      }
+    },
+    "Wayne Custom 3.0: Swarms Enhanced": {
+      "description": "Dedicated Swarms-enhanced orchestrator mode alias featuring full Kye Gomez Swarms topologies, consensus council gates, swarm router, and bounded cyclic self-healing.",
+      "taskSizing": {
+        "tier1": "Direct Solo (S_task <= 5)",
+        "tier2": "Targeted Specialist (S_task 6-8)",
+        "tier3": "Full Swarm (S_task >= 9)"
+      },
+      "zeroDirectLaborTier3": true,
+      "approvalGate": {
+        "interactive": true,
+        "scheduled": false
+      },
+      "blackboardEnabled": true,
+      "swarmTopologies": [
+        "Hierarchical Swarm",
+        "LLM Council / Consensus",
+        "Swarm Router",
+        "Mixture of Agents (MoA)",
+        "Cyclic Self-Healing"
+      ],
+      "cyclicSelfHealing": {
+        "enabled": true,
+        "maxIterations": 3
+      },
+      "corePillars": [
+        "The Orchestrator",
+        "pm-agent",
+        "design-agent",
+        "architect-agent",
+        "builder-agent",
+        "qa-adversary-agent"
+      ],
+      "dynamicPlugins": [
+        "seo-agent",
+        "analytics-agent",
+        "image-agent",
+        "docs-agent"
+      ],
+      "agentSkillBoundaries": {
+        "The Orchestrator": {
+          "assignedSkills": [
+            "dispatching-parallel-agents",
+            "brainstorming"
+          ],
+          "excludedSkills": [
+            "all direct implementation",
+            "UI styling",
+            "code editing"
+          ]
+        },
+        "pm-agent": {
+          "assignedSkills": [
+            "writing-plans",
+            "brainstorming"
+          ],
+          "excludedSkills": [
+            "code editing",
+            "UI styling",
+            "debugging"
+          ]
+        },
+        "design-agent": {
+          "assignedSkills": [
+            "ui-ux-pro-max (tokens only)",
+            "design-system"
+          ],
+          "excludedSkills": [
+            "animate",
+            "animate-expo",
+            "code implementation"
+          ]
+        },
+        "architect-agent": {
+          "assignedSkills": [
+            "architecture & schema design",
+            "api contracts"
+          ],
+          "excludedSkills": [
+            "frontend CSS",
+            "UI styling",
+            "browser test tools"
+          ]
+        },
+        "builder-agent": {
+          "assignedSkills": [
+            "modern-web-guidance",
+            "animate",
+            "systematic-debugging",
+            "ui-styling"
+          ],
+          "excludedSkills": [
+            "brand",
+            "slides",
+            "canvas-design",
+            "open-ended design discovery"
+          ]
+        },
+        "qa-adversary-agent": {
+          "assignedSkills": [
+            "a11y-debugging",
+            "chrome-devtools",
+            "verification-before-completion"
+          ],
+          "excludedSkills": [
+            "file writing",
+            "creative design",
+            "feature implementation"
+          ]
+        },
+        "seo-agent": {
+          "assignedSkills": [
+            "search console",
+            "metadata validators",
+            "json-ld"
+          ],
+          "excludedSkills": [
+            "UI layout",
+            "CSS",
+            "backend database"
+          ]
+        },
+        "analytics-agent": {
+          "assignedSkills": [
+            "GA4 api",
+            "sql adapters",
+            "event taxonomy"
+          ],
+          "excludedSkills": [
+            "visual design",
+            "application code"
+          ]
+        },
+        "image-agent": {
+          "assignedSkills": [
+            "search_web",
+            "generate_image",
+            "banner-design"
+          ],
+          "excludedSkills": [
+            "code editing",
+            "refactoring"
+          ]
+        },
+        "docs-agent": {
+          "assignedSkills": [
+            "markdown documentation",
+            "api markdown"
+          ],
+          "excludedSkills": [
+            "heavy runtime skills",
+            "execution tools"
+          ]
+        }
+      }
     },
     "Direct Solo": {
       "description": "Direct single-agent pair programming mode without subagent overhead.",

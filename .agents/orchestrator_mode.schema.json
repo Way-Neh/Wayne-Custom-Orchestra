@@ -13,7 +13,16 @@
         "type": "object",
         "properties": {
           "description": { "type": "string" },
+          "taskSizing": {
+            "type": "object",
+            "properties": {
+              "tier1": { "type": "string" },
+              "tier2": { "type": "string" },
+              "tier3": { "type": "string" }
+            }
+          },
           "zeroDirectLabor": { "type": "boolean" },
+          "zeroDirectLaborTier3": { "type": "boolean" },
           "approvalGate": {
             "type": "object",
             "properties": {
@@ -22,6 +31,42 @@
             }
           },
           "blackboardEnabled": { "type": "boolean" },
+          "swarmTopologies": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "cyclicSelfHealing": {
+            "type": "object",
+            "properties": {
+              "enabled": { "type": "boolean" },
+              "maxIterations": { "type": "integer" }
+            }
+          },
+          "corePillars": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "dynamicPlugins": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "agentSkillBoundaries": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "assignedSkills": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "excludedSkills": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                }
+              },
+              "required": ["assignedSkills", "excludedSkills"]
+            }
+          },
           "subagents": {
             "type": "array",
             "items": { "type": "string" }
