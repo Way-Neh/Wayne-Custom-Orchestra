@@ -1,0 +1,54 @@
+{
+  "$schema": "./orchestrator_mode.schema.json",
+  "activeMode": "Wayne Custom 2.0",
+  "modes": {
+    "Wayne Custom 2.0": {
+      "description": "Adaptive multi-agent swarm with dynamic task sizing (S_task), criteria-mapped adversarial QA, machine blackboard contracts, and zero direct labor for Tier 3.",
+      "taskSizing": {
+        "tier1": "Direct Solo (S_task <= 5)",
+        "tier2": "Targeted Specialist (S_task 6-8)",
+        "tier3": "Full Swarm (S_task >= 9)"
+      },
+      "zeroDirectLaborTier3": true,
+      "approvalGate": {
+        "interactive": true,
+        "scheduled": false
+      },
+      "blackboardEnabled": true,
+      "corePillars": [
+        "The Orchestrator",
+        "pm-agent",
+        "design-agent",
+        "architect-agent",
+        "builder-agent",
+        "qa-adversary-agent"
+      ],
+      "dynamicPlugins": [
+        "seo-agent",
+        "analytics-agent",
+        "image-agent",
+        "docs-agent"
+      ]
+    },
+    "Direct Solo": {
+      "description": "Direct single-agent pair programming mode without subagent overhead.",
+      "zeroDirectLabor": false,
+      "approvalGate": {
+        "interactive": false,
+        "scheduled": false
+      },
+      "blackboardEnabled": false,
+      "subagents": []
+    },
+    "TDD Pair": {
+      "description": "Strict Test-Driven Development pairing mode (Red-Green-Refactor).",
+      "zeroDirectLabor": false,
+      "approvalGate": {
+        "interactive": true,
+        "scheduled": false
+      },
+      "blackboardEnabled": false,
+      "subagents": ["qa-adversary-agent"]
+    }
+  }
+}
