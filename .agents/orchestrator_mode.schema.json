@@ -71,6 +71,16 @@
             },
             "required": ["reportTokensAndModel", "collatedTable"]
           },
+          "jitSkillRetrieval": {
+            "type": "object",
+            "properties": {
+              "enabled": { "type": "boolean" },
+              "catalogDirectory": { "type": "string" },
+              "script": { "type": "string" },
+              "indexFile": { "type": "string" }
+            },
+            "required": ["enabled", "catalogDirectory", "script", "indexFile"]
+          },
           "corePillars": {
             "type": "array",
             "items": { "type": "string" }

@@ -10,3 +10,7 @@ scratch/
 
 # Binaries
 .agents/skills/**/bin/
+
+# Cold Catalog temporary downloads & cache
+.agents/skills/catalog/downloads/
+.agents/skills/catalog/**/cache/

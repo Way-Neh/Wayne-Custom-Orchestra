@@ -48,6 +48,12 @@
         "reportTokensAndModel": true,
         "collatedTable": true
       },
+      "jitSkillRetrieval": {
+        "enabled": true,
+        "catalogDirectory": ".agents/skills/catalog",
+        "script": ".agents/scripts/find_skill.py",
+        "indexFile": ".agents/skills/catalog/index.json"
+      },
       "corePillars": [
         "The Orchestrator",
         "pm-agent",
@@ -178,12 +184,15 @@
         },
         "docs-agent": {
           "assignedSkills": [
-            "markdown documentation",
-            "api markdown"
+            "diataxis-framework",
+            "api-documenter",
+            "c4-mermaid-diagrams"
           ],
           "excludedSkills": [
-            "heavy runtime skills",
-            "execution tools"
+            "runtime execution",
+            "test runners",
+            "ui-styling",
+            "code implementation"
           ]
         }
       }

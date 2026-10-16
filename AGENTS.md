@@ -50,7 +50,7 @@ Wayne Custom incorporates six architectural topologies inspired by the Swarms fr
 | :--- | :--- | :--- |
 | **Hierarchical Swarm** | `The Orchestrator` $\rightarrow$ Core Pillars $\rightarrow$ Dynamic Plugins | Enforces organizational separation of concerns: Orchestrator directs and routes; specialized pillars execute; worker plugins handle domain tasks. Zero direct labor on root orchestrator. |
 | **LLM Council / Consensus Gate** | Proposer (`architect-agent`) vs. Challenger (`security/scalability lens`) | Activates during Phase 2. Architectural schemas and critical data contracts must achieve consensus before being committed to `arch_schema.md`. |
-| **Swarm Router** | Semantic / capability-based dynamic dispatcher | Orchestrator routes sub-tasks to dynamic domain plugins (`seo-agent`, `analytics-agent`, `image-agent`, `docs-agent`) strictly on-demand, preventing context dilution. |
+| **Swarm Router** | Semantic / capability-based dynamic dispatcher with Cold Catalog JIT Retrieval | Orchestrator routes sub-tasks to dynamic domain plugins (`seo-agent`, `analytics-agent`, `image-agent`, `docs-agent`) strictly on-demand. Employs Just-in-Time (JIT) skill discovery (`.agents/scripts/find_skill.py`) to mount specialized domain skills (e.g. docx, pdf, pptx, xlsx) with 0 root token overhead. |
 | **Mixture of Agents (MoA)** | Layered contextual synthesis | Upstream agent outputs (`pm_spec.md`, `design_tokens.md`, `arch_schema.md`) are synthesized and injected into `builder-agent` to eliminate hallucination. |
 | **Concurrent Worker Worktrees** | Isolated Git worktrees (`.worktrees/worker-<id>`) on `swarm/worker-<id>` | Activates in Phase 4. Prevents git contention, compiler lockups, and file clobbering across concurrent builder instances before merging via the integration gate. |
 | **Bounded Cyclic Self-Healing** | Automated error-feedback loop (`qa-adversary-agent` $\rightleftharpoons$ `builder-agent`) | Activates in Phase 5. If QA verification detects failing acceptance criteria (`[AC-xx]`), diffs and traces are routed back to Builder for up to **3 automated repair iterations** before escalation. |
@@ -100,7 +100,23 @@ For Tier 3 Swarms, specs are staged in `.agents/blackboard/` prior to implementa
   - If SEO/metadata required $\rightarrow$ dispatch `seo-agent`.
   - If telemetry/analytics required $\rightarrow$ dispatch `analytics-agent`.
   - If visual assets/icons needed $\rightarrow$ dispatch `image-agent`.
-  - If developer guides/changelogs needed $\rightarrow$ dispatch `docs-agent`.
+  - If technical documentation, API specs, C4 diagrams, or changelogs needed $\rightarrow$ dispatch `docs-agent` (Lean Docs Trinity).
+
+#### 🧰 Just-in-Time (JIT) Skill Retrieval Pattern (Cold Catalog Architecture)
+When an esoteric or domain-specialized task arrives (e.g. Word `.docx` manipulation, PDF form filling, Excel `.xlsx` financial modeling, EPUB compilation, OpenAPI schema authoring, or GitHub Actions CI/CD fixes), the swarm prevents polluting agent prompts with monolithic skill catalogs:
+
+1. **Cold Catalog Discovery (`.agents/skills/catalog/`)**:
+   - The Swarm Router queries the offline cold storage catalog and curated `index.json` using the lightweight search utility:
+     ```bash
+     python3 .agents/scripts/find_skill.py <query>
+     ```
+   - Searches local catalog files (`.agents/skills/catalog/`), active skills (`.agents/skills/`), and the curated index of 2,000+ skills without loading them into memory or prompts.
+2. **Targeted Subagent Mounting**:
+   - The skill instructions (e.g., [`.agents/skills/catalog/docx/SKILL.md`](file:///.agents/skills/catalog/docx/SKILL.md)) are mounted **strictly to the target subagent's prompt and workspace** during invocation via `invoke_subagent`.
+   - If a skill is remote, `python3 .agents/scripts/find_skill.py --fetch <id>` hydrates it into `.agents/skills/catalog/<id>/SKILL.md` on-demand.
+3. **Zero Direct Root Overhead Invariant**:
+   - The Root Orchestrator and Core Pillars maintain **0 token overhead** from domain-specific skills.
+   - Only the ephemeral target subagent reads the skill instructions, preserving prompt attention density and preventing context window bloat.
 - **Parallel Dispatch & Mixture of Agents (MoA)**:
   - Upstream specs are shared via Mixture of Agents (MoA) synthesis.
   - Subagents construct features strictly aligned with staged contracts.
@@ -181,7 +197,13 @@ To guarantee world-class visual quality while preventing prompt context bloat, t
 | **`seo-agent`** | [`seo-agent/AGENTS.md`](file:///Users/ap-wayne.tan/DockerProjects/Orchestrator/.agents/roster/seo-agent/AGENTS.md) | Public marketing, SEO meta tags, OpenGraph, JSON-LD schemas. | Search console, metadata validators, JSON-LD | UI layout, CSS, backend database | **`flash`** | **Low** (Structured extraction) |
 | **`analytics-agent`** | [`analytics-agent/AGENTS.md`](file:///Users/ap-wayne.tan/DockerProjects/Orchestrator/.agents/roster/analytics-agent/AGENTS.md) | Telemetry tracking, funnels, cohort indicators, analytics dashboards. | GA4 API, SQL adapters, event taxonomy | Visual design, application code | **`flash`** | **Low** (Deterministic queries) |
 | **`image-agent`** | [`image-agent/AGENTS.md`](file:///Users/ap-wayne.tan/DockerProjects/Orchestrator/.agents/roster/image-agent/AGENTS.md) | Web asset discovery and custom AI image generation. | `search_web`, `generate_image`, `banner-design`, `brand (visual assets)`, `canvas-design` | Code editing, refactoring | **`flash`** | **Low** (Asset retrieval) |
-| **`docs-agent`** | [`docs-agent/AGENTS.md`](file:///Users/ap-wayne.tan/DockerProjects/Orchestrator/.agents/roster/docs-agent/AGENTS.md) | Developer documentation, API markdown, and changelogs. | Markdown documentation, API markdown | Heavy runtime skills, execution tools | **`flash_lite`** / **`flash`** | **None–Low** (Markdown compilation) |
+| **`docs-agent`** | [`docs-agent/AGENTS.md`](file:///Users/ap-wayne.tan/DockerProjects/Orchestrator/.agents/roster/docs-agent/AGENTS.md) | Lead Technical Writer, Lean Documentation Trinity (Diátaxis, typed API contracts, C4 diagrams, SemVer changelogs, ADRs). | `diataxis-framework`, `api-documenter`, `c4-mermaid-diagrams` | `runtime execution`, `test runners`, `ui-styling`, `code implementation` | **`flash`** *(or `flash_lite`)* | **Medium** *(or `None–Low` for changelogs)* |
+
+### 📚 The Lean Documentation Trinity & Diátaxis Architecture
+To ensure world-class technical documentation without narrative bloat or ambiguous schemas, `docs-agent` operates via the **Lean Documentation Trinity**:
+1. **`diataxis-framework`**: Establishes strict 4-quadrant information architecture (Tutorials, How-To Guides, Reference, Explanation), ensuring documentation addresses specific developer intents without mixed-mode confusion.
+2. **`api-documenter`**: Extracts type-safe API contracts directly from code, Zod schemas, and `arch_schema.md`—generating typed JSON payloads, an exhaustive HTTP error matrix (400, 401, 403, 404, 409, 422, 429, 500), and multi-language snippets (`curl`, TypeScript, Python).
+3. **`c4-mermaid-diagrams`**: Transforms complex software topologies into GitHub-native Mermaid C4 diagrams (Context, Container, Component, and Sequence flows) directly in markdown.
 
 ---
 
@@ -189,7 +211,7 @@ To guarantee world-class visual quality while preventing prompt context bloat, t
 
 To ensure maximum operational velocity, cost-efficiency, and reasoning precision, all agents operate under strict **"Good Enough" skill boundaries** and **anti-bloat scopes**:
 
-1. **75% Prompt Context Reduction via Lean Design Trinity**: By replacing sprawling, monolithic style guides and multi-megabyte UI dumps with the Lean Design Trinity (`impeccable` + `design-system` + `ui-ux-pro-max (query-only)`), agent prompt token overhead is slashed by **~75%**, dramatically lowering inference latency and eliminating token waste.
+1. **75% Prompt Context Reduction via Lean Design & Documentation Trinities**: By replacing sprawling, monolithic style guides and unstructured doc dumps with the Lean Design Trinity (`impeccable` + `design-system` + `ui-ux-pro-max (query-only)`) and Lean Documentation Trinity (`diataxis-framework` + `api-documenter` + `c4-mermaid-diagrams`), agent prompt token overhead is slashed by **~75%**, dramatically lowering inference latency and eliminating token waste.
 2. **Token Economy**: Loading sprawling or overlapping skill prompts saturates agent context windows with irrelevant instructions, driving up unnecessary inference token usage and increasing turn latency.
 3. **Attention Preservation**: Modern LLMs maintain peak cognitive performance when instruction density is focused. Confining each agent to its "Good Enough" skillset prevents attentional dispersion and eliminates reasoning distractions.
 4. **Zero Role-Bleed**: Absolute role decoupling eliminates territorial overlap:
@@ -197,6 +219,8 @@ To ensure maximum operational velocity, cost-efficiency, and reasoning precision
    - **`design-agent`** specifies design tokens and contracts without implementing runtime code or animations.
    - **`builder-agent`** executes concrete features and styling without wandering into open-ended design discovery or branding.
    - **`qa-adversary-agent`** independently audits against acceptance criteria and executes anti-slop checks (`impeccable detect`) without attempting to write or fix feature code.
+   - **`docs-agent`** authors Diátaxis documentation, typed API specs, and C4 Mermaid diagrams without compiling runtimes, running test suites, or implementing feature code.
+5. **Zero Root Token Overhead via Cold Catalog & JIT Retrieval**: Monolithic skills (e.g. Word, PDF, Excel, EPUB, API design, DevOps workflows) reside exclusively in Cold Storage (`.agents/skills/catalog/`). They are never pre-loaded into prompt contexts. When an esoteric domain requirement arises, the Swarm Router queries `.agents/scripts/find_skill.py` and mounts the skill solely to the targeted subagent's prompt or workspace, ensuring 0 token overhead on root and core pillars.
 
 ---
 

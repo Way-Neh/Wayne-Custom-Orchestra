@@ -11,6 +11,7 @@ Adaptive Multi-Agent Swarm Orchestrator Architecture & Operating Model (**Wayne 
 - **Hierarchical Swarms**: Structured delegation from Root Orchestrator to Core Pillars and Worker Plugins.
 - **LLM Council (Consensus Gate)**: Adversarial debate (Proposer vs. Security/Scalability Challenger) before locking architectural contracts.
 - **Swarm Router**: Semantic and capability-driven router dynamically activating specialized domain plugins on-demand.
+- **Cold Catalog & JIT Skill Retrieval**: Curated offline catalog (`.agents/skills/catalog/`) of 2,000+ domain skills (DOCX, PDF, PPTX, XLSX, EPUB, API design, DevOps) searched via `find_skill.py` and mounted just-in-time with 0 root token overhead.
 - **Mixture of Agents (MoA)**: Context synthesis flowing downstream from PM, Design, and Architecture directly into Builder.
 - **Concurrent Worker Worktrees**: Physical filesystem isolation via Git worktrees (`.worktrees/worker-<id>`) on `swarm/worker-<id>` eliminating file clobbering, git contention, and build lock collisions.
 - **Bounded Cyclic Self-Healing**: Automated $\le 3$ iteration feedback cycle between QA Adversary and Builder before escalating to the Director.
@@ -93,7 +94,7 @@ flowchart TD
 | :--- | :--- | :--- |
 | **Hierarchical Swarm** | `The Orchestrator` $\rightarrow$ Core Pillars $\rightarrow$ Dynamic Plugins | Enforces strict executive oversight with zero direct labor on the root orchestrator. Core pillars lead specialized tracks while dynamic plugins serve as worker nodes. |
 | **LLM Council (Consensus Gate)** | Proposer (`architect-agent`) vs. Challenger (`security/scalability lens`) | Activates during Phase 2. System schemas, data models, and API interfaces must withstand rigorous challenge and reach multi-perspective consensus before locking into `arch_schema.md`. |
-| **Swarm Router** | Semantic / capability-based dispatcher in Orchestrator | Dynamically provisions plugin subagents (`seo-agent`, `analytics-agent`, `image-agent`, `docs-agent`) strictly when requirements demand them, keeping context concise. |
+| **Swarm Router** | Semantic / capability-based dispatcher with Cold Catalog JIT Retrieval | Dynamically provisions plugin subagents (`seo-agent`, `analytics-agent`, `image-agent`, `docs-agent`) and queries `.agents/scripts/find_skill.py` to mount specialized domain skills (docx, pdf, pptx, xlsx) just-in-time, keeping root context at 0 token overhead. |
 | **Mixture of Agents (MoA)** | Layered contextual synthesis across blackboard | Outputs from PM, Design, and Architecture are synthesized into machine-readable blackboard contracts that guide `builder-agent` directly. |
 | **Concurrent Worker Worktrees** | Isolated Git worktrees (`.worktrees/worker-<id>`) on `swarm/worker-<id>` | Activates in Phase 4. Prevents git index contention, compiler cache locks, and file clobbering across concurrent builder instances before merging through the integration gate. |
 | **Bounded Cyclic Self-Healing** | Automated loop (`qa-adversary-agent` $\rightleftharpoons$ `builder-agent`) | If adversarial audit detects failing acceptance criteria (`[AC-xx]`), diffs and failure traces are automatically routed back to Builder for up to **3 iterations** before escalation. |
@@ -134,6 +135,33 @@ When parallel implementation spans multiple builders or independent modules, the
 4. **Automated Swarm Integration Gate**: Worker branches are merged or rebased into the integration branch `feat/<task>`, ensuring structural and integration integrity.
 5. **Phase 5 QA & Teardown**: `qa-adversary-agent` audits the integrated branch. Once all criteria pass, worktrees are automatically cleaned up (`git worktree remove --force`).
 
+### 6. Cold Catalog & Just-in-Time (JIT) Skill Retrieval
+To prevent prompt context bloat while supporting thousands of specialized file formats, protocols, and workflows (e.g. Word `.docx`, PDF forms, Excel `.xlsx`, EPUB publishing, OpenAPI schemas, GitHub Actions, Kubernetes), the workspace implements a two-tier **Cold Catalog & Just-in-Time (JIT) Retrieval Architecture**:
+
+1. **Cold Storage Catalog (`.agents/skills/catalog/`)**:
+   - Monolithic domain skills reside cold on disk and in curated `index.json`, completely excluded from agent prompt contexts.
+   - Offline starter skills (`docx`, `pdf`, `pptx`, `_template`) are pre-cached locally for offline speed.
+2. **Fast Semantic Search (`find_skill.py`)**:
+   - The Orchestrator or Swarm Router queries `.agents/scripts/find_skill.py` via CLI to find matching skills without loading them into memory:
+   ```bash
+   # Search for domain capabilities
+   python3 .agents/scripts/find_skill.py docx
+   python3 .agents/scripts/find_skill.py --category devops
+   python3 .agents/scripts/find_skill.py --fetch pptx
+   ```
+3. **Dynamic Subagent Mounting**:
+   - Discovered skills are mounted strictly into the target subagent's prompt and workspace during `invoke_subagent`:
+   ```python
+   invoke_subagent(
+       TypeName="docs-agent",
+       Role="Docs (DOCX Specialist)",
+       Workspace="share",
+       Prompt="Follow domain skill instructions at .agents/skills/catalog/docx/SKILL.md to execute the task."
+   )
+   ```
+4. **Zero Direct Root Token Overhead**:
+   - Root Orchestrator and Core Pillars maintain **0 token overhead** from specialized skills, ensuring full cognitive capacity and attention preservation for coordination.
+
 ---
 
 ## 👥 Agent Roster & Codified Skill Boundaries
@@ -163,13 +191,20 @@ The frontend workflow leverages a streamlined, decoupled design stack to achieve
 | **`seo-agent`** | [`seo-agent/AGENTS.md`](.agents/roster/seo-agent/AGENTS.md) | Public marketing, SEO meta tags, JSON-LD schemas. | Search console, metadata validators, JSON-LD | UI layout, CSS, backend database | **`flash`** | **Low** |
 | **`analytics-agent`** | [`analytics-agent/AGENTS.md`](.agents/roster/analytics-agent/AGENTS.md) | Telemetry tracking, funnels, cohort indicators. | GA4 API, SQL adapters, event taxonomy | Visual design, application code | **`flash`** | **Low** |
 | **`image-agent`** | [`image-agent/AGENTS.md`](.agents/roster/image-agent/AGENTS.md) | Web asset discovery and custom AI image generation. | `search_web`, `generate_image`, `banner-design`, `brand (visual assets)`, `canvas-design` | Code editing, refactoring | **`flash`** | **Low** |
-| **`docs-agent`** | [`docs-agent/AGENTS.md`](.agents/roster/docs-agent/AGENTS.md) | Developer documentation, API markdown, changelogs. | Markdown documentation, API markdown | Heavy runtime skills, execution tools | **`flash_lite`** / **`flash`** | **None–Low** |
+| **`docs-agent`** | [`docs-agent/AGENTS.md`](.agents/roster/docs-agent/AGENTS.md) | Lead Technical Writer, Lean Documentation Trinity (Diátaxis, typed API contracts, C4 diagrams, SemVer changelogs, ADRs). | `diataxis-framework`, `api-documenter`, `c4-mermaid-diagrams` | `runtime execution`, `test runners`, `ui-styling`, `code implementation` | **`flash`** *(or `flash_lite`)* | **Medium** *(or `None–Low`)* |
+
+### 📚 The Lean Documentation Trinity & Technical Writing Architecture
+Technical documentation is authored by `docs-agent` adhering strictly to the **Lean Documentation Trinity**:
+- **`diataxis-framework`**: Structured 4-quadrant information architecture (Tutorials, How-To Guides, Reference, Explanation), ensuring documentation addresses specific developer needs without mixed-mode confusion.
+- **`api-documenter`**: Extracts type-safe API contracts directly from code, Zod schemas, and `arch_schema.md`—generating typed JSON payloads, exhaustive HTTP error matrices (400, 401, 403, 404, 409, 422, 429, 500), and copy-pasteable multi-language snippets (`curl`, TypeScript, Python).
+- **`c4-mermaid-diagrams`**: Renders GitHub-native Mermaid C4 diagrams (Context, Container, Component, and Sequence flows) directly in markdown, giving developers instant visual orientation.
+- **Zero Role-Bleed**: Documentation and diagrams only. Never compiles runtimes, executes tests, or modifies UI code.
 
 ### 🛡️ Context Bloat Prevention Invariant
-- **75% Prompt Context Reduction**: By replacing bloated multi-megabyte style dumps with the Lean Design Trinity (`impeccable` + `design-system` + `ui-ux-pro-max (query-only)`), token overhead is reduced by ~75%.
+- **75% Prompt Context Reduction**: By replacing bloated style dumps and unstructured doc dumps with the Lean Design Trinity (`impeccable` + `design-system` + `ui-ux-pro-max (query-only)`) and Lean Documentation Trinity (`diataxis-framework` + `api-documenter` + `c4-mermaid-diagrams`), token overhead is reduced by ~75%.
 - **Token Economy**: Prevents prompt saturation by stripping unnecessary skills, minimizing latency and inference overhead.
 - **Attention Preservation**: Constrains agent reasoning strictly to its core domain, eliminating hallucinations or distractions from tangential toolsets.
-- **Zero Role-Bleed**: Guarantees distinct separation of concerns—planners plan, designers tokenize, builders code and style, and adversaries audit and detect anti-patterns.
+- **Zero Role-Bleed**: Guarantees distinct separation of concerns—planners plan, designers tokenize, builders code and style, adversaries audit and detect anti-patterns, and technical writers author Diátaxis documentation and C4 diagrams.
 
 ---
 
@@ -248,12 +283,21 @@ python3 .agents/scripts/collate_telemetry.py --format json
 │   │   ├── analytics-agent/AGENTS.md
 │   │   ├── image-agent/AGENTS.md
 │   │   └── docs-agent/AGENTS.md
-│   ├── scripts/                      # Orchestration utilities (collate_telemetry.py)
-│   │   └── collate_telemetry.py
-│   └── skills/                       # Custom workspace skills (e.g. impeccable)
+│   ├── scripts/                      # Orchestration utilities
+│   │   ├── collate_telemetry.py      # Telemetry collation utility
+│   │   └── find_skill.py             # JIT skill search & retrieval utility
+│   └── skills/                       # Workspace & Cold Catalog skills
+│       ├── catalog/                  # Cold Storage catalog (JIT retrieval)
+│       │   ├── index.json            # Curated catalog index (2,000+ skills)
+│       │   ├── _template/SKILL.md    # Offline starter template
+│       │   ├── docx/SKILL.md         # Word OOXML processing skill
+│       │   ├── pdf/SKILL.md          # PDF extraction & form filling skill
+│       │   ├── pptx/SKILL.md         # PowerPoint deck engineering skill
+│       │   └── downloads/            # Dynamic downloads directory (gitignored)
+│       └── impeccable/               # Active core frontend skill
 ├── .worktrees/                       # Ephemeral agent worktrees (gitignored)
 ├── AGENTS.md                         # Master Orchestrator Blueprint, lifecycle & topologies
-├── .gitignore                        # Git ignore rules (includes .worktrees/)
+├── .gitignore                        # Git ignore rules (includes .worktrees/ & downloads/)
 └── README.md                         # Architecture overview, Swarms diagram & docs
 ```
 
