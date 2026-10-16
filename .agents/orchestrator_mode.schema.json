@@ -13,6 +13,17 @@
         "type": "object",
         "properties": {
           "description": { "type": "string" },
+          "rosterPath": {
+            "type": "string",
+            "description": "Relative path to the dedicated agent roster directory."
+          },
+          "agentRoster": {
+            "type": "object",
+            "description": "Mapping of agent identifiers to their dedicated AGENTS.md specifications.",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
           "taskSizing": {
             "type": "object",
             "properties": {
@@ -41,6 +52,24 @@
               "enabled": { "type": "boolean" },
               "maxIterations": { "type": "integer" }
             }
+          },
+          "concurrentWorkerWorktrees": {
+            "type": "object",
+            "properties": {
+              "enabled": { "type": "boolean" },
+              "worktreeDirectory": { "type": "string" },
+              "branchPrefix": { "type": "string" },
+              "autoCleanupOnPass": { "type": "boolean" }
+            },
+            "required": ["enabled", "worktreeDirectory", "branchPrefix", "autoCleanupOnPass"]
+          },
+          "telemetry": {
+            "type": "object",
+            "properties": {
+              "reportTokensAndModel": { "type": "boolean" },
+              "collatedTable": { "type": "boolean" }
+            },
+            "required": ["reportTokensAndModel", "collatedTable"]
           },
           "corePillars": {
             "type": "array",

@@ -1,6 +1,6 @@
 # Wayne Custom Orchestra 🎻
 
-Adaptive Multi-Agent Swarm Orchestrator Architecture & Operating Model (**Wayne Custom 2.0 / Swarms Enhanced**).
+Adaptive Multi-Agent Swarm Orchestrator Architecture & Operating Model (**Wayne Custom 2.0 2026-10-16 / Swarms Enhanced**).
 
 ---
 
@@ -12,6 +12,7 @@ Adaptive Multi-Agent Swarm Orchestrator Architecture & Operating Model (**Wayne 
 - **LLM Council (Consensus Gate)**: Adversarial debate (Proposer vs. Security/Scalability Challenger) before locking architectural contracts.
 - **Swarm Router**: Semantic and capability-driven router dynamically activating specialized domain plugins on-demand.
 - **Mixture of Agents (MoA)**: Context synthesis flowing downstream from PM, Design, and Architecture directly into Builder.
+- **Concurrent Worker Worktrees**: Physical filesystem isolation via Git worktrees (`.worktrees/worker-<id>`) on `swarm/worker-<id>` eliminating file clobbering, git contention, and build lock collisions.
 - **Bounded Cyclic Self-Healing**: Automated $\le 3$ iteration feedback cycle between QA Adversary and Builder before escalating to the Director.
 
 ```mermaid
@@ -31,7 +32,7 @@ flowchart TD
         
         subgraph Council ["Phase 2: Spec Staging & LLM Council"]
             PM_Spec["📋 pm-agent<br/>pm_spec.md ([AC-xx] Matrix)"]
-            Design_Spec["🎨 design-agent<br/>design_tokens.md (CSS Tokens)"]
+            Design_Spec["🎨 design-agent (Lean Design Trinity)<br/>design_tokens.md (3-Tier Tokens)"]
             Arch_Prop["🏛️ architect-agent<br/>Architecture Proposal"]
             Challenger["🛡️ Council Challenger<br/>Security & Scalability Lens"]
             Arch_Prop <-->|"Consensus Gate"| Challenger
@@ -40,21 +41,30 @@ flowchart TD
         
         P3["Phase 3: Director Gate<br/>(Auto-Bypassed for Scheduled Tasks)"]
         
-        subgraph Execution ["Phase 4: Swarm Router & Parallel Dispatch"]
+        subgraph Execution ["Phase 4: Swarm Router & Concurrent Worker Worktrees"]
             Router["🔀 Swarm Router<br/>Semantic Capability Router"]
-            Builder["🔨 builder-agent<br/>Feature Construction"]
+            
+            subgraph Worktrees ["Concurrent Worker Worktrees (.worktrees/)"]
+                W1["🌿 Worker 1 Worktree<br/>branch: swarm/worker-1<br/>builder-agent (API / Data)"]
+                W2["🌿 Worker 2 Worktree<br/>branch: swarm/worker-2<br/>builder-agent (UI / Layout)"]
+                WN["🌿 Worker N Worktree<br/>branch: swarm/worker-n<br/>builder-agent (Auth / State)"]
+            end
+
             Plugins["🔌 Dynamic Domain Plugins<br/>seo | analytics | image | docs"]
-            Router --> Builder
+            Gate["🔀 Swarm Integration Gate<br/>Merge & Rebase into feat/task"]
+
+            Router --> Worktrees
             Router -->|"On-Demand"| Plugins
+            Worktrees --> Gate
         end
         
         subgraph Verification ["Phase 5: Adversarial QA & Cyclic Self-Healing"]
-            QA["🛡️ qa-adversary-agent<br/>Audits against [AC-xx]"]
+            QA["🛡️ qa-adversary-agent<br/>Audits [AC-xx] on feat/task & Anti-Slop"]
             Heal{"All [AC-xx] Pass?"}
             Loop["Bounded Cyclic Self-Healing<br/>Diffs & Traces to Builder (Max 3 Loops)"]
             QA --> Heal
-            Heal -- "Fail (&le; 3 Loops)" --> Loop --> Builder
-            Heal -- "Pass" --> Synthesis["✅ Final Synthesis & Report"]
+            Heal -- "Fail (&le; 3 Loops)" --> Loop --> Worktrees
+            Heal -- "Pass" --> Synthesis["✅ Final Synthesis & Report<br/>Auto Worktree Teardown"]
             Heal -- "Fail (> 3 Loops)" --> Escalate["⚠️ Escalate to Director"]
         end
     end
@@ -63,7 +73,7 @@ flowchart TD
     P1 --> Council
     Council --> P3
     P3 --> Execution
-    Execution --> Verification
+    Gate --> Verification
 
     subgraph Blackboard [".agents/blackboard/ (Machine Contracts)"]
         BB_PM["pm_spec.md"]
@@ -85,6 +95,7 @@ flowchart TD
 | **LLM Council (Consensus Gate)** | Proposer (`architect-agent`) vs. Challenger (`security/scalability lens`) | Activates during Phase 2. System schemas, data models, and API interfaces must withstand rigorous challenge and reach multi-perspective consensus before locking into `arch_schema.md`. |
 | **Swarm Router** | Semantic / capability-based dispatcher in Orchestrator | Dynamically provisions plugin subagents (`seo-agent`, `analytics-agent`, `image-agent`, `docs-agent`) strictly when requirements demand them, keeping context concise. |
 | **Mixture of Agents (MoA)** | Layered contextual synthesis across blackboard | Outputs from PM, Design, and Architecture are synthesized into machine-readable blackboard contracts that guide `builder-agent` directly. |
+| **Concurrent Worker Worktrees** | Isolated Git worktrees (`.worktrees/worker-<id>`) on `swarm/worker-<id>` | Activates in Phase 4. Prevents git index contention, compiler cache locks, and file clobbering across concurrent builder instances before merging through the integration gate. |
 | **Bounded Cyclic Self-Healing** | Automated loop (`qa-adversary-agent` $\rightleftharpoons$ `builder-agent`) | If adversarial audit detects failing acceptance criteria (`[AC-xx]`), diffs and failure traces are automatically routed back to Builder for up to **3 iterations** before escalation. |
 
 ---
@@ -112,8 +123,16 @@ $$S_{\text{task}} = D + F + A + C + V$$
 ### 3. The Zero Direct Labor Rule (Tier 3)
 For Tier 3 tasks, the root Orchestrator does **no direct code or asset implementation**. It exclusively handles triage, task sizing, LLM Council facilitation, Swarm Router dispatching (`invoke_subagent` with `Workspace: "share"`), self-healing orchestration, and final synthesis.
 
-### 4. Adversarial QA Integrity & Cyclic Remediation
-`builder-agent` and `qa-adversary-agent` are strictly decoupled. The builder never audits its own code; the adversary validates line-by-line against numbered Acceptance Criteria (`[AC-xx]`) with concrete evidence. If an issue is flagged, the **Bounded Cyclic Self-Healing Loop** automatically routes the fix up to 3 times before involving the Director.
+### 4. Adversarial QA Integrity, Anti-Slop Gating & Cyclic Remediation
+`builder-agent` and `qa-adversary-agent` are strictly decoupled. The builder never audits its own code; the adversary validates line-by-line against numbered Acceptance Criteria (`[AC-xx]`) with concrete evidence and executes `impeccable detect (anti-slop audit)` to gate against visual anti-patterns, generic AI templates, and contrast defects. If an issue is flagged, the **Bounded Cyclic Self-Healing Loop** automatically routes the fix up to 3 times before involving the Director.
+
+### 5. Concurrent Worker Worktree Protocol
+When parallel implementation spans multiple builders or independent modules, the Orchestrator enforces filesystem isolation:
+1. **Spec-Driven Task Partitioning**: Numbered acceptance criteria (`[AC-xx]`) are partitioned into orthogonal domains (API, UI, Auth, etc.).
+2. **Worktree Provisioning**: Each concurrent builder instance is allocated a dedicated worktree under `.worktrees/worker-<id>` on branch `swarm/worker-<id>`.
+3. **Concurrent Execution**: Subagents run concurrently via `invoke_subagent`, operating strictly within their designated worktrees to eliminate file clobbering, build cache lockups, and git index contention.
+4. **Automated Swarm Integration Gate**: Worker branches are merged or rebased into the integration branch `feat/<task>`, ensuring structural and integration integrity.
+5. **Phase 5 QA & Teardown**: `qa-adversary-agent` audits the integrated branch. Once all criteria pass, worktrees are automatically cleaned up (`git worktree remove --force`).
 
 ---
 
@@ -121,28 +140,36 @@ For Tier 3 tasks, the root Orchestrator does **no direct code or asset implement
 
 To prevent token waste, context dilution, and role-bleed, every agent in the swarm operates within codified **"Good Enough" skill boundaries** and strict **anti-bloat scopes**.
 
-### Core Pillars
-| Agent | Responsibility | Assigned "Good Enough" Skills | Excluded Skills (Anti-Bloat Boundary) | Model Tier | Thinking Effort |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **The Orchestrator** | Triage, sizing, dispatch, synthesis. Zero direct labor in Tier 3. | `dispatching-parallel-agents`, `brainstorming` | All direct implementation, UI styling, code editing | **Pro / Reasoning** | **High** |
-| **`pm-agent`** | PRD, acceptance criteria (`[AC-xx]`), user personas. | `writing-plans`, `brainstorming` | Code editing, UI styling, debugging | **`pro`** | **High** |
-| **`design-agent`** | Layout architecture, typography, responsive CSS tokens. | `ui-ux-pro-max (tokens only)`, `design-system` | `animate`, `animate-expo`, code implementation | **`pro`** | **Medium–High** |
-| **`architect-agent`** | System architecture, API contracts, schema consensus. | Architecture & schema design, API contracts | Frontend CSS, UI styling, browser test tools | **`pro`** | **High** |
-| **`builder-agent`** | Feature construction, logic wiring, cyclic repair. | `modern-web-guidance`, `animate`, `systematic-debugging`, `ui-styling` | `brand`, `slides`, `canvas-design`, open-ended design discovery | **`pro`** *(or `flash`)* | **Medium** |
-| **`qa-adversary-agent`** | Independent auditor against `[AC-xx]` criteria. | `a11y-debugging`, `chrome-devtools`, `verification-before-completion` | File writing, creative design, feature implementation | **`flash`** *(or `pro`)* | **Low–Medium** |
+### Core Pillars (Always Active in Tier 3 Swarms)
+| Agent | Dedicated Spec | Responsibility | Assigned "Good Enough" Skills | Excluded Skills (Anti-Bloat Boundary) | Model Tier | Thinking Effort |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **The Orchestrator** | *Root Master Blueprint* | Triage, sizing, dispatch, synthesis. Zero direct labor in Tier 3. | `dispatching-parallel-agents`, `brainstorming` | All direct implementation, UI styling, code editing | **Pro / Reasoning** | **High** |
+| **`pm-agent`** | [`pm-agent/AGENTS.md`](.agents/roster/pm-agent/AGENTS.md) | PRD, acceptance criteria (`[AC-xx]`), user personas. | `writing-plans`, `brainstorming` | Code editing, UI styling, debugging | **`pro`** | **High** |
+| **`design-agent`** | [`design-agent/AGENTS.md`](.agents/roster/design-agent/AGENTS.md) | Layout architecture, typography, responsive CSS tokens. | `impeccable`, `design-system`, `ui-ux-pro-max (query-only)` | `animate`, `animate-expo`, `emil-design-eng`, `ui-styling`, code implementation, `brand`, `slides`, `banner-design` | **`pro`** | **Medium–High** |
+| **`architect-agent`** | [`architect-agent/AGENTS.md`](.agents/roster/architect-agent/AGENTS.md) | System architecture, API contracts, schema consensus. | Architecture & schema design, API contracts | Frontend CSS, UI styling, browser test tools | **`pro`** | **High** |
+| **`builder-agent`** | [`builder-agent/AGENTS.md`](.agents/roster/builder-agent/AGENTS.md) | Feature construction, logic wiring, cyclic repair. | `ui-styling`, `modern-web-guidance`, `animate`, `systematic-debugging` | `brand`, `slides`, `canvas-design`, open-ended design discovery | **`pro`** *(or `flash`)* | **Medium** |
+| **`qa-adversary-agent`** | [`qa-adversary-agent/AGENTS.md`](.agents/roster/qa-adversary-agent/AGENTS.md) | Independent auditor against `[AC-xx]` & anti-slop gate. | `a11y-debugging`, `chrome-devtools`, `verification-before-completion`, `impeccable detect (anti-slop audit)` | File writing, creative design, feature implementation | **`flash`** *(or `pro`)* | **Low–Medium** |
+
+### 🎨 The Lean Design Trinity & Anti-Slop Architecture
+The frontend workflow leverages a streamlined, decoupled design stack to achieve bespoke visual quality without saturating prompt context:
+- **`impeccable`**: Provides taste, aesthetic direction, optical typography scales, OKLCH color palettes, and anti-AI slop heuristics.
+- **`design-system`**: Emits strict 3-tier token contracts (`primitive` &rarr; `semantic` &rarr; `component`) into `design_tokens.md`.
+- **`ui-ux-pro-max (query-only)`**: Query-only reference tool for instant CLI lookup (`python -m uipro ...`), keeping massive style guides out of the model prompt context.
+- **Zero Role-Bleed**: Runtime markup and animations are strictly owned by `builder-agent` (`ui-styling`, `animate`), while `qa-adversary-agent` runs `impeccable detect` to mechanically catch AI design slop and visual regressions.
 
 ### Dynamic Domain Plugins (Swarm Router)
-| Plugin Agent | Responsibility | Assigned "Good Enough" Skills | Excluded Skills (Anti-Bloat Boundary) | Model Tier | Thinking Effort |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **`seo-agent`** | Public marketing, SEO meta tags, JSON-LD schemas. | Search console, metadata validators, JSON-LD | UI layout, CSS, backend database | **`flash`** | **Low** |
-| **`analytics-agent`** | Telemetry tracking, funnels, cohort indicators. | GA4 API, SQL adapters, event taxonomy | Visual design, application code | **`flash`** | **Low** |
-| **`image-agent`** | Web asset discovery and custom AI image generation. | `search_web`, `generate_image`, `banner-design` | Code editing, refactoring | **`flash`** | **Low** |
-| **`docs-agent`** | Developer documentation, API markdown, changelogs. | Markdown documentation, API markdown | Heavy runtime skills, execution tools | **`flash_lite`** / **`flash`** | **None–Low** |
+| Plugin Agent | Dedicated Spec | Responsibility | Assigned "Good Enough" Skills | Excluded Skills (Anti-Bloat Boundary) | Model Tier | Thinking Effort |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **`seo-agent`** | [`seo-agent/AGENTS.md`](.agents/roster/seo-agent/AGENTS.md) | Public marketing, SEO meta tags, JSON-LD schemas. | Search console, metadata validators, JSON-LD | UI layout, CSS, backend database | **`flash`** | **Low** |
+| **`analytics-agent`** | [`analytics-agent/AGENTS.md`](.agents/roster/analytics-agent/AGENTS.md) | Telemetry tracking, funnels, cohort indicators. | GA4 API, SQL adapters, event taxonomy | Visual design, application code | **`flash`** | **Low** |
+| **`image-agent`** | [`image-agent/AGENTS.md`](.agents/roster/image-agent/AGENTS.md) | Web asset discovery and custom AI image generation. | `search_web`, `generate_image`, `banner-design`, `brand (visual assets)`, `canvas-design` | Code editing, refactoring | **`flash`** | **Low** |
+| **`docs-agent`** | [`docs-agent/AGENTS.md`](.agents/roster/docs-agent/AGENTS.md) | Developer documentation, API markdown, changelogs. | Markdown documentation, API markdown | Heavy runtime skills, execution tools | **`flash_lite`** / **`flash`** | **None–Low** |
 
 ### 🛡️ Context Bloat Prevention Invariant
+- **75% Prompt Context Reduction**: By replacing bloated multi-megabyte style dumps with the Lean Design Trinity (`impeccable` + `design-system` + `ui-ux-pro-max (query-only)`), token overhead is reduced by ~75%.
 - **Token Economy**: Prevents prompt saturation by stripping unnecessary skills, minimizing latency and inference overhead.
 - **Attention Preservation**: Constrains agent reasoning strictly to its core domain, eliminating hallucinations or distractions from tangential toolsets.
-- **Zero Role-Bleed**: Guarantees distinct separation of concerns—planners plan, designers tokenize, builders code, and adversaries audit.
+- **Zero Role-Bleed**: Guarantees distinct separation of concerns—planners plan, designers tokenize, builders code and style, and adversaries audit and detect anti-patterns.
 
 ---
 
@@ -153,15 +180,52 @@ Projects configure their orchestrator mode at any time via [`.agents/orchestrato
 ```json
 {
   "$schema": "./orchestrator_mode.schema.json",
-  "activeMode": "Wayne Custom 2.0"
+  "activeMode": "Wayne Custom 2.0 2026-10-16"
 }
 ```
 
+> [!IMPORTANT]
+> **Version Naming Invariant**:
+> Whenever the Orchestrator is updated, the active mode name MUST be updated to:
+> `Wayne Custom 2.0 <DateOfUpdate>` (e.g. `Wayne Custom 2.0 2026-10-16`).
+
 Supported modes:
-- **`Wayne Custom 2.0`** *(Primary Default)*: Adaptive Swarm with Swarms topologies, dynamic task sizing, shared blackboard, LLM Council gate, and cyclic self-healing QA.
-- **`Wayne Custom 3.0: Swarms Enhanced`**: Dedicated Swarms-enhanced alias.
+- **`Wayne Custom 2.0 2026-10-16`** *(Primary Default)*: Adaptive Swarm with Swarms topologies, dynamic task sizing, modular agent roster (`.agents/roster/`), shared blackboard, LLM Council gate, and cyclic self-healing QA.
 - **`Direct Solo`**: Single-agent pair programming without subagent overhead.
 - **`TDD Pair`**: Strict Test-Driven Development (Red-Green-Refactor) pair workflow.
+
+---
+
+## 📈 Mandatory Token & Model Telemetry Protocol
+
+To maintain complete transparency into inference economics, verify model routing integrity, and measure token velocity, Wayne Custom 2.0 2026-10-16 enforces a multi-level **Token & Model Telemetry Reporting Protocol**:
+
+1. **Subagent Level**: Every subagent reports its actual assigned Model and token consumption metrics (`Input Tokens`, `Output Tokens`, `Cache Read Tokens`, `Total Tokens`) in its final completion message to the caller via `send_message`.
+2. **Root Orchestrator Level**: The Root Orchestrator executes [`.agents/scripts/collate_telemetry.py`](file:///.agents/scripts/collate_telemetry.py) to parse all active session transcripts, aggregating token metrics across all active subagents and the root orchestrator.
+3. **Collated Telemetry Summary**: The Root Orchestrator embeds the collated Markdown table in its completion response to the Director.
+
+### 📊 Collated Execution & Token Telemetry Table Example:
+
+| Agent / Level | Model Used | Input Tokens | Output Tokens | Cache Read Tokens | Total Tokens |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| Root Orchestrator | Gemini 3.8 Pro (High) | 20,870 | 4,058 | 1,398,943 | 1,423,871 |
+| Subagent (`System Architect`) | Gemini 3.8 Flash (High) | 162,722 | 26,517 | 3,320,513 | 3,509,752 |
+| **Total (Run Sum)** | **-** | **183,592** | **30,575** | **4,719,456** | **4,933,623** |
+
+### 🛠️ CLI Telemetry Collator Utility
+
+You can generate telemetry reports anytime using the bundled Python script:
+
+```bash
+# Auto-detect latest run and collate across all active agents
+python3 .agents/scripts/collate_telemetry.py
+
+# Target specific conversation ID
+python3 .agents/scripts/collate_telemetry.py --root <ROOT_CONVERSATION_ID>
+
+# Output structured JSON for telemetry dashboards
+python3 .agents/scripts/collate_telemetry.py --format json
+```
 
 ---
 
@@ -172,10 +236,24 @@ Supported modes:
 ├── .agents/
 │   ├── orchestrator_mode.json        # Project mode configuration & Swarm topologies
 │   ├── orchestrator_mode.schema.json # JSON Schema for mode validation
-│   └── blackboard/                   # Machine-actionable shared contracts
-│       └── .gitkeep
-├── AGENTS.md                         # Detailed agent directives, lifecycle & topologies
-├── .gitignore                        # Git ignore rules
+│   ├── blackboard/                   # Machine-actionable shared contracts
+│   │   └── .gitkeep
+│   ├── roster/                       # Modular agent directives & specifications
+│   │   ├── pm-agent/AGENTS.md
+│   │   ├── design-agent/AGENTS.md
+│   │   ├── architect-agent/AGENTS.md
+│   │   ├── builder-agent/AGENTS.md
+│   │   ├── qa-adversary-agent/AGENTS.md
+│   │   ├── seo-agent/AGENTS.md
+│   │   ├── analytics-agent/AGENTS.md
+│   │   ├── image-agent/AGENTS.md
+│   │   └── docs-agent/AGENTS.md
+│   ├── scripts/                      # Orchestration utilities (collate_telemetry.py)
+│   │   └── collate_telemetry.py
+│   └── skills/                       # Custom workspace skills (e.g. impeccable)
+├── .worktrees/                       # Ephemeral agent worktrees (gitignored)
+├── AGENTS.md                         # Master Orchestrator Blueprint, lifecycle & topologies
+├── .gitignore                        # Git ignore rules (includes .worktrees/)
 └── README.md                         # Architecture overview, Swarms diagram & docs
 ```
 

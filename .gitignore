@@ -6,3 +6,7 @@ Thumbs.db
 *.log
 .system_generated/
 scratch/
+.worktrees/
+
+# Binaries
+.agents/skills/**/bin/
