@@ -1,0 +1,16 @@
+# Ephemeral
+.worktrees/
+*.log
+
+# Downloads (JIT skill cache)
+skills/catalog/downloads/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Impeccable build artifacts
+.impeccable/
+
+# Node (if any scripts need it)
+node_modules/

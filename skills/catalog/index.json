@@ -1,0 +1,184 @@
+{
+  "version": "1.0.0",
+  "catalog": "Wayne Custom Cold Catalog",
+  "description": "Curated Cold Storage catalog of specialized agentic skills from awesome-claude-skills / agentic-awesome-skills for Just-in-Time (JIT) retrieval with zero context bloat.",
+  "updatedAt": "2026-10-16",
+  "skills": [
+    {
+      "id": "docx",
+      "name": "DOCX Processing & OOXML",
+      "category": "document-processing",
+      "description": "Create, edit, analyze, and redline Microsoft Word (.docx) documents with raw OOXML access, pandoc markdown extraction, and docx-js generation.",
+      "tags": ["docx", "word", "office", "ooxml", "documents", "redlining", "pandoc"],
+      "target_subagent": "docs-agent",
+      "status": "local",
+      "local_path": ".agents/skills/catalog/docx/SKILL.md",
+      "source_url": "https://github.com/sickn33/agentic-awesome-skills/tree/main/skills/docx-official"
+    },
+    {
+      "id": "pdf",
+      "name": "PDF Processing & Analysis",
+      "category": "document-processing",
+      "description": "Extract text, fill out PDF forms, merge/split documents, OCR scanned pages, and generate PDFs using pypdf, pdfplumber, and reportlab.",
+      "tags": ["pdf", "documents", "pypdf", "forms", "ocr", "extraction", "pdfplumber"],
+      "target_subagent": "docs-agent",
+      "status": "local",
+      "local_path": ".agents/skills/catalog/pdf/SKILL.md",
+      "source_url": "https://github.com/sickn33/agentic-awesome-skills/tree/main/skills/pdf-official"
+    },
+    {
+      "id": "pptx",
+      "name": "PPTX Presentation Deck Engineering",
+      "category": "presentation-processing",
+      "description": "Create, edit, and analyze PowerPoint (.pptx) decks with narrative planning, explicit layouts, OOXML manipulation, and python-pptx generation.",
+      "tags": ["pptx", "powerpoint", "slides", "deck", "presentation", "python-pptx", "ooxml"],
+      "target_subagent": "image-agent",
+      "status": "catalog",
+      "local_path": null,
+      "source_url": "https://github.com/sickn33/agentic-awesome-skills/tree/main/skills/pptx-official"
+    },
+    {
+      "id": "xlsx",
+      "name": "XLSX Financial & Data Modeling",
+      "category": "spreadsheet-processing",
+      "description": "Excel model construction with zero formula errors, financial industry color conventions, openpyxl automation, formulas, and multi-sheet consolidation.",
+      "tags": ["xlsx", "excel", "spreadsheets", "financial-model", "openpyxl", "formulas", "data-modeling"],
+      "target_subagent": "analytics-agent",
+      "status": "catalog",
+      "local_path": null,
+      "source_url": "https://github.com/sickn33/agentic-awesome-skills/tree/main/skills/xlsx-official"
+    },
+    {
+      "id": "epub",
+      "name": "EPUB Ebook Publishing",
+      "category": "document-processing",
+      "description": "Author, validate, and compile EPUB 3 ebook packages with OPF metadata, NCX navigation tables, XHTML styling, and semantic reader markup.",
+      "tags": ["epub", "ebook", "publishing", "kindle", "calibre", "opf", "ncx", "xhtml"],
+      "target_subagent": "docs-agent",
+      "status": "catalog",
+      "local_path": null,
+      "source_url": "https://github.com/sickn33/agentic-awesome-skills/tree/main/skills/epub-generator"
+    },
+    {
+      "id": "api-tools",
+      "name": "REST & GraphQL API Designer",
+      "category": "backend",
+      "description": "Design production-ready REST and GraphQL APIs, OpenAPI 3.1 specifications, request/response JSON schemas, error matrix definitions, and idempotency patterns.",
+      "tags": ["api", "api-tools", "rest", "graphql", "openapi", "swagger", "backend", "contracts", "endpoints"],
+      "target_subagent": "architect-agent",
+      "status": "catalog",
+      "local_path": null,
+      "source_url": "https://github.com/sickn33/agentic-awesome-skills/tree/main/skills/api-designer"
+    },
+    {
+      "id": "github-actions",
+      "name": "GitHub Actions CI/CD Specialist",
+      "category": "devops",
+      "description": "Design, debug, and harden GitHub Actions CI/CD workflows, composite actions, matrix builds, automated tests, secret handling, and deployment pipelines.",
+      "tags": ["github-actions", "cicd", "devops", "workflows", "yaml", "automation", "runners"],
+      "target_subagent": "builder-agent",
+      "status": "catalog",
+      "local_path": null,
+      "source_url": "https://github.com/sickn33/agentic-awesome-skills/tree/main/skills/github-actions-debugger"
+    },
+    {
+      "id": "docker-expert",
+      "name": "Docker Containerization Architect",
+      "category": "devops",
+      "description": "Production-grade Docker containerization, multi-stage builds, caching layers, compose environments, security hardening, and image size optimization.",
+      "tags": ["docker", "container", "dockerfile", "docker-compose", "devops", "microservices"],
+      "target_subagent": "architect-agent",
+      "status": "catalog",
+      "local_path": null,
+      "source_url": "https://github.com/sickn33/agentic-awesome-skills/tree/main/skills/docker-expert"
+    },
+    {
+      "id": "kubernetes-architect",
+      "name": "Kubernetes Cluster Architect",
+      "category": "devops",
+      "description": "Cloud-native Kubernetes architecture, Helm charts, ingress controllers, resource quotas, HPA auto-scaling, and production deployment manifests.",
+      "tags": ["kubernetes", "k8s", "helm", "devops", "cloud-native", "ingress", "cluster"],
+      "target_subagent": "architect-agent",
+      "status": "catalog",
+      "local_path": null,
+      "source_url": "https://github.com/sickn33/agentic-awesome-skills/tree/main/skills/kubernetes-architect"
+    },
+    {
+      "id": "diagram-generator",
+      "name": "Architecture Diagram Generator",
+      "category": "architecture-diagrams",
+      "description": "Generate, refine, validate, and render diagrams from natural language and code using Mermaid, PlantUML, Graphviz DOT, and C4 models.",
+      "tags": ["diagram", "mermaid", "plantuml", "c4", "architecture", "graphviz", "visuals"],
+      "target_subagent": "docs-agent",
+      "status": "catalog",
+      "local_path": null,
+      "source_url": "https://github.com/sickn33/agentic-awesome-skills/tree/main/skills/diagram-generator"
+    },
+    {
+      "id": "api-security-testing",
+      "name": "API Security & Penetration Testing",
+      "category": "security",
+      "description": "API vulnerability assessment covering OWASP API Top 10, JWT attack vectors, auth bypasses, rate limiting validation, and sensitive data leakage.",
+      "tags": ["security", "api-security", "owasp", "penetration-testing", "jwt", "authorization", "audit"],
+      "target_subagent": "qa-adversary-agent",
+      "status": "catalog",
+      "local_path": null,
+      "source_url": "https://github.com/sickn33/agentic-awesome-skills/tree/main/skills/api-security-testing"
+    },
+    {
+      "id": "git-advanced-workflows",
+      "name": "Git Advanced Workflows & Worktrees",
+      "category": "workflow",
+      "description": "Advanced Git techniques: interactive rebase, squashing, cherry-pick conflict resolution, git worktrees isolation, submodules, and bisect automation.",
+      "tags": ["git", "version-control", "worktrees", "rebase", "branching", "workflow"],
+      "target_subagent": "builder-agent",
+      "status": "catalog",
+      "local_path": null,
+      "source_url": "https://github.com/sickn33/agentic-awesome-skills/tree/main/skills/git-advanced-workflows"
+    },
+    {
+      "id": "playwright-testing",
+      "name": "Playwright E2E Test Suite",
+      "category": "testing",
+      "description": "End-to-end browser automation, regression test suites, network request mocking, trace viewer debugging, and cross-browser visual snapshot assertions.",
+      "tags": ["playwright", "e2e-testing", "browser-automation", "testing", "assertions", "qa"],
+      "target_subagent": "qa-adversary-agent",
+      "status": "catalog",
+      "local_path": null,
+      "source_url": "https://github.com/sickn33/agentic-awesome-skills/tree/main/skills/playwright-testing"
+    },
+    {
+      "id": "database-optimizer",
+      "name": "SQL Database Profiler & Optimizer",
+      "category": "backend",
+      "description": "SQL query profiling, index optimization (B-tree, GIN, GiST), explain plan analysis, connection pooling, and relational schema normalization.",
+      "tags": ["database", "sql", "postgresql", "mysql", "indexing", "performance", "optimization"],
+      "target_subagent": "architect-agent",
+      "status": "catalog",
+      "local_path": null,
+      "source_url": "https://github.com/sickn33/agentic-awesome-skills/tree/main/skills/database-optimizer"
+    },
+    {
+      "id": "web-scraping-crawler",
+      "name": "Resilient Web Scraper & Crawler",
+      "category": "data-extraction",
+      "description": "Robust web extraction pipelines, headless browser rendering, BeautifulSoup/Cheerio extraction, rate-limiting backoff, and robots.txt compliance.",
+      "tags": ["web-scraping", "crawler", "extraction", "cheerio", "beautifulsoup", "data"],
+      "target_subagent": "analytics-agent",
+      "status": "catalog",
+      "local_path": null,
+      "source_url": "https://github.com/sickn33/agentic-awesome-skills/tree/main/skills/web-scraping-crawler"
+    },
+    {
+      "id": "impeccable",
+      "name": "Impeccable Frontend Taste & Anti-Slop",
+      "category": "design",
+      "description": "Aesthetic direction, optical typography scales, OKLCH palettes, and anti-AI slop heuristics for crafting world-class user interfaces.",
+      "tags": ["design", "ui", "ux", "impeccable", "anti-slop", "typography", "colors"],
+      "target_subagent": "design-agent",
+      "status": "active",
+      "local_path": ".agents/skills/impeccable/SKILL.md",
+      "source_url": "local"
+    }
+  ]
+}
