@@ -1,6 +1,13 @@
 ---
 name: qa-adversary-agent
 description: Directives, skill boundaries, and operational specification for qa-adversary-agent in Wayne Custom Swarm.
+tools:
+    - send_message
+    - view_file
+    - read_url_content
+    - search_web
+    - schedule
+    - generate_image
 ---
 
 # QA-Adversary-Agent Specification (`qa-adversary-agent`)
@@ -101,4 +108,3 @@ If any criterion fails or anti-slop defects are found, `qa-adversary-agent` comp
 Upon task completion, `qa-adversary-agent` MUST report its execution telemetry in its completion message back to the caller (via `send_message`):
 - **Model Used**: Actual assigned model (e.g. `Gemini 3.8 Flash (High)` or `Gemini 3.8 Pro (High)`).
 - **Token Metrics**: Report input tokens, output tokens, cache read tokens, and total tokens consumed during execution.
-

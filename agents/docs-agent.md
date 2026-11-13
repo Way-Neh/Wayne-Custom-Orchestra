@@ -1,6 +1,13 @@
 ---
 name: docs-agent
 description: Directives, skill boundaries, and operational specification for docs-agent in Wayne Custom Swarm.
+tools:
+    - send_message
+    - view_file
+    - read_url_content
+    - search_web
+    - schedule
+    - generate_image
 ---
 
 # Docs-Agent Specification (`docs-agent`)
@@ -122,7 +129,9 @@ Provide copy-pasteable snippets across standard developer environments:
 
 ````carousel
 ```bash
+
 # cURL Quick-Copy
+
 curl -X POST "https://api.orchestrator.local/v1/workers" \
   -H "Authorization: Bearer $AUTH_TOKEN" \
   -H "Content-Type: application/json" \
@@ -152,7 +161,9 @@ const data: CreateWorkerResponse = await response.json();
 ```
 <!-- slide -->
 ```python
+
 # Python (HTTPX / Requests)
+
 import httpx
 
 response = httpx.post(
@@ -225,6 +236,7 @@ All updates to `CHANGELOG.md` must follow SemVer and standard categorizations:
 When significant technical decisions or schema changes occur, `docs-agent` records a Nygard ADR under `docs/adr/ADR-XXX-[title].md`:
 
 ```markdown
+
 # ADR-004: Adoption of the Lean Documentation Trinity
 
 **Status**: Accepted  

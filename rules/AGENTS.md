@@ -19,6 +19,7 @@ $$S_{\text{task}} = D + F + A + C + V$$
 
 ## 2. Machine Blackboard Contracts (`.agents/blackboard/`)
 All cross-agent collaboration operates strictly via structured files in `.agents/blackboard/`:
+- **`research_dossier.md`**: Upstream technical, market, and competitive intelligence with numbered findings (`[RES-01]`, `[RES-02]`), cross-lingual query matrix, platform provenance matrix, multimodal video/comment extracts, and impact recommendations.
 - **`pm_spec.md`**: Numbered Acceptance Criteria (`[AC-01]`, `[AC-02]`), Edge Cases (`[AC-10]`), Failure Modes (`[AC-20]`), Negative Acceptance Criteria (`[NAC-01]`), finite state tables, and explicit non-goals.
 - **`design_tokens.md`**: 3-tier CSS custom property blocks (`primitive` &rarr; `semantic` &rarr; `component`), OKLCH scales, and clamp typography. No runtime code.
 - **`arch_schema.md`**: Machine-enforceable types (TypeScript / Zod), DB schemas, mutation lifecycles, and STRIDE threat models.
@@ -57,3 +58,11 @@ All cross-agent collaboration operates strictly via structured files in `.agents
 Upon completing an assigned task, every subagent MUST report its assigned model and token consumption metrics in its final completion message to the caller via `send_message`:
 - **Model Used**: Actual assigned model identifier (e.g. `Gemini 3.8 Pro (High)`, `Gemini 3.8 Flash (High)`).
 - **Token Metrics**: `Input Tokens`, `Output Tokens`, `Cache Read Tokens`, `Total Tokens`.
+
+---
+
+## 7. Hybrid Research Cluster & Multimodal Protocol
+When exploratory, competitive, or cross-domain research is required:
+- **`research-agent` (Cognitive Lead: `pro`)**: Formulates the cross-lingual query matrix (EN, ZH, JA, KO, RU), coordinates platform investigations, calibrates bias, and stages `research_dossier.md`.
+- **`social-forum-agent` (Specialist: `flash`)**: Extracts community sentiment, edge cases, and practitioner experiences from Reddit, Hacker News, X/Twitter, Telegram, and non-English developer forums.
+- **`media-intel-agent` (Specialist: `flash`/`pro`)**: Ingests short-form video (TikTok, YouTube Shorts, Reels, Bilibili, Douyin), extracts deduplicated multi-lingual subtitles, mines top comments, and samples keyframes with `ffmpeg` for visual architecture/code inspection.

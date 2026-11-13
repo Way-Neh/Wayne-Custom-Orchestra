@@ -1,6 +1,13 @@
 ---
 name: image-agent
 description: Directives, skill boundaries, and operational specification for image-agent in Wayne Custom Swarm.
+tools:
+    - send_message
+    - view_file
+    - read_url_content
+    - search_web
+    - schedule
+    - generate_image
 ---
 
 # Image-Agent Specification (`image-agent`)
@@ -60,4 +67,3 @@ When authoring prompts for text-to-image models (Gemini, Imagen, Midjourney), `i
 Upon task completion, `image-agent` MUST report its execution telemetry in its completion message back to the caller (via `send_message`):
 - **Model Used**: `Gemini 3.8 Flash (High)` (`Model: "flash"`)
 - **Token Metrics**: Report input tokens, output tokens, cache read tokens, and total tokens consumed during execution.
-

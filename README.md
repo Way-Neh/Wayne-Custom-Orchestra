@@ -77,6 +77,7 @@ flowchart TD
     Gate --> Verification
 
     subgraph Blackboard [".agents/blackboard/ (Machine Contracts)"]
+        BB_Research["research_dossier.md"]
         BB_PM["pm_spec.md"]
         BB_Design["design_tokens.md"]
         BB_Arch["arch_schema.md"]
@@ -188,10 +189,20 @@ The frontend workflow leverages a streamlined, decoupled design stack to achieve
 ### Dynamic Domain Plugins (Swarm Router)
 | Plugin Agent | Dedicated Spec | Responsibility | Assigned "Good Enough" Skills | Excluded Skills (Anti-Bloat Boundary) | Model Tier | Thinking Effort |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **`seo-agent`** | [`seo-agent/AGENTS.md`](.agents/roster/seo-agent/AGENTS.md) | Public marketing, SEO meta tags, JSON-LD schemas. | Search console, metadata validators, JSON-LD | UI layout, CSS, backend database | **`flash`** | **Low** |
-| **`analytics-agent`** | [`analytics-agent/AGENTS.md`](.agents/roster/analytics-agent/AGENTS.md) | Telemetry tracking, funnels, cohort indicators. | GA4 API, SQL adapters, event taxonomy | Visual design, application code | **`flash`** | **Low** |
-| **`image-agent`** | [`image-agent/AGENTS.md`](.agents/roster/image-agent/AGENTS.md) | Web asset discovery and custom AI image generation. | `search_web`, `generate_image`, `banner-design`, `brand (visual assets)`, `canvas-design` | Code editing, refactoring | **`flash`** | **Low** |
-| **`docs-agent`** | [`docs-agent/AGENTS.md`](.agents/roster/docs-agent/AGENTS.md) | Lead Technical Writer, Lean Documentation Trinity (Diátaxis, typed API contracts, C4 diagrams, SemVer changelogs, ADRs). | `diataxis-framework`, `api-documenter`, `c4-mermaid-diagrams` | `runtime execution`, `test runners`, `ui-styling`, `code implementation` | **`flash`** *(or `flash_lite`)* | **Medium** *(or `None–Low`)* |
+| **`research-agent`** | [`agents/research-agent.md`](agents/research-agent.md) | Lead Research Strategist, cross-lingual query matrix, dossier compilation. | `research-intelligence`, `search_web`, `research_tools.py` | Implementation, UI styling, DB writes | **`pro`** | **High** |
+| **`social-forum-agent`** | [`agents/social-forum-agent.md`](agents/social-forum-agent.md) | Community sentiment, Reddit/HN/Telegram/X and non-English forums. | `forum-scraping`, `sentiment-analysis`, `research_tools.py` | Architecture design, code authoring | **`flash`** | **Medium** |
+| **`media-intel-agent`** | [`agents/media-intel-agent.md`](agents/media-intel-agent.md) | Short-form video (TikTok, Shorts, Reels, Bilibili), multi-subtitles, keyframe vision. | `yt-dlp-pipeline`, `ffmpeg-keyframes`, `multimodal-vision` | Video creation, code authoring | **`flash`** *(or `pro` for vision)* | **Medium** |
+| **`seo-agent`** | [`agents/seo-agent.md`](agents/seo-agent.md) | Public marketing, SEO meta tags, JSON-LD schemas. | Search console, metadata validators, JSON-LD | UI layout, CSS, backend database | **`flash`** | **Low** |
+| **`analytics-agent`** | [`agents/analytics-agent.md`](agents/analytics-agent.md) | Telemetry tracking, funnels, cohort indicators. | GA4 API, SQL adapters, event taxonomy | Visual design, application code | **`flash`** | **Low** |
+| **`image-agent`** | [`agents/image-agent.md`](agents/image-agent.md) | Web asset discovery and custom AI image generation. | `search_web`, `generate_image`, `banner-design`, `brand (visual assets)`, `canvas-design` | Code editing, refactoring | **`flash`** | **Low** |
+| **`docs-agent`** | [`agents/docs-agent.md`](agents/docs-agent.md) | Lead Technical Writer, Lean Documentation Trinity (Diátaxis, typed API contracts, C4 diagrams, SemVer changelogs, ADRs). | `diataxis-framework`, `api-documenter`, `c4-mermaid-diagrams` | `runtime execution`, `test runners`, `ui-styling`, `code implementation` | **`flash`** *(or `flash_lite`)* | **Medium** *(or `None–Low`)* |
+
+### 🔬 The Hybrid Research Cluster & Multimodal Architecture
+The research intelligence cluster operates during Phase 0 (Research Sprint) or whenever market/technical investigation is requested:
+- **`research-agent` (Pro / High)**: Formulates localized query matrices across 5 major language ecosystems (English, Chinese, Japanese, Korean, Russian). Translates technical concepts into native developer community jargon (`踩坑`, `实测`, `使ってみた`, `грабли`).
+- **`social-forum-agent` (Flash / Medium)**: Ingests Reddit threads via public JSON, queries the Hacker News Algolia API, parses public Telegram channels, and analyzes X/Twitter discourse without bloating prompt contexts.
+- **`media-intel-agent` (Flash/Pro / Medium)**: Processes short-form video (TikTok, YouTube Shorts, Instagram Reels, Bilibili, Douyin) through a 4-layer multimodal pipeline: metadata extraction, deduplicated subtitle parsing across multi-language tracks, top community comment mining, and `ffmpeg` keyframe sampling to inspect on-screen code or diagrams.
+- **`research_dossier.md`**: Machine blackboard contract synthesizing all findings, provenances, and evidence into structured inputs directly ingested by `pm-agent` (`pm_spec.md`) and `architect-agent` (`arch_schema.md`).
 
 ### 📚 The Lean Documentation Trinity & Technical Writing Architecture
 Technical documentation is authored by `docs-agent` adhering strictly to the **Lean Documentation Trinity**:

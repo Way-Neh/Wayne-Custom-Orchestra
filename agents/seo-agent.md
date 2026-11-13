@@ -1,6 +1,13 @@
 ---
 name: seo-agent
 description: Directives, skill boundaries, and operational specification for seo-agent in Wayne Custom Swarm.
+tools:
+    - send_message
+    - view_file
+    - read_url_content
+    - search_web
+    - schedule
+    - generate_image
 ---
 
 # SEO-Agent Specification (`seo-agent`)
@@ -75,4 +82,3 @@ All structured data must conform strictly to [Schema.org](https://schema.org) st
 Upon task completion, `seo-agent` MUST report its execution telemetry in its completion message back to the caller (via `send_message`):
 - **Model Used**: `Gemini 3.8 Flash (High)` (`Model: "flash"`)
 - **Token Metrics**: Report input tokens, output tokens, cache read tokens, and total tokens consumed during execution.
-

@@ -1,6 +1,13 @@
 ---
 name: pm-agent
 description: Directives, skill boundaries, and operational specification for pm-agent in Wayne Custom Swarm.
+tools:
+    - send_message
+    - view_file
+    - read_url_content
+    - search_web
+    - schedule
+    - generate_image
 ---
 
 # PM-Agent Specification (`pm-agent`)
@@ -101,4 +108,3 @@ Every PRD staged by `pm-agent` must explicitly enumerate **Non-Goals** to protec
 Upon task completion, `pm-agent` MUST report its execution telemetry in its completion message back to the caller (via `send_message`):
 - **Model Used**: `Gemini 3.8 Pro (High)` (`Model: "pro"`)
 - **Token Metrics**: Report input tokens, output tokens, cache read tokens, and total tokens consumed during execution.
-

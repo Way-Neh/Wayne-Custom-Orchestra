@@ -30,14 +30,16 @@ $$S_{\text{task}} = D + F + A + C + V$$
 ## 2. Swarms Architectural Primitives & Topologies
 - **Hierarchical Swarm**: Root Orchestrator (Zero Direct Labor) directs and routes; specialized core pillars execute; domain plugins handle discrete tasks.
 - **LLM Council / Consensus Gate**: Proposer (`architect-agent`) vs. Challenger lens. Schemas and contracts achieve consensus before commit.
-- **Swarm Router**: Semantic, on-demand dispatching to domain plugins (`seo-agent`, `analytics-agent`, `image-agent`, `docs-agent`).
-- **Mixture of Agents (MoA)**: Upstream specs (`pm_spec.md`, `design_tokens.md`, `arch_schema.md`) are synthesized and injected into `builder-agent`.
+- **Hybrid Research Cluster**: Dynamic intelligence sprint (`research-agent` lead, `social-forum-agent` for Reddit/HN/X/Telegram, `media-intel-agent` for Shorts/TikTok/Bilibili/Reels).
+- **Swarm Router**: Semantic, on-demand dispatching to domain plugins (`research-agent`, `social-forum-agent`, `media-intel-agent`, `seo-agent`, `analytics-agent`, `image-agent`, `docs-agent`).
+- **Mixture of Agents (MoA)**: Upstream specs (`research_dossier.md`, `pm_spec.md`, `design_tokens.md`, `arch_schema.md`) are synthesized and injected into `builder-agent`.
 - **Bounded Cyclic Self-Healing**: Automated feedback loop (`qa-adversary-agent` $\rightleftharpoons$ `builder-agent`) with up to 3 repair cycles before escalation.
 
 ## 3. The Zero Direct Labor Rule (Tier 3)
 For Tier 3 tasks, the root Orchestrator does **zero direct code or asset implementation**. It exclusively handles triage, decomposition, subagent delegation (`invoke_subagent` with `Workspace: "share"`), self-healing orchestration, and synthesis.
 
 ## 4. Shared Blackboard Contracts (`.agents/blackboard/`)
+- `research_dossier.md`: Cross-lingual intelligence, native query matrices, video transcripts/comments, and empirical findings.
 - `pm_spec.md`: Numbered Acceptance Criteria matrix (`[AC-xx]`), user personas, edge cases.
 - `design_tokens.md`: Drop-in CSS variables, color palettes, spacing scales, component hierarchy.
 - `arch_schema.md`: System architecture, API contracts, DB schemas, state trees approved by LLM Council.
