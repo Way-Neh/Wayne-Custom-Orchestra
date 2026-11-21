@@ -33,14 +33,23 @@ To completely eliminate git contention, index locks, and build artifact clobberi
 ```
 
 ### Execution Rules:
-1. **Isolated Path**: Always execute commands, file edits, and builds inside `.worktrees/worker-<id>/`.
+1. **Isolated Path & Helper Usage**: Use the bundled orchestrator worktree helper to initialize and maintain isolation:
+   ```bash
+   bash "${PLUGIN_DIR:-/home/wayne/.gemini/config/plugins/wayne-custom-orchestra}/scripts/worktree_helper.sh" add <worker-id> [base-branch]
+   ```
+   Always execute commands, file edits, and builds inside `.worktrees/worker-<id>/`.
 2. **Dedicated Branch**: Commit code exclusively to `swarm/worker-<id>`.
 3. **No Direct Master Touches**: Never commit directly to `main`, `master`, or un-merged integration branches.
-4. **Integration Gate**: Once implementation completes, signal the Orchestrator for branch merge into `feat/<task>`.
+4. **Integration Gate**: Once implementation completes, signal the Orchestrator for branch merge into `feat/<task>` or invoke:
+   ```bash
+   bash "${PLUGIN_DIR:-/home/wayne/.gemini/config/plugins/wayne-custom-orchestra}/scripts/worktree_helper.sh" merge <worker-id> feat/<task>
+   ```
 5. **Self-Healing Re-Sync Protocol (Iterations 2 & 3)**:
-   - Before applying fixes in Iteration $N$, `builder-agent` MUST re-synchronize its worktree with the local integration branch:
+   - Before applying fixes in Iteration $N$, `builder-agent` MUST re-synchronize its worktree with the local integration branch using the helper:
      ```bash
-     git merge --ff-only feat/<task> || git rebase feat/<task>
+     bash "${PLUGIN_DIR:-/home/wayne/.gemini/config/plugins/wayne-custom-orchestra}/scripts/worktree_helper.sh" sync <worker-id> feat/<task>
+     # Fallback manual command:
+     git -C ".worktrees/worker-<worker-id>" merge --ff-only feat/<task> || git -C ".worktrees/worker-<worker-id>" rebase feat/<task>
      ```
    - This guarantees the builder develops fixes against the exact integrated codebase audited by `qa-adversary-agent` without depending on a remote upstream `origin`.
 

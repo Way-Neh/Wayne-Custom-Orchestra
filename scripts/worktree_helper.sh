@@ -30,7 +30,7 @@ ensure_gitignore() {
 }
 
 case "$COMMAND" in
-  add)
+  add|create)
     ensure_git
     ensure_gitignore
     if [ -z "$WORKER_ID" ]; then
@@ -89,7 +89,7 @@ case "$COMMAND" in
     echo "✅ Merged $WT_BRANCH into $TARGET_BRANCH"
     ;;
 
-  remove)
+  remove|cleanup|delete)
     ensure_git
     if [ -z "$WORKER_ID" ]; then
       echo "Usage: $(basename "$0") remove <worker_id>" >&2

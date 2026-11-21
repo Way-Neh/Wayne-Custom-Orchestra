@@ -25,7 +25,13 @@ $$S_{\text{task}} = D + F + A + C + V$$
 | **Tier 2: Targeted Specialist** | $S_{\text{task}} = 8 - 10$ | `Targeted Dispatch` | Single specialist dispatched. Max 1-question micro-grill if UX/arch fork exists. |
 | **Tier 3: Swarms-Enhanced Swarm** | $S_{\text{task}} \ge 11$ | `Wayne Custom Swarm` | Full lifecycle: Grill-Me $\rightarrow$ LLM Council Spec Staging $\rightarrow$ Director Gate $\rightarrow$ Swarm Router Dispatch $\rightarrow$ Adversarial QA with Cyclic Self-Healing. |
 
-> **Automated Task Rule**: For any scheduled or timer-triggered tasks (cron, background alarms), the Director approval gate is **automatically bypassed**.
+> **Automated Task Safety Rule**: For any scheduled or timer-triggered tasks (cron, background alarms), the Director approval gate is bypassed ONLY if $S_{\text{task}} \le 10$ (Tier 1 or Tier 2). Tier 3 swarms triggered via unattended timers are automatically constrained to a **50,000 token spend ceiling** and a **maximum of 1 self-healing repair cycle**; if unpassed criteria remain, execution safely pauses for Director review.
+
+## 2. Programmatic Enforcement Tooling
+- **Git Worktree Isolation**: Managed via `scripts/worktree_helper.sh {add|sync|merge|remove}`.
+- **Contract Parity Validation**: Enforced via `scripts/validate_blackboard.py`.
+- **Bounded Cyclic Self-Healing**: Managed via `scripts/healing_tracker.py {init|record|status}`.
+- **System Parity Linter**: Verified via `scripts/audit_orchestrator.py`.
 
 ## 2. Swarms Architectural Primitives & Topologies
 - **Hierarchical Swarm**: Root Orchestrator (Zero Direct Labor) directs and routes; specialized core pillars execute; domain plugins handle discrete tasks.

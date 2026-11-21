@@ -1,5 +1,6 @@
 # Ephemeral
 .worktrees/
+.agents/
 *.log
 
 # Downloads (JIT skill cache)

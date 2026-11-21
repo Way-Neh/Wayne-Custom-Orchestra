@@ -14,7 +14,11 @@
 | `[AC-01]` | {{DESCRIPTION_AC_01}} | `PASS` | `npm test -- -t "AC-01"` (Clean 0 exit, 3 passed) |
 | `[AC-02]` | {{DESCRIPTION_AC_02}} | `PASS` | Verified via AST grep and response payload assert |
 | `[AC-10]` | {{DESCRIPTION_AC_10}} | `FAIL` | `Expected status 400 on empty string, got 500` |
+| `[AC-11]` | {{DESCRIPTION_AC_11}} | `PASS` | Boundary value verified at limits |
+| `[AC-20]` | {{DESCRIPTION_AC_20}} | `PASS` | Clean exception handling on network disconnect |
+| `[AC-21]` | {{DESCRIPTION_AC_21}} | `PASS` | Fallback recovery route verified |
 | `[NAC-01]` | {{DESCRIPTION_NAC_01}} | `PASS` | Zero unhandled promise rejections detected |
+| `[NAC-02]` | {{DESCRIPTION_NAC_02}} | `PASS` | No memory leaks detected in heap profile |
 
 ---
 

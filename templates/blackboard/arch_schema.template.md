@@ -35,3 +35,14 @@ export type {{ENTITY_NAME}} = z.infer<typeof {{ENTITY_NAME}}Schema>;
 | :--- | :--- | :--- |
 | **Tampering** | Unvalidated API payloads | Zod schema parse gate at API gateway |
 | **Elevation of Privilege** | Horizontal parameter tampering | Session-bound user ID validation |
+
+---
+
+## 4. LLM Council Consensus Resolution
+- **Proposer (`architect-agent`)**: Initial architectural topology, data boundaries, and schema definitions.
+- **Challenger (`council-challenger`)**: Stress-test findings on race conditions, memory/concurrency bottlenecks, and failure modes.
+- **Resolution & Hardening**:
+  - Point 1: [Mitigation applied based on challenger critique]
+  - Point 2: [Contract constraint hardened]
+- **Consensus Verdict**: `CONSENSUS_ACHIEVED` (Signed by Proposer & Challenger before Phase 3 Director Gate).
+

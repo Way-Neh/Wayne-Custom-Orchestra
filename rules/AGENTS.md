@@ -25,15 +25,18 @@ $$S_{\text{task}} = D + F + A + C + V$$
 - **`design_tokens.md`**: 3-tier CSS custom property blocks (`primitive` &rarr; `semantic` &rarr; `component`), OKLCH scales, and clamp typography. No runtime code.
 - **`arch_schema.md`**: Machine-enforceable types (TypeScript / Zod), DB schemas, mutation lifecycles, and STRIDE threat models.
 - **`code_qa_status.md`**: Line-by-line verification matrix against every `[AC-xx]` ID with concrete reproduction proofs and diff telemetry.
+- **Contract Parity Validation**: Before builder hand-off, the blackboard MUST be validated using `scripts/validate_blackboard.py`.
 
 ---
 
 ## 3. Worker Worktree Isolation & Re-Sync Invariant
-- Concurrent builders MUST implement features strictly inside dedicated Git worktrees: `.worktrees/worker-<id>` on branch `swarm/worker-<id>`.
+- Concurrent builders MUST implement features strictly inside dedicated Git worktrees managed via `scripts/worktree_helper.sh {add|sync|merge|remove}`: `.worktrees/worker-<id>` on branch `swarm/worker-<id>`.
 - Never commit directly to `main`, `master`, or unmerged integration branches (`feat/<task>`).
 - **Self-Healing Re-Sync Protocol (Iterations 2 & 3)**:
   Before applying fixes in Iteration $N$, `builder-agent` MUST re-synchronize its worktree branch with the local integration branch:
   ```bash
+  bash scripts/worktree_helper.sh sync <worker-id> feat/<task>
+  # Fallback:
   git merge --ff-only feat/<task> || git rebase feat/<task>
   ```
   This ensures the builder develops fixes against the exact integrated codebase audited by QA.
@@ -48,9 +51,9 @@ $$S_{\text{task}} = D + F + A + C + V$$
 ---
 
 ## 5. Bounded Cyclic Self-Healing & Escalation Gate
-- Automated feedback loop (`qa-adversary-agent` $\rightleftharpoons$ `builder-agent`): maximum **3 repair iterations**.
-- **Regression Lock Rule**: Criteria verified as PASS (`[x]`) in iteration $N$ are permanently locked. Any subsequent fix breaking a passing criterion is flagged as a `REGRESSION_VIOLATION`.
-- **Architectural Escalation Gate**: If the same criterion fails across 2 consecutive iterations, the Orchestrator pauses `builder-agent` and dispatches `architect-agent` to evaluate whether `arch_schema.md` or API contracts require revision before attempting iteration 3.
+- Automated feedback loop (`qa-adversary-agent` $\rightleftharpoons$ `builder-agent`): maximum **3 repair iterations**, tracked deterministically via `scripts/healing_tracker.py`.
+- **Regression Lock Rule**: Criteria verified as PASS (`[x]`) in iteration $N$ are permanently locked. Any subsequent fix breaking a passing criterion is flagged by `healing_tracker.py` as a `REGRESSION_VIOLATION`.
+- **Architectural Escalation Gate**: If the same criterion fails across 2 consecutive iterations, `healing_tracker.py` flags an architectural escalation. The Orchestrator pauses `builder-agent` and dispatches `architect-agent` to evaluate whether `arch_schema.md` or API contracts require revision before attempting iteration 3.
 - If issues remain unresolved after 3 iterations, execution cleanly halts and escalates to the Director with complete diagnostic telemetry.
 
 ---
@@ -67,3 +70,9 @@ When exploratory, competitive, or cross-domain research is required:
 - **`research-agent` (Cognitive Lead: `pro`)**: Formulates the cross-lingual query matrix (EN, ZH, JA, KO, RU), coordinates platform investigations, calibrates bias, and stages `research_dossier.md`.
 - **`social-forum-agent` (Specialist: `flash`)**: Extracts community sentiment, edge cases, and practitioner experiences from Reddit, Hacker News, X/Twitter, Telegram, and non-English developer forums.
 - **`media-intel-agent` (Specialist: `flash`/`pro`)**: Ingests short-form video (TikTok, YouTube Shorts, Reels, Bilibili, Douyin), extracts deduplicated multi-lingual subtitles, mines top comments, and samples keyframes with `ffmpeg` for visual architecture/code inspection.
+
+---
+
+## 8. Unattended Execution Safety Ceiling
+- For background scheduled/timer automations (cron jobs), the Director approval gate is bypassed ONLY if $S_{\text{task}} \le 10$ (Tier 1 or Tier 2).
+- Any unattended Tier 3 swarm ($S_{\text{task}} \ge 11$) is strictly capped at a **50,000 total token spend limit** and a **maximum of 1 self-healing repair cycle** before halting and demanding Director authorization.

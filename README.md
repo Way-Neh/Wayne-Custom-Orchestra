@@ -11,7 +11,7 @@ Adaptive Multi-Agent Swarm Orchestrator Architecture & Operating Model (**Wayne 
 - **Hierarchical Swarms**: Structured delegation from Root Orchestrator to Core Pillars and Worker Plugins.
 - **LLM Council (Consensus Gate)**: Adversarial debate (Proposer vs. Security/Scalability Challenger) before locking architectural contracts.
 - **Swarm Router**: Semantic and capability-driven router dynamically activating specialized domain plugins on-demand.
-- **Cold Catalog & JIT Skill Retrieval**: Curated offline catalog (`.agents/skills/catalog/`) of 2,000+ domain skills (DOCX, PDF, PPTX, XLSX, EPUB, API design, DevOps) searched via `find_skill.py` and mounted just-in-time with 0 root token overhead.
+- **Cold Catalog & JIT Skill Retrieval**: Curated foundational catalog (`skills/catalog/`) of 16 indexed skills with offline packages for DOCX, PDF, PPTX, and XLSX, dynamically searchable and mountable via `find_skill.py` with zero root token overhead.
 - **Mixture of Agents (MoA)**: Context synthesis flowing downstream from PM, Design, and Architecture directly into Builder.
 - **Concurrent Worker Worktrees**: Physical filesystem isolation via Git worktrees (`.worktrees/worker-<id>`) on `swarm/worker-<id>` eliminating file clobbering, git contention, and build lock collisions.
 - **Bounded Cyclic Self-Healing**: Automated $\le 3$ iteration feedback cycle between QA Adversary and Builder before escalating to the Director.
@@ -130,7 +130,7 @@ $$S_{\text{task}} = D + F + A + C + V$$
 | **Tier 2: Targeted Specialist** | $S_{\text{task}} = 8 - 10$ | `Targeted Dispatch` | Single specialist dispatched. Max 1-question micro-grill if UX/arch fork exists. |
 | **Tier 3: Swarms-Enhanced Swarm** | $S_{\text{task}} \ge 11$ | `Wayne Custom Swarm` | Full lifecycle: Grill-Me $\rightarrow$ LLM Council Spec Staging $\rightarrow$ Director Gate $\rightarrow$ Swarm Router Dispatch $\rightarrow$ Adversarial QA with Cyclic Self-Healing. |
 
-> **Automated Task Rule**: For any scheduled or timer-triggered tasks (cron, background alarms), the Director approval gate is **automatically bypassed**.
+> **Automated Task Safety Rule**: For any scheduled or timer-triggered tasks (cron, background alarms), the Director approval gate is bypassed ONLY if $S_{\text{task}} \le 10$ (Tier 1 or Tier 2). Tier 3 swarms triggered via unattended timers are automatically constrained to a **50,000 token spend ceiling** and a **maximum of 1 self-healing repair cycle**; if unpassed criteria remain, execution safely halts for Director review.
 
 ### 3. The Zero Direct Labor Rule (Tier 3)
 For Tier 3 tasks, the root Orchestrator does **no direct code or asset implementation**. It exclusively handles triage, task sizing, LLM Council facilitation, Swarm Router dispatching (`invoke_subagent` with `Workspace: "share"`), self-healing orchestration, and final synthesis.
@@ -172,6 +172,15 @@ To prevent prompt context bloat while supporting thousands of specialized file f
    ```
 4. **Zero Direct Root Token Overhead**:
    - Root Orchestrator and Core Pillars maintain **0 token overhead** from specialized skills, ensuring full cognitive capacity and attention preservation for coordination.
+
+### 7. Programmatic vs. Heuristic Architecture Taxonomy
+
+To maintain engineering rigor and avoid conflating prompt suggestions with code guarantees, the orchestrator delineates all capabilities into two distinct operational classes:
+
+| Class | Mechanism Type | Enforcing Artifact / Tool | Failure Behavior |
+| :--- | :--- | :--- | :--- |
+| **Code-Enforced** | Deterministic CLI scripts, Git hooks, filesystem locks | `worktree_helper.sh`, `validate_blackboard.py`, `healing_tracker.py`, `collate_telemetry.py`, `on_session_start.py` (`hooks.json`) | Hard exit code $\ne 0$; blocks subsequent phases loudly. |
+| **Prompt-Guided** | Cognitive role directives, persona constraints, thinking depth | Agent system prompts (`agents/*.md`), skill guides (`skills/*/SKILL.md`) | Probabilistic; monitored via adversarial review and linter audits (`audit_orchestrator.py`). |
 
 ---
 
@@ -305,12 +314,20 @@ python3 .agents/scripts/collate_telemetry.py --format json
 │   │   ├── analytics-agent/AGENTS.md
 │   │   ├── image-agent/AGENTS.md
 │   │   └── docs-agent/AGENTS.md
-│   ├── scripts/                      # Orchestration utilities
-│   │   ├── collate_telemetry.py      # Telemetry collation utility
-│   │   └── find_skill.py             # JIT skill search & retrieval utility
+│   ├── scripts/                      # Orchestration & verification utilities
+│   │   ├── audit_orchestrator.py     # System-wide parity linter & claim auditor
+│   │   ├── collate_telemetry.py      # Subagent execution telemetry aggregator
+│   │   ├── find_skill.py             # JIT skill search & mounting utility
+│   │   ├── healing_tracker.py        # Bounded cyclic self-healing state machine
+│   │   ├── init_blackboard.py        # Blackboard contract bootstrapper
+│   │   ├── on_session_start.py       # SessionStart hook handler
+│   │   ├── research_tools.py         # Cross-lingual forum & media intelligence CLI
+│   │   ├── retrospective_onboard.py  # Batch workspace blackboard migrator
+│   │   ├── validate_blackboard.py    # Blackboard syntax & parity validator
+│   │   └── worktree_helper.sh        # Git worktree isolation lifecycle helper
 │   └── skills/                       # Workspace & Cold Catalog skills
 │       ├── catalog/                  # Cold Storage catalog (JIT retrieval)
-│       │   ├── index.json            # Curated catalog index (2,000+ skills)
+│       │   ├── index.json            # Curated foundational catalog index (16 skills)
 │       │   ├── _template/SKILL.md    # Offline starter template
 │       │   ├── docx/SKILL.md         # Word OOXML processing skill
 │       │   ├── pdf/SKILL.md          # PDF extraction & form filling skill
