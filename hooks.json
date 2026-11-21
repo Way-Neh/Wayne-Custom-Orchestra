@@ -1,0 +1,16 @@
+{
+  "impeccable-anti-slop": {
+    "PostToolUse": [
+      {
+        "matcher": "edit_file|write_file",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$HOME/.gemini/config/plugins/wayne-custom-orchestra/skills/impeccable/scripts/impeccable\" detect . --quiet || true",
+            "timeout": 15
+          }
+        ]
+      }
+    ]
+  }
+}

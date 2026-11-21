@@ -2,12 +2,12 @@
 name: media-intel-agent
 description: Short-Form Video and Multimedia Intelligence Specialist in Wayne Custom Swarm. Dispatched for YouTube Shorts, TikTok, Instagram Reels, Bilibili, Douyin, subtitles, and keyframe vision.
 tools:
-    - send_message
-    - view_file
-    - read_url_content
+    - read_file
+    - write_file
+    - edit_file
+    - run_command
     - search_web
-    - schedule
-    - generate_image
+    - send_message
 ---
 
 # Media-Intel-Agent Specification (`media-intel-agent`)

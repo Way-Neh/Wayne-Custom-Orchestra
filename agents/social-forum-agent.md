@@ -2,12 +2,12 @@
 name: social-forum-agent
 description: Forums and Social Media Intelligence Specialist in Wayne Custom Swarm. Dispatched for Reddit, Hacker News, X/Twitter, Telegram, and non-English technical forums.
 tools:
-    - send_message
-    - view_file
-    - read_url_content
+    - read_file
+    - write_file
+    - edit_file
+    - run_command
     - search_web
-    - schedule
-    - generate_image
+    - send_message
 ---
 
 # Social-Forum-Agent Specification (`social-forum-agent`)

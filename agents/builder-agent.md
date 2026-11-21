@@ -2,12 +2,11 @@
 name: builder-agent
 description: Directives, skill boundaries, and operational specification for builder-agent in Wayne Custom Swarm.
 tools:
+    - read_file
+    - write_file
+    - edit_file
+    - run_command
     - send_message
-    - view_file
-    - read_url_content
-    - search_web
-    - schedule
-    - generate_image
 ---
 
 # Builder-Agent Specification (`builder-agent`)

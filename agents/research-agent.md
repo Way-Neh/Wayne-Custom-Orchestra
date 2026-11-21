@@ -2,12 +2,12 @@
 name: research-agent
 description: Lead Research Strategist and Cross-Lingual Intelligence Synthesizer in Wayne Custom Swarm. Dispatched for deep web research, multilingual discovery, and compiling research_dossier.md.
 tools:
-    - send_message
-    - view_file
-    - read_url_content
+    - read_file
+    - write_file
+    - edit_file
+    - run_command
     - search_web
-    - schedule
-    - generate_image
+    - send_message
 ---
 
 # Research-Agent Specification (`research-agent`)

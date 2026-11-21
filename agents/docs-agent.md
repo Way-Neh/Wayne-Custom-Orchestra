@@ -2,12 +2,10 @@
 name: docs-agent
 description: Directives, skill boundaries, and operational specification for docs-agent in Wayne Custom Swarm.
 tools:
+    - read_file
+    - write_file
+    - edit_file
     - send_message
-    - view_file
-    - read_url_content
-    - search_web
-    - schedule
-    - generate_image
 ---
 
 # Docs-Agent Specification (`docs-agent`)

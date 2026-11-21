@@ -22,20 +22,27 @@ flowchart TD
     --> Orch["🧠 Root Orchestrator<br/>Triage & 5-Factor Sizing (S_task)<br/>Zero Direct Labor in Tier 3"]
 
     subgraph Sizing ["Dynamic Task Sizing Protocol"]
-        Tier1["Tier 1: Direct Solo (S_task &le; 5)<br/>Immediate Execution (Bypass Gates)"]
-        Tier2["Tier 2: Targeted Specialist (S_task 6-8)<br/>Conditional Micro-Grill"]
-        Tier3["Tier 3: Swarms-Enhanced Swarm (S_task &ge; 9)<br/>Grill-Me + LLM Council + Cyclic Self-Healing"]
+        Tier1["Tier 1: Direct Solo (S_task &le; 7)<br/>Immediate Execution (Bypass Gates)"]
+        Tier2["Tier 2: Targeted Specialist (S_task 8-10)<br/>Conditional Micro-Grill"]
+        Tier3["Tier 3: Swarms-Enhanced Swarm (S_task &ge; 11)<br/>Grill-Me + LLM Council + Cyclic Self-Healing"]
     end
     Orch --> Sizing
 
     subgraph Lifecycle ["Tier 3 Swarms Lifecycle & Topologies"]
+        subgraph Research ["Phase 0: Hybrid Research Cluster (Optional / On-Demand)"]
+            Res_Lead["🔬 research-agent (Pro / High)<br/>Cross-Lingual Query Matrix"]
+            Forum["💬 social-forum-agent (Flash)<br/>Reddit / HN / Telegram / X"]
+            Media["🎬 media-intel-agent (Flash/Pro)<br/>Shorts / TikTok / Reels / ffmpeg"]
+            Res_Lead --> Forum & Media
+        end
+
         P1["Phase 1: Grill-Me Protocol<br/>Interactive Trade-Off Alignment"]
         
         subgraph Council ["Phase 2: Spec Staging & LLM Council"]
             PM_Spec["📋 pm-agent<br/>pm_spec.md ([AC-xx] Matrix)"]
             Design_Spec["🎨 design-agent (Lean Design Trinity)<br/>design_tokens.md (3-Tier Tokens)"]
             Arch_Prop["🏛️ architect-agent<br/>Architecture Proposal"]
-            Challenger["🛡️ Council Challenger<br/>Security & Scalability Lens"]
+            Challenger["🛡️ council-challenger<br/>Security & Scalability Lens"]
             Arch_Prop <-->|"Consensus Gate"| Challenger
             Arch_Prop --> Arch_Spec["arch_schema.md<br/>Validated Schema Contract"]
         end
@@ -51,7 +58,7 @@ flowchart TD
                 WN["🌿 Worker N Worktree<br/>branch: swarm/worker-n<br/>builder-agent (Auth / State)"]
             end
 
-            Plugins["🔌 Dynamic Domain Plugins<br/>seo | analytics | image | docs"]
+            Plugins["🔌 Dynamic Domain Plugins<br/>research | social-forum | media-intel | seo | analytics | image | docs"]
             Gate["🔀 Swarm Integration Gate<br/>Merge & Rebase into feat/task"]
 
             Router --> Worktrees
@@ -70,7 +77,8 @@ flowchart TD
         end
     end
 
-    Tier3 --> P1
+    Tier3 --> Research
+    Research --> P1
     P1 --> Council
     Council --> P3
     P3 --> Execution
@@ -83,6 +91,7 @@ flowchart TD
         BB_Arch["arch_schema.md"]
         BB_QA["code_qa_status.md"]
     end
+    Research -.-> BB_Research
     Council -.-> Blackboard
     Verification -.-> Blackboard
 ```
@@ -94,8 +103,9 @@ flowchart TD
 | Swarm Topology | Implementation Mechanism | Workflow Impact |
 | :--- | :--- | :--- |
 | **Hierarchical Swarm** | `The Orchestrator` $\rightarrow$ Core Pillars $\rightarrow$ Dynamic Plugins | Enforces strict executive oversight with zero direct labor on the root orchestrator. Core pillars lead specialized tracks while dynamic plugins serve as worker nodes. |
-| **LLM Council (Consensus Gate)** | Proposer (`architect-agent`) vs. Challenger (`security/scalability lens`) | Activates during Phase 2. System schemas, data models, and API interfaces must withstand rigorous challenge and reach multi-perspective consensus before locking into `arch_schema.md`. |
-| **Swarm Router** | Semantic / capability-based dispatcher with Cold Catalog JIT Retrieval | Dynamically provisions plugin subagents (`seo-agent`, `analytics-agent`, `image-agent`, `docs-agent`) and queries `.agents/scripts/find_skill.py` to mount specialized domain skills (docx, pdf, pptx, xlsx) just-in-time, keeping root context at 0 token overhead. |
+| **LLM Council (Consensus Gate)** | Proposer (`architect-agent`) vs. Challenger (`council-challenger`) | Activates during Phase 2. System schemas, data models, and API interfaces must withstand rigorous challenge and reach multi-perspective consensus before locking into `arch_schema.md`. |
+| **Hybrid Research Cluster** | Phase 0 Intelligence Sprint (`research-agent`, `social-forum-agent`, `media-intel-agent`) | Ingests cross-lingual technical discourse, developer forums (Reddit, HN, Telegram), and short-form video (Shorts, TikTok, Bilibili) into `research_dossier.md` before planning. |
+| **Swarm Router** | Semantic / capability-based dispatcher with Cold Catalog JIT Retrieval | Dynamically provisions plugin subagents (`research-agent`, `social-forum-agent`, `media-intel-agent`, `seo-agent`, `analytics-agent`, `image-agent`, `docs-agent`) and queries `find_skill.py` to mount specialized domain skills just-in-time, keeping root context at 0 token overhead. |
 | **Mixture of Agents (MoA)** | Layered contextual synthesis across blackboard | Outputs from PM, Design, and Architecture are synthesized into machine-readable blackboard contracts that guide `builder-agent` directly. |
 | **Concurrent Worker Worktrees** | Isolated Git worktrees (`.worktrees/worker-<id>`) on `swarm/worker-<id>` | Activates in Phase 4. Prevents git index contention, compiler cache locks, and file clobbering across concurrent builder instances before merging through the integration gate. |
 | **Bounded Cyclic Self-Healing** | Automated loop (`qa-adversary-agent` $\rightleftharpoons$ `builder-agent`) | If adversarial audit detects failing acceptance criteria (`[AC-xx]`), diffs and failure traces are automatically routed back to Builder for up to **3 iterations** before escalation. |
@@ -116,9 +126,9 @@ $$S_{\text{task}} = D + F + A + C + V$$
 ### 2. Tier-by-Tier Gating
 | Tier | Score Range | Mode | Gating Behavior |
 | :--- | :--- | :--- | :--- |
-| **Tier 1: Micro / Quick Fix** | $S_{\text{task}} \le 5$ | `Direct Solo` | Mandatory bypass of Grill-Me & approval gates. Direct execution. |
-| **Tier 2: Targeted Specialist** | $S_{\text{task}} = 6 - 8$ | `Targeted Dispatch` | Single specialist dispatched. Max 1-question micro-grill if UX/arch fork exists. |
-| **Tier 3: Swarms-Enhanced Swarm** | $S_{\text{task}} \ge 9$ | `Wayne Custom Swarm` | Full lifecycle: Grill-Me $\rightarrow$ LLM Council Spec Staging $\rightarrow$ Director Gate $\rightarrow$ Swarm Router Dispatch $\rightarrow$ Adversarial QA with Cyclic Self-Healing. |
+| **Tier 1: Micro / Quick Fix** | $S_{\text{task}} \le 7$ | `Direct Solo` | Mandatory bypass of Grill-Me & approval gates. Direct execution. |
+| **Tier 2: Targeted Specialist** | $S_{\text{task}} = 8 - 10$ | `Targeted Dispatch` | Single specialist dispatched. Max 1-question micro-grill if UX/arch fork exists. |
+| **Tier 3: Swarms-Enhanced Swarm** | $S_{\text{task}} \ge 11$ | `Wayne Custom Swarm` | Full lifecycle: Grill-Me $\rightarrow$ LLM Council Spec Staging $\rightarrow$ Director Gate $\rightarrow$ Swarm Router Dispatch $\rightarrow$ Adversarial QA with Cyclic Self-Healing. |
 
 > **Automated Task Rule**: For any scheduled or timer-triggered tasks (cron, background alarms), the Director approval gate is **automatically bypassed**.
 
@@ -173,17 +183,18 @@ To prevent token waste, context dilution, and role-bleed, every agent in the swa
 | Agent | Dedicated Spec | Responsibility | Assigned "Good Enough" Skills | Excluded Skills (Anti-Bloat Boundary) | Model Tier | Thinking Effort |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **The Orchestrator** | *Root Master Blueprint* | Triage, sizing, dispatch, synthesis. Zero direct labor in Tier 3. | `dispatching-parallel-agents`, `brainstorming` | All direct implementation, UI styling, code editing | **Pro / Reasoning** | **High** |
-| **`pm-agent`** | [`pm-agent/AGENTS.md`](.agents/roster/pm-agent/AGENTS.md) | PRD, acceptance criteria (`[AC-xx]`), user personas. | `writing-plans`, `brainstorming` | Code editing, UI styling, debugging | **`pro`** | **High** |
-| **`design-agent`** | [`design-agent/AGENTS.md`](.agents/roster/design-agent/AGENTS.md) | Layout architecture, typography, responsive CSS tokens. | `impeccable`, `design-system`, `ui-ux-pro-max (query-only)` | `animate`, `animate-expo`, `emil-design-eng`, `ui-styling`, code implementation, `brand`, `slides`, `banner-design` | **`pro`** | **Medium–High** |
-| **`architect-agent`** | [`architect-agent/AGENTS.md`](.agents/roster/architect-agent/AGENTS.md) | System architecture, API contracts, schema consensus. | Architecture & schema design, API contracts | Frontend CSS, UI styling, browser test tools | **`pro`** | **High** |
-| **`builder-agent`** | [`builder-agent/AGENTS.md`](.agents/roster/builder-agent/AGENTS.md) | Feature construction, logic wiring, cyclic repair. | `ui-styling`, `modern-web-guidance`, `animate`, `systematic-debugging` | `brand`, `slides`, `canvas-design`, open-ended design discovery | **`pro`** *(or `flash`)* | **Medium** |
-| **`qa-adversary-agent`** | [`qa-adversary-agent/AGENTS.md`](.agents/roster/qa-adversary-agent/AGENTS.md) | Independent auditor against `[AC-xx]` & anti-slop gate. | `a11y-debugging`, `chrome-devtools`, `verification-before-completion`, `impeccable detect (anti-slop audit)` | File writing, creative design, feature implementation | **`flash`** *(or `pro`)* | **Low–Medium** |
+| **`pm-agent`** | [`agents/pm-agent.md`](agents/pm-agent.md) | PRD, acceptance criteria (`[AC-xx]`), user personas. | `writing-plans`, `brainstorming` | Code editing, UI styling, debugging | **`pro`** | **High** |
+| **`design-agent`** | [`agents/design-agent.md`](agents/design-agent.md) | Layout architecture, typography, responsive CSS tokens. | `impeccable`, `design-system` | `animate`, `animate-expo`, `emil-design-eng`, `ui-styling`, code implementation, `brand`, `slides`, `banner-design` | **`flash`** *(or `pro`)* | **Medium** |
+| **`architect-agent`** | [`agents/architect-agent.md`](agents/architect-agent.md) | System architecture, API contracts, schema consensus. | Architecture & schema design, API contracts | Frontend CSS, UI styling, browser test tools | **`pro`** | **High** |
+| **`council-challenger`** | [`agents/council-challenger.md`](agents/council-challenger.md) | Consensus challenger: STRIDE security, race conditions, scalability. | Threat modeling, scalability audit, edge-case challenge | Code editing, feature implementation | **`pro`** | **High** |
+| **`builder-agent`** | [`agents/builder-agent.md`](agents/builder-agent.md) | Feature construction, logic wiring, cyclic repair. | `ui-styling`, `modern-web-guidance`, `animate`, `systematic-debugging` | `brand`, `slides`, `canvas-design`, open-ended design discovery | **`pro`** *(or `flash`)* | **Medium** |
+| **`qa-adversary-agent`** | [`agents/qa-adversary-agent.md`](agents/qa-adversary-agent.md) | Independent auditor against `[AC-xx]` & anti-slop gate. | `a11y-debugging`, `chrome-devtools`, `verification-before-completion`, `impeccable detect (anti-slop audit)` | File writing, creative design, feature implementation | **`pro`** *(Tier 3 parity)* or `flash` | **High** *(Tier 3)* / **Low–Medium** |
 
 ### 🎨 The Lean Design Trinity & Anti-Slop Architecture
 The frontend workflow leverages a streamlined, decoupled design stack to achieve bespoke visual quality without saturating prompt context:
 - **`impeccable`**: Provides taste, aesthetic direction, optical typography scales, OKLCH color palettes, and anti-AI slop heuristics.
 - **`design-system`**: Emits strict 3-tier token contracts (`primitive` &rarr; `semantic` &rarr; `component`) into `design_tokens.md`.
-- **`ui-ux-pro-max (query-only)`**: Query-only reference tool for instant CLI lookup (`python -m uipro ...`), keeping massive style guides out of the model prompt context.
+- **`impeccable (CLI & Heuristics)`**: On-demand CLI lookup (`impeccable detect`, `impeccable critique`) for aesthetic archetypes and anti-slop rules, keeping massive style guides out of the model prompt context.
 - **Zero Role-Bleed**: Runtime markup and animations are strictly owned by `builder-agent` (`ui-styling`, `animate`), while `qa-adversary-agent` runs `impeccable detect` to mechanically catch AI design slop and visual regressions.
 
 ### Dynamic Domain Plugins (Swarm Router)

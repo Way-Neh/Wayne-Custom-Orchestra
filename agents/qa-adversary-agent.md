@@ -2,12 +2,10 @@
 name: qa-adversary-agent
 description: Directives, skill boundaries, and operational specification for qa-adversary-agent in Wayne Custom Swarm.
 tools:
-    - send_message
-    - view_file
-    - read_url_content
+    - read_file
+    - run_command
     - search_web
-    - schedule
-    - generate_image
+    - send_message
 ---
 
 # QA-Adversary-Agent Specification (`qa-adversary-agent`)

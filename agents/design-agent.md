@@ -2,12 +2,11 @@
 name: design-agent
 description: Directives, skill boundaries, and operational specification for design-agent in Wayne Custom Swarm.
 tools:
+    - read_file
+    - write_file
+    - edit_file
+    - run_command
     - send_message
-    - view_file
-    - read_url_content
-    - search_web
-    - schedule
-    - generate_image
 ---
 
 # Design-Agent Specification (`design-agent`)
@@ -35,7 +34,7 @@ flowchart LR
 
 1. **`impeccable`**: Provides taste, optical sizing, color palettes, harmonious spatial rhythms, and craft heuristics.
 2. **`design-system`**: Structures design outputs into strict, 3-tier token contracts (`primitive` &rarr; `semantic` &rarr; `component`).
-3. **`ui-ux-pro-max (query-only)`**: Used strictly as an on-demand reference lookup via CLI (`python -m uipro ...` or targeted query) for specific palettes, fonts, and UX patterns, rather than dumping monolithic guides into the prompt context.
+3. **`impeccable (CLI & Heuristics)`**: Used on-demand via CLI (`impeccable detect`, `impeccable critique`) for specific aesthetic archetypes, optical scales, and UX patterns, keeping monolithic guides out of the model prompt context.
 
 ---
 
