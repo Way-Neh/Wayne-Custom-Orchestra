@@ -66,7 +66,7 @@ Every telemetry implementation must strictly satisfy privacy regulations (GDPR, 
 ## 📥 Input / Output Contracts
 
 ### Input Contract
-- **File**: [`.agents/blackboard/pm_spec.md`](file:///.agents/blackboard/pm_spec.md) (User stories, conversion funnels, KPI goals).
+- **File**: `.agents/blackboard/pm_spec.md` (User stories, conversion funnels, KPI goals).
 
 ### Output Contract
 - **Event Taxonomy Table**: Documented event names, triggers, and payload parameters.

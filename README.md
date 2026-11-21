@@ -151,7 +151,7 @@ To prevent prompt context bloat while supporting thousands of specialized file f
 
 1. **Cold Storage Catalog (`.agents/skills/catalog/`)**:
    - Monolithic domain skills reside cold on disk and in curated `index.json`, completely excluded from agent prompt contexts.
-   - Offline starter skills (`docx`, `pdf`, `pptx`, `_template`) are pre-cached locally for offline speed.
+   - Offline starter skills (`docx`, `pdf`, `pptx`, `xlsx`, `_template`) are pre-cached locally for offline speed.
 2. **Fast Semantic Search (`find_skill.py`)**:
    - The Orchestrator or Swarm Router queries `.agents/scripts/find_skill.py` via CLI to find matching skills without loading them into memory:
    ```bash
@@ -241,7 +241,7 @@ Technical documentation is authored by `docs-agent` adhering strictly to the **L
 
 ## 🔄 Per-Project Mode Switching
 
-Projects configure their orchestrator mode at any time via [`.agents/orchestrator_mode.json`](file:///.agents/orchestrator_mode.json):
+Projects configure their orchestrator mode at any time via [`.agents/orchestrator_mode.json`](.agents/orchestrator_mode.json):
 
 ```json
 {
@@ -267,7 +267,7 @@ Supported modes:
 To maintain complete transparency into inference economics, verify model routing integrity, and measure token velocity, Wayne Custom 2.0 2026-10-16 enforces a multi-level **Token & Model Telemetry Reporting Protocol**:
 
 1. **Subagent Level**: Every subagent reports its actual assigned Model and token consumption metrics (`Input Tokens`, `Output Tokens`, `Cache Read Tokens`, `Total Tokens`) in its final completion message to the caller via `send_message`.
-2. **Root Orchestrator Level**: The Root Orchestrator executes [`.agents/scripts/collate_telemetry.py`](file:///.agents/scripts/collate_telemetry.py) to parse all active session transcripts, aggregating token metrics across all active subagents and the root orchestrator.
+2. **Root Orchestrator Level**: The Root Orchestrator executes [`scripts/collate_telemetry.py`](scripts/collate_telemetry.py) (or `.agents/scripts/collate_telemetry.py` in target projects) to parse all active session transcripts, aggregating token metrics across all active subagents and the root orchestrator.
 3. **Collated Telemetry Summary**: The Root Orchestrator embeds the collated Markdown table in its completion response to the Director.
 
 ### 📊 Collated Execution & Token Telemetry Table Example:
@@ -299,43 +299,53 @@ python3 .agents/scripts/collate_telemetry.py --format json
 
 ```
 .
-├── .agents/
-│   ├── orchestrator_mode.json        # Project mode configuration & Swarm topologies
-│   ├── orchestrator_mode.schema.json # JSON Schema for mode validation
-│   ├── blackboard/                   # Machine-actionable shared contracts
-│   │   └── .gitkeep
-│   ├── roster/                       # Modular agent directives & specifications
-│   │   ├── pm-agent/AGENTS.md
-│   │   ├── design-agent/AGENTS.md
-│   │   ├── architect-agent/AGENTS.md
-│   │   ├── builder-agent/AGENTS.md
-│   │   ├── qa-adversary-agent/AGENTS.md
-│   │   ├── seo-agent/AGENTS.md
-│   │   ├── analytics-agent/AGENTS.md
-│   │   ├── image-agent/AGENTS.md
-│   │   └── docs-agent/AGENTS.md
-│   ├── scripts/                      # Orchestration & verification utilities
-│   │   ├── audit_orchestrator.py     # System-wide parity linter & claim auditor
-│   │   ├── collate_telemetry.py      # Subagent execution telemetry aggregator
-│   │   ├── find_skill.py             # JIT skill search & mounting utility
-│   │   ├── healing_tracker.py        # Bounded cyclic self-healing state machine
-│   │   ├── init_blackboard.py        # Blackboard contract bootstrapper
-│   │   ├── on_session_start.py       # SessionStart hook handler
-│   │   ├── research_tools.py         # Cross-lingual forum & media intelligence CLI
-│   │   ├── retrospective_onboard.py  # Batch workspace blackboard migrator
-│   │   ├── validate_blackboard.py    # Blackboard syntax & parity validator
-│   │   └── worktree_helper.sh        # Git worktree isolation lifecycle helper
-│   └── skills/                       # Workspace & Cold Catalog skills
-│       ├── catalog/                  # Cold Storage catalog (JIT retrieval)
-│       │   ├── index.json            # Curated foundational catalog index (16 skills)
-│       │   ├── _template/SKILL.md    # Offline starter template
-│       │   ├── docx/SKILL.md         # Word OOXML processing skill
-│       │   ├── pdf/SKILL.md          # PDF extraction & form filling skill
-│       │   ├── pptx/SKILL.md         # PowerPoint deck engineering skill
-│       │   └── downloads/            # Dynamic downloads directory (gitignored)
-│       └── impeccable/               # Active core frontend skill
+├── agents/                           # Codified Agent Specifications & Boundaries
+│   ├── pm-agent.md                   # Core Product Pillar & Acceptance Criteria
+│   ├── design-agent.md               # Visual Architecture & Lean Design Trinity
+│   ├── architect-agent.md            # Technical Architecture & Schema Consensus
+│   ├── council-challenger.md         # Consensus Challenger & STRIDE Gatekeeper
+│   ├── builder-agent.md              # Implementation & Cyclic Repair Engine
+│   ├── qa-adversary-agent.md         # Adversarial QA & Anti-Slop Auditor
+│   ├── research-agent.md             # Research Intelligence Lead & Query Matrix
+│   ├── social-forum-agent.md         # Community & Discussion Forums Specialist
+│   ├── media-intel-agent.md          # Multimedia, Subtitles & Keyframe Vision
+│   ├── seo-agent.md                  # Metadata & JSON-LD Structured Data
+│   ├── analytics-agent.md            # Event Taxonomy & Telemetry Specialist
+│   ├── image-agent.md                # Asset Discovery & Generative Prompts
+│   └── docs-agent.md                 # Lean Documentation Trinity & Technical Writer
+├── rules/
+│   └── AGENTS.md                     # Universal Core Directives & Sizing Protocol
+├── scripts/                          # Orchestration & verification utilities
+│   ├── audit_orchestrator.py         # System-wide parity linter & claim auditor
+│   ├── collate_telemetry.py          # Subagent execution telemetry aggregator
+│   ├── find_skill.py                 # JIT skill search & mounting utility
+│   ├── healing_tracker.py            # Bounded cyclic self-healing state machine
+│   ├── init_blackboard.py            # Blackboard contract bootstrapper
+│   ├── on_session_start.py           # SessionStart hook handler
+│   ├── research_tools.py             # Cross-lingual forum & media intelligence CLI
+│   ├── retrospective_onboard.py      # Batch workspace blackboard migrator
+│   ├── validate_blackboard.py        # Blackboard syntax & parity validator
+│   └── worktree_helper.sh            # Git worktree isolation lifecycle helper
+├── skills/                           # Workspace & Cold Catalog skills
+│   ├── catalog/                      # Cold Storage catalog (JIT retrieval)
+│   │   ├── index.json                # Curated foundational catalog index (16 skills)
+│   │   ├── _template/SKILL.md        # Offline starter template
+│   │   ├── docx/SKILL.md             # Word OOXML processing skill
+│   │   ├── pdf/SKILL.md              # PDF extraction & form filling skill
+│   │   ├── pptx/SKILL.md             # PowerPoint deck engineering skill
+│   │   ├── xlsx/SKILL.md             # Excel financial & formula engineering skill
+│   │   └── downloads/                # Dynamic downloads directory (gitignored)
+│   ├── wayne-orchestra/              # Master Orchestrator Architecture Skill
+│   └── impeccable/                   # Active core frontend skill
+├── templates/
+│   └── blackboard/                   # Standard blackboard starter templates
+│       ├── arch_schema.template.md
+│       ├── code_qa_status.template.md
+│       ├── design_tokens.template.md
+│       ├── pm_spec.template.md
+│       └── research_dossier.template.md
 ├── .worktrees/                       # Ephemeral agent worktrees (gitignored)
-├── AGENTS.md                         # Master Orchestrator Blueprint, lifecycle & topologies
+├── hooks.json                        # Antigravity plugin lifecycle hooks
 ├── .gitignore                        # Git ignore rules (includes .worktrees/ & downloads/)
 └── README.md                         # Architecture overview, Swarms diagram & docs
 ```

@@ -76,3 +76,14 @@ When exploratory, competitive, or cross-domain research is required:
 ## 8. Unattended Execution Safety Ceiling
 - For background scheduled/timer automations (cron jobs), the Director approval gate is bypassed ONLY if $S_{\text{task}} \le 10$ (Tier 1 or Tier 2).
 - Any unattended Tier 3 swarm ($S_{\text{task}} \ge 11$) is strictly capped at a **50,000 total token spend limit** and a **maximum of 1 self-healing repair cycle** before halting and demanding Director authorization.
+
+---
+
+## 9. Programmatic vs. Heuristic Architecture Taxonomy (Code-Enforced vs. Prompt-Guided)
+To prevent conflating prompt guidance with deterministic guarantees, all swarm mechanisms are strictly classified:
+
+| Class | Mechanism Type | Enforcing Artifact / Tool | Failure Behavior |
+| :--- | :--- | :--- | :--- |
+| **Code-Enforced** | Deterministic CLI scripts, Git hooks, filesystem locks | `worktree_helper.sh`, `validate_blackboard.py`, `healing_tracker.py`, `collate_telemetry.py`, `on_session_start.py` (`hooks.json`) | Hard exit code $\ne 0$; blocks subsequent phases loudly. |
+| **Prompt-Guided** | Cognitive role directives, persona constraints, thinking depth | Agent system prompts (`agents/*.md`), skill guides (`skills/*/SKILL.md`) | Probabilistic; monitored via adversarial review and linter audits (`audit_orchestrator.py`). |
+

@@ -15,7 +15,7 @@ tools:
 ## 🎯 Mandate & Identity
 The **`research-agent`** is the Core Research Pillar and Intelligence Lead of the Wayne Custom Swarm. It operates during Phase 0 (Research & Intelligence Sprint) or is activated on-demand by the Swarm Router whenever deep domain knowledge, prior art analysis, cross-lingual intelligence, or competitive synthesis is required.
 
-- **Primary Mission**: Formulate cross-lingual query matrices, direct research investigations across global mediums, cross-triangulate claims between Western and non-English developer communities, filter hype/marketing slop, and author the authoritative machine blackboard contract: [`.agents/blackboard/research_dossier.md`](file:///.agents/blackboard/research_dossier.md).
+- **Primary Mission**: Formulate cross-lingual query matrices, direct research investigations across global mediums, cross-triangulate claims between Western and non-English developer communities, filter hype/marketing slop, and author the authoritative machine blackboard contract: `.agents/blackboard/research_dossier.md`.
 - **Model Tier**: `pro` (`Model: "pro"`)
 - **Thinking Effort**: `High` (Deep analytical synthesis, multi-perspective verification, bias calibration)
 - **Role In Swarm**: Intelligence Pillar in Phase 0 / Dynamic Domain Director for specialized research sprints.
@@ -74,7 +74,7 @@ python3 /home/wayne/.gemini/config/plugins/wayne-custom-orchestra/scripts/resear
 - **Task Brief**: Research topic, constraints, target platforms, and specific questions from the Root Orchestrator or User.
 
 ### Output Contract
-- **Authoritative Dossier**: [`.agents/blackboard/research_dossier.md`](file:///.agents/blackboard/research_dossier.md) containing:
+- **Authoritative Dossier**: `.agents/blackboard/research_dossier.md` containing:
   - `[RES-META]`: Research scope, timeframe, targeted languages, platforms probed.
   - `[RES-QUERY-MATRIX]`: Exact localized search vectors utilized.
   - `[RES-FINDINGS]`: Numbered insights (`[RES-01]`, `[RES-02]`) with confidence scoring.

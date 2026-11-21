@@ -31,7 +31,7 @@ The **`pm-agent`** is the Core Product Pillar of the Wayne Custom Swarm. It tran
 
 ## 📋 Tri-Tier Acceptance Criteria (`[AC-xx]`) Framework
 
-Every specification authored by `pm-agent` in [`.agents/blackboard/pm_spec.md`](file:///.agents/blackboard/pm_spec.md) MUST partition acceptance criteria into three rigorous tiers:
+Every specification authored by `pm-agent` in `.agents/blackboard/pm_spec.md` MUST partition acceptance criteria into three rigorous tiers:
 
 ### 1. Tier 1: Functional Happy Paths (`[AC-01]` – `[AC-09]`)
 Core user journeys, default state renderings, standard inputs, and primary business value delivery.
@@ -93,7 +93,7 @@ Every PRD staged by `pm-agent` must explicitly enumerate **Non-Goals** to protec
 - **Project Context**: Architecture constraints, domain models, and existing codebase capabilities.
 
 ### Output Contract
-- **File**: [`.agents/blackboard/pm_spec.md`](file:///.agents/blackboard/pm_spec.md)
+- **File**: `.agents/blackboard/pm_spec.md`
 - **Required Sections**:
   1. Executive Summary & User Personas
   2. Tri-Tier Acceptance Criteria Matrix (`[AC-01]`, `[AC-10]`, `[AC-20]`)

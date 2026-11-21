@@ -33,8 +33,8 @@
       "description": "Create, edit, and analyze PowerPoint (.pptx) decks with narrative planning, explicit layouts, OOXML manipulation, and python-pptx generation.",
       "tags": ["pptx", "powerpoint", "slides", "deck", "presentation", "python-pptx", "ooxml"],
       "target_subagent": "image-agent",
-      "status": "catalog",
-      "local_path": null,
+      "status": "local",
+      "local_path": ".agents/skills/catalog/pptx/SKILL.md",
       "source_url": "https://github.com/sickn33/agentic-awesome-skills/tree/main/skills/pptx-official"
     },
     {
@@ -44,8 +44,8 @@
       "description": "Excel model construction with zero formula errors, financial industry color conventions, openpyxl automation, formulas, and multi-sheet consolidation.",
       "tags": ["xlsx", "excel", "spreadsheets", "financial-model", "openpyxl", "formulas", "data-modeling"],
       "target_subagent": "analytics-agent",
-      "status": "catalog",
-      "local_path": null,
+      "status": "local",
+      "local_path": ".agents/skills/catalog/xlsx/SKILL.md",
       "source_url": "https://github.com/sickn33/agentic-awesome-skills/tree/main/skills/xlsx-official"
     },
     {

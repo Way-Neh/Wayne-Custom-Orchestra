@@ -70,7 +70,7 @@ Every audit must produce concrete, verifiable evidence for every criterion defin
 
 ## 🔄 Cyclic Error Trace & Remediation Feedback
 
-If any criterion fails or anti-slop defects are found, `qa-adversary-agent` compiles an actionable remediation report in [`.agents/blackboard/code_qa_status.md`](file:///.agents/blackboard/code_qa_status.md):
+If any criterion fails or anti-slop defects are found, `qa-adversary-agent` compiles an actionable remediation report in `.agents/blackboard/code_qa_status.md`:
 
 ```markdown
 ## ⚠️ QA Adversary Defect Telemetry (Iteration N/3)
@@ -90,10 +90,10 @@ If any criterion fails or anti-slop defects are found, `qa-adversary-agent` comp
 
 ### Input Contract
 - **Codebase**: Merged code on integration branch `feat/<task>`.
-- **Files**: [`.agents/blackboard/pm_spec.md`](file:///.agents/blackboard/pm_spec.md), [`.agents/blackboard/arch_schema.md`](file:///.agents/blackboard/arch_schema.md), [`.agents/blackboard/design_tokens.md`](file:///.agents/blackboard/design_tokens.md).
+- **Files**: `.agents/blackboard/pm_spec.md`, `.agents/blackboard/arch_schema.md`, `.agents/blackboard/design_tokens.md`.
 
 ### Output Contract
-- **File**: [`.agents/blackboard/code_qa_status.md`](file:///.agents/blackboard/code_qa_status.md)
+- **File**: `.agents/blackboard/code_qa_status.md`
 - **Required Sections**:
   1. Audit Verdict (`ALL_PASS` or `FAILURES_DETECTED`)
   2. Iteration Counter (1, 2, or 3)

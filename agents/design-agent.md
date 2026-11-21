@@ -156,7 +156,7 @@ The fluid clamp structure remains the standard pattern:
 
 ## 🧱 3-Tier CSS Token Architecture
 
-The output contract in [`.agents/blackboard/design_tokens.md`](file:///.agents/blackboard/design_tokens.md) must strictly enforce 3 tiers. **All token values are derived from the chosen archetype and mood answers** — never from hardcoded defaults.
+The output contract in `.agents/blackboard/design_tokens.md` must strictly enforce 3 tiers. **All token values are derived from the chosen archetype and mood answers** — never from hardcoded defaults.
 
 ### Tier 1: Primitive Tokens (Raw Values)
 Archetype-specific raw color, spacing, and radius values.
@@ -174,10 +174,10 @@ Map semantic tokens to specific component properties: button styles, card treatm
 ## 📥 Input / Output Contracts
 
 ### Input Contract
-- **File**: [`.agents/blackboard/pm_spec.md`](file:///.agents/blackboard/pm_spec.md) (Acceptance criteria, user personas, layout needs).
+- **File**: `.agents/blackboard/pm_spec.md` (Acceptance criteria, user personas, layout needs).
 
 ### Output Contract
-- **File**: [`.agents/blackboard/design_tokens.md`](file:///.agents/blackboard/design_tokens.md)
+- **File**: `.agents/blackboard/design_tokens.md`
 - **Required Sections**:
   1. Chosen Archetype & Design Direction Summary
   2. Design Philosophy & Visual Tone

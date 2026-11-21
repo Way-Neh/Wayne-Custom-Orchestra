@@ -87,7 +87,7 @@ quadrantChart
 
 ## 🔌 Technical API & Contract Rigor (`api-documenter`)
 
-All API documentation must be directly extracted from source code, Zod schemas, TypeScript types, and [`.agents/blackboard/arch_schema.md`](file:///.agents/blackboard/arch_schema.md):
+All API documentation must be directly extracted from source code, Zod schemas, TypeScript types, and `.agents/blackboard/arch_schema.md`:
 
 ### 1. Concrete Typed Request & Response JSON Payloads
 Provide complete, valid JSON examples reflecting actual schema constraints:
@@ -269,8 +269,8 @@ Validated via `docs-agent` specification and `.agents/orchestrator_mode.json`.
 ## 📥 Input / Output Contracts
 
 ### Input Contract
-- **File**: [`.agents/blackboard/arch_schema.md`](file:///.agents/blackboard/arch_schema.md) (API schemas, data models, state machines).
-- **File**: [`.agents/blackboard/pm_spec.md`](file:///.agents/blackboard/pm_spec.md) (Numbered acceptance criteria, user stories).
+- **File**: `.agents/blackboard/arch_schema.md` (API schemas, data models, state machines).
+- **File**: `.agents/blackboard/pm_spec.md` (Numbered acceptance criteria, user stories).
 - Git commits, pull requests, and source code diffs from `feat/<task>`.
 - Existing project documentation (`README.md`, `CHANGELOG.md`, `docs/`).
 

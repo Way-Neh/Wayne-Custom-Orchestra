@@ -23,7 +23,7 @@ The **`architect-agent`** is the Core Technical Architecture Pillar of the Wayne
 
 ## 🏛️ LLM Council Consensus Gate & STRIDE Checklist
 
-Before any architecture is committed to [`.agents/blackboard/arch_schema.md`](file:///.agents/blackboard/arch_schema.md), `architect-agent` serves as the **Proposer** against the **Council Challenger lens** (evaluating edge cases, failure states, and security vulnerabilities).
+Before any architecture is committed to `.agents/blackboard/arch_schema.md`, `architect-agent` serves as the **Proposer** against the **Council Challenger lens** (evaluating edge cases, failure states, and security vulnerabilities).
 
 The architecture must pass the **STRIDE Threat Modeling Checklist**:
 

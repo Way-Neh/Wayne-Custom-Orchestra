@@ -55,7 +55,7 @@ When authoring prompts for text-to-image models (Gemini, Imagen, Midjourney), `i
 ## 📥 Input / Output Contracts
 
 ### Input Contract
-- **File**: [`.agents/blackboard/design_tokens.md`](file:///.agents/blackboard/design_tokens.md) (Color palette, aesthetic direction).
+- **File**: `.agents/blackboard/design_tokens.md` (Color palette, aesthetic direction).
 - **Brief**: Asset requirements, aspect ratios, target resolutions, and placement contexts.
 
 ### Output Contract

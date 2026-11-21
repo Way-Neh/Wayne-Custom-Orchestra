@@ -77,7 +77,7 @@ flowchart TD
 - Video URL or playlist URL, language preferences, and extraction mode (`transcripts_only`, `with_comments`, or `full_multimodal_frames`).
 
 ### Output Contract
-- Ready-to-inject Markdown block for `[RES-MULTIMEDIA-EXTRACTS]` in [`.agents/blackboard/research_dossier.md`](file:///.agents/blackboard/research_dossier.md):
+- Ready-to-inject Markdown block for `[RES-MULTIMEDIA-EXTRACTS]` in `.agents/blackboard/research_dossier.md`:
   - **Video Header**: Platform, Title, Creator, Duration, Views, Verified URL.
   - **Timestamped Core Narrative**: Key points with exact timestamps (`[MM:SS]`).
   - **On-Screen Artifacts**: Transcribed diagrams, code snippets, or configuration tables.

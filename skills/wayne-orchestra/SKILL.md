@@ -27,13 +27,24 @@ $$S_{\text{task}} = D + F + A + C + V$$
 
 > **Automated Task Safety Rule**: For any scheduled or timer-triggered tasks (cron, background alarms), the Director approval gate is bypassed ONLY if $S_{\text{task}} \le 10$ (Tier 1 or Tier 2). Tier 3 swarms triggered via unattended timers are automatically constrained to a **50,000 token spend ceiling** and a **maximum of 1 self-healing repair cycle**; if unpassed criteria remain, execution safely pauses for Director review.
 
-## 2. Programmatic Enforcement Tooling
+## 2. Programmatic Enforcement & Architecture Taxonomy
+
+All capabilities are delineated into two operational classes:
+
+| Class | Mechanism Type | Enforcing Artifact / Tool | Failure Behavior |
+| :--- | :--- | :--- | :--- |
+| **Code-Enforced** | Deterministic CLI scripts, Git hooks, filesystem locks | `worktree_helper.sh`, `validate_blackboard.py`, `healing_tracker.py`, `collate_telemetry.py`, `on_session_start.py` (`hooks.json`) | Hard exit code $\ne 0$; blocks subsequent phases loudly. |
+| **Prompt-Guided** | Cognitive role directives, persona constraints, thinking depth | Agent system prompts (`agents/*.md`), skill guides (`skills/*/SKILL.md`) | Probabilistic; monitored via adversarial review and linter audits (`audit_orchestrator.py`). |
+
+### Programmatic Enforcement Tooling
 - **Git Worktree Isolation**: Managed via `scripts/worktree_helper.sh {add|sync|merge|remove}`.
 - **Contract Parity Validation**: Enforced via `scripts/validate_blackboard.py`.
 - **Bounded Cyclic Self-Healing**: Managed via `scripts/healing_tracker.py {init|record|status}`.
 - **System Parity Linter**: Verified via `scripts/audit_orchestrator.py`.
+- **Telemetry Aggregation**: Processed via `scripts/collate_telemetry.py`.
+- **JIT Skill Retrieval**: Queried via `scripts/find_skill.py`.
 
-## 2. Swarms Architectural Primitives & Topologies
+## 3. Swarms Architectural Primitives & Topologies
 - **Hierarchical Swarm**: Root Orchestrator (Zero Direct Labor) directs and routes; specialized core pillars execute; domain plugins handle discrete tasks.
 - **LLM Council / Consensus Gate**: Proposer (`architect-agent`) vs. Challenger (`council-challenger`). Schemas and contracts achieve consensus before commit.
 - **Hybrid Research Cluster**: Dynamic intelligence sprint (`research-agent` lead, `social-forum-agent` for Reddit/HN/X/Telegram, `media-intel-agent` for Shorts/TikTok/Bilibili/Reels).
@@ -41,17 +52,17 @@ $$S_{\text{task}} = D + F + A + C + V$$
 - **Mixture of Agents (MoA)**: Upstream specs (`research_dossier.md`, `pm_spec.md`, `design_tokens.md`, `arch_schema.md`) are synthesized and injected into `builder-agent`.
 - **Bounded Cyclic Self-Healing**: Automated feedback loop (`qa-adversary-agent` $\rightleftharpoons$ `builder-agent`) with up to 3 repair cycles before escalation.
 
-## 3. The Zero Direct Labor Rule (Tier 3)
+## 4. The Zero Direct Labor Rule (Tier 3)
 For Tier 3 tasks, the root Orchestrator does **zero direct code or asset implementation**. It exclusively handles triage, decomposition, subagent delegation (`invoke_subagent` with `Workspace: "share"`), self-healing orchestration, and synthesis.
 
-## 4. Shared Blackboard Contracts (`.agents/blackboard/`)
+## 5. Shared Blackboard Contracts (`.agents/blackboard/`)
 - `research_dossier.md`: Cross-lingual intelligence, native query matrices, video transcripts/comments, and empirical findings.
 - `pm_spec.md`: Numbered Acceptance Criteria matrix (`[AC-xx]`), user personas, edge cases.
 - `design_tokens.md`: Drop-in CSS variables, color palettes, spacing scales, component hierarchy.
 - `arch_schema.md`: System architecture, API contracts, DB schemas, state trees approved by LLM Council.
 - `code_qa_status.md`: Line-by-line audit proof against `[AC-xx]` with concrete verification evidence.
 
-## 5. Mandatory Response Reporting Invariant
+## 6. Mandatory Response Reporting Invariant
 Every response summarizing execution or status updates must include:
 > **Execution Telemetry**:
 > - **Task Tier**: `Tier 1: Direct Solo` | `Tier 2: Targeted Specialist` | `Tier 3: Full Swarm` (with $S_{\text{task}}$ score)
