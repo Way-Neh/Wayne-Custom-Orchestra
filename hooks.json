@@ -1,4 +1,13 @@
 {
+  "wayne-orchestra-init": {
+    "SessionStart": [
+      {
+        "type": "command",
+        "command": "python3 ./scripts/on_session_start.py",
+        "timeout": 15
+      }
+    ]
+  },
   "impeccable-anti-slop": {
     "PostToolUse": [
       {

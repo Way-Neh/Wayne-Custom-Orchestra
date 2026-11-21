@@ -17,8 +17,9 @@ $$S_{\text{task}} = D + F + A + C + V$$
 
 ---
 
-## 2. Machine Blackboard Contracts (`.agents/blackboard/`)
-All cross-agent collaboration operates strictly via structured files in `.agents/blackboard/`:
+## 2. Machine Blackboard Contracts & Autonomous Onboarding (`.agents/blackboard/`)
+- **Autonomous Project Onboarding**: Whenever beginning work in any project where `.agents/blackboard/` does not yet exist or is incomplete, the Orchestrator MUST autonomously bootstrap `.agents/blackboard/` (and ensure Git is initialized) before planning or staging specs. Never require the user to run manual setup commands.
+- All cross-agent collaboration operates strictly via structured files in `.agents/blackboard/`:
 - **`research_dossier.md`**: Upstream technical, market, and competitive intelligence with numbered findings (`[RES-01]`, `[RES-02]`), cross-lingual query matrix, platform provenance matrix, multimodal video/comment extracts, and impact recommendations.
 - **`pm_spec.md`**: Numbered Acceptance Criteria (`[AC-01]`, `[AC-02]`), Edge Cases (`[AC-10]`), Failure Modes (`[AC-20]`), Negative Acceptance Criteria (`[NAC-01]`), finite state tables, and explicit non-goals.
 - **`design_tokens.md`**: 3-tier CSS custom property blocks (`primitive` &rarr; `semantic` &rarr; `component`), OKLCH scales, and clamp typography. No runtime code.
