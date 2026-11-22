@@ -30,6 +30,7 @@ def init_state(bb_dir: Path):
         "consecutive_failures": {},
         "regression_violations": [],
         "escalated_to_architect": False,
+        "model_escalation": None,
         "history": []
     }
     state_file.write_text(json.dumps(state, indent=2), encoding="utf-8")
@@ -90,26 +91,38 @@ def record_qa_cycle(bb_dir: Path, passed_ids, failed_ids):
         print(f"🛑 ARCHITECTURAL ESCALATION GATE TRIGGERED: Criteria failed across 2 consecutive iterations: {escalate}")
         print("   Action Required: Dispatch architect-agent to review arch_schema.md before next builder fix.")
 
-    # 5. Record History
-    state["history"].append({
-        "iteration": iteration,
-        "passed": list(current_passed),
-        "failed": list(current_failed),
-        "regressions": regressions
-    })
-
-    # 6. Status Determination
+    # 5. Status & Model Escalation Determination
+    model_escalation = None
     if not current_failed:
         state["status"] = "PASSED_ALL"
+        state["model_escalation"] = None
         print("🎉 ALL ACCEPTANCE CRITERIA PASSED! Healing cycle complete.")
     elif iteration >= state["max_iterations"]:
         state["status"] = "ESCALATED_MAX_CYCLES_EXCEEDED"
+        state["model_escalation"] = None
         print(f"❌ MAXIMUM ITERATIONS ({state['max_iterations']}) EXCEEDED with unresolved failures: {list(current_failed)}")
         print("   Action Required: Halting automatic fixes; escalate to human Director with diagnostics.")
     else:
         state["iteration"] += 1
         state["status"] = "REPAIR_REQUIRED"
+        # Dynamic Gemini Self-Healing Escalation Ladder:
+        # Iteration 1 -> 2: Promote builder-agent to gemini-3.8-flash-high for deep root-cause diagnosis.
+        if state["iteration"] == 2:
+            model_escalation = "Promote builder-agent from gemini-3.8-flash-medium to gemini-3.8-flash-high for deep root-cause diagnosis."
+        else:
+            model_escalation = "Maintain builder-agent on gemini-3.8-flash-high for deep root-cause diagnosis."
+        state["model_escalation"] = model_escalation
         print(f"🔄 Repair cycle scheduled. Next iteration: {state['iteration']}/{state['max_iterations']}")
+        print(f"⚡ MODEL ESCALATION RECOMMENDATION: {model_escalation}")
+
+    # 6. Record History
+    state["history"].append({
+        "iteration": iteration,
+        "passed": list(current_passed),
+        "failed": list(current_failed),
+        "regressions": regressions,
+        "model_escalation": model_escalation,
+    })
 
     save_state(bb_dir, state)
     return state
@@ -123,6 +136,7 @@ def show_status(bb_dir: Path):
     print(f"Consecutive Failures: {state.get('consecutive_failures', {})}")
     print(f"Regression Violations: {state.get('regression_violations', [])}")
     print(f"Escalated to Architect: {state.get('escalated_to_architect', False)}")
+    print(f"Model Escalation: {state.get('model_escalation', None)}")
     print("=" * 40 + "\n")
 
 def main():

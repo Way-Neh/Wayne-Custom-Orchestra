@@ -84,7 +84,7 @@ PERSONA_CONFIGS = {
         "canonical_name": "pm-agent",
         "spec_file": "agents/pm-agent.md",
         "default_channel": "council",
-        "default_model": "pro",
+        "default_model": "gemini-3.8-flash-high",
         "default_workspace": "inherit",
         "primary_contract": ".agents/blackboard/pm_spec.md",
         "summary": "Authoritative Product Manager for acceptance criteria and finite state tables.",
@@ -93,7 +93,7 @@ PERSONA_CONFIGS = {
         "canonical_name": "architect-agent",
         "spec_file": "agents/architect-agent.md",
         "default_channel": "council",
-        "default_model": "pro",
+        "default_model": "gemini-3.8-flash-high",
         "default_workspace": "inherit",
         "primary_contract": ".agents/blackboard/arch_schema.md",
         "summary": "Technical architecture pillar; authors Zod schemas, DB models, and STRIDE mitigations.",
@@ -102,7 +102,7 @@ PERSONA_CONFIGS = {
         "canonical_name": "council-challenger",
         "spec_file": "agents/council-challenger.md",
         "default_channel": "council",
-        "default_model": "pro",
+        "default_model": "gemini-3.8-flash-high",
         "default_workspace": "inherit",
         "primary_contract": ".agents/blackboard/arch_schema.md",
         "summary": "Adversarial council challenger; executes STRIDE threat modeling and concurrency audits.",
@@ -111,7 +111,7 @@ PERSONA_CONFIGS = {
         "canonical_name": "builder-agent",
         "spec_file": "agents/builder-agent.md",
         "default_channel": "builders",
-        "default_model": "pro",
+        "default_model": "gemini-3.8-flash-medium",
         "default_workspace": "share",
         "primary_contract": ".agents/blackboard/pm_spec.md, .agents/blackboard/design_tokens.md, .agents/blackboard/arch_schema.md",
         "summary": "Construction engine; implements logic and UI styling in isolated Git worktrees.",
@@ -120,7 +120,7 @@ PERSONA_CONFIGS = {
         "canonical_name": "qa-adversary-agent",
         "spec_file": "agents/qa-adversary-agent.md",
         "default_channel": "qa",
-        "default_model": "pro",
+        "default_model": "gemini-3.8-flash-high",
         "default_workspace": "inherit",
         "primary_contract": ".agents/blackboard/code_qa_status.md",
         "summary": "Adversarial verification lead with cognitive parity; executes independent QA audits.",
@@ -129,7 +129,7 @@ PERSONA_CONFIGS = {
         "canonical_name": "narrator",
         "spec_file": None,
         "default_channel": "all",
-        "default_model": "flash",
+        "default_model": "gemini-3.8-flash-low",
         "default_workspace": "inherit",
         "primary_contract": ".agents/blackboard/",
         "summary": "Antigravity Live UI narrator for real-time overview of swarm milestones and metrics.",
@@ -138,7 +138,7 @@ PERSONA_CONFIGS = {
         "canonical_name": "monitor",
         "spec_file": None,
         "default_channel": "all",
-        "default_model": "flash",
+        "default_model": "gemini-3.8-flash-low",
         "default_workspace": "inherit",
         "primary_contract": ".agents/blackboard/",
         "summary": "Swarm stall watchdog and deadlock breaker across all topics.",
@@ -147,7 +147,7 @@ PERSONA_CONFIGS = {
         "canonical_name": "research-agent",
         "spec_file": "agents/research-agent.md",
         "default_channel": "research",
-        "default_model": "pro",
+        "default_model": "gemini-3.8-flash-high",
         "default_workspace": "inherit",
         "primary_contract": ".agents/blackboard/research_dossier.md",
         "summary": "Lead researcher coordinating multilingual query matrix and platform provenance.",
@@ -156,7 +156,7 @@ PERSONA_CONFIGS = {
         "canonical_name": "social-forum-agent",
         "spec_file": "agents/social-forum-agent.md",
         "default_channel": "research",
-        "default_model": "flash",
+        "default_model": "gemini-3.8-flash-medium",
         "default_workspace": "inherit",
         "primary_contract": ".agents/blackboard/research_dossier.md",
         "summary": "Developer community sentiment and edge case extractor across forums.",
@@ -165,7 +165,7 @@ PERSONA_CONFIGS = {
         "canonical_name": "media-intel-agent",
         "spec_file": "agents/media-intel-agent.md",
         "default_channel": "research",
-        "default_model": "flash",
+        "default_model": "gemini-3.8-flash-medium",
         "default_workspace": "inherit",
         "primary_contract": ".agents/blackboard/research_dossier.md",
         "summary": "Multimodal video ingest, transcript extraction, and frame sampler.",
@@ -174,7 +174,7 @@ PERSONA_CONFIGS = {
         "canonical_name": "design-agent",
         "spec_file": "agents/design-agent.md",
         "default_channel": "council",
-        "default_model": "pro",
+        "default_model": "gemini-3.8-flash-low",
         "default_workspace": "inherit",
         "primary_contract": ".agents/blackboard/design_tokens.md",
         "summary": "Anti-Slop Design Trinity lead; authors 3-tier CSS tokens and typography.",
@@ -183,7 +183,7 @@ PERSONA_CONFIGS = {
         "canonical_name": "docs-agent",
         "spec_file": "agents/docs-agent.md",
         "default_channel": "council",
-        "default_model": "flash",
+        "default_model": "gemini-3.8-flash-low",
         "default_workspace": "inherit",
         "primary_contract": "Documentation & ADRs",
         "summary": "Technical documentation and architectural decision record author.",
@@ -192,7 +192,7 @@ PERSONA_CONFIGS = {
         "canonical_name": "analytics-agent",
         "spec_file": "agents/analytics-agent.md",
         "default_channel": "council",
-        "default_model": "flash",
+        "default_model": "gemini-3.8-flash-medium",
         "default_workspace": "inherit",
         "primary_contract": "Event schemas & metrics",
         "summary": "Data pipeline instrumentation and event telemetry engineer.",
@@ -201,7 +201,7 @@ PERSONA_CONFIGS = {
         "canonical_name": "seo-agent",
         "spec_file": "agents/seo-agent.md",
         "default_channel": "council",
-        "default_model": "flash",
+        "default_model": "gemini-3.8-flash-low",
         "default_workspace": "inherit",
         "primary_contract": "Semantic HTML & structured data",
         "summary": "Search engine optimization and structured metadata specialist.",
@@ -210,7 +210,7 @@ PERSONA_CONFIGS = {
         "canonical_name": "image-agent",
         "spec_file": "agents/image-agent.md",
         "default_channel": "council",
-        "default_model": "flash",
+        "default_model": "gemini-3.8-flash-low",
         "default_workspace": "inherit",
         "primary_contract": "Visual assets & SVG specs",
         "summary": "Visual asset prompt engineering and SVG optimization specialist.",
@@ -255,6 +255,21 @@ ALIASES = {
     "image-agent": "image-agent",
 }
 
+# Google Gemini Model Tiers
+GOOGLE_MODELS = {
+    "gemini-3.8-flash-high",
+    "gemini-3.8-flash-medium",
+    "gemini-3.8-flash-low",
+}
+
+MODEL_ALIASES = {
+    "high": "gemini-3.8-flash-high",
+    "medium": "gemini-3.8-flash-medium",
+    "low": "gemini-3.8-flash-low",
+    "pro": "gemini-3.8-flash-high",
+    "flash": "gemini-3.8-flash-low",
+}
+
 
 def resolve_persona(name: str) -> Optional[Dict[str, Any]]:
     clean = name.strip().lower()
@@ -287,7 +302,10 @@ def generate_brief(
     canonical_name = conf["canonical_name"]
     spec_file = conf["spec_file"]
     effective_channel = channel or conf["default_channel"]
-    effective_model = model_tier or conf["default_model"]
+    if model_tier:
+        effective_model = MODEL_ALIASES.get(model_tier.lower(), model_tier)
+    else:
+        effective_model = conf["default_model"]
     effective_workspace = workspace_mode or conf["default_workspace"]
     contract_file = conf["primary_contract"]
 
@@ -299,7 +317,7 @@ def generate_brief(
 
     if canonical_name == "pm-agent":
         brief_parts.append(
-            f"You are pm-agent in Wayne Custom Swarm. Load spec at {spec_file}. "
+            f"You are pm-agent in Wayne Custom Swarm. Load spec at {spec_file}. Model Tier: {effective_model}. "
             f"Strictly obey blackboard contracts in .agents/blackboard/ (stage pm_spec.md with numbered acceptance criteria [AC-01]..[AC-xx], negative criteria [NAC-xx], edge cases, and finite state tables). "
             f"{slice_clause}Communicate on the shared message board using channel '#{effective_channel}'. "
             f"Always use explicit mentions ('@<agent_name>'), cite relevant sequence numbers ('#<seq>'), and address peer questions. "
@@ -307,7 +325,7 @@ def generate_brief(
         )
     elif canonical_name == "architect-agent":
         brief_parts.append(
-            f"You are architect-agent in Wayne Custom Swarm. Load spec at {spec_file}. Model Tier: pro (High Thinking). "
+            f"You are architect-agent in Wayne Custom Swarm. Load spec at {spec_file}. Model Tier: {effective_model} (High Thinking). "
             f"Strictly obey blackboard contracts in .agents/blackboard/ (author arch_schema.md against pm_spec.md, specifying machine types, Zod schemas, DB migrations, STRIDE threat mitigations, and mutation lifecycles). "
             f"{slice_clause}Communicate on channel '#{effective_channel}'. Defend the architecture against council-challenger. "
             f"Always use explicit mentions ('@council-challenger'), cite sequence numbers ('#<seq>'), and answer challenge tags ([CHAL-SEC-xx], [CHAL-CONC-xx]). "
@@ -315,7 +333,7 @@ def generate_brief(
         )
     elif canonical_name == "council-challenger":
         brief_parts.append(
-            f"You are council-challenger in Wayne Custom Swarm. Load spec at {spec_file}. Model Tier: pro (High Thinking). "
+            f"You are council-challenger in Wayne Custom Swarm. Load spec at {spec_file}. Model Tier: {effective_model} (High Thinking). "
             f"Strictly obey blackboard contracts in .agents/blackboard/ (stress-test arch_schema.md against STRIDE threat models, concurrency races, error states, and unvalidated payloads). "
             f"{slice_clause}Communicate on channel '#{effective_channel}'. "
             f"Always use explicit mentions ('@architect-agent'), cite sequence numbers ('#<seq>'), and post structured challenges ([CHAL-SEC-xx], [CHAL-CONC-xx]). "
@@ -323,7 +341,7 @@ def generate_brief(
         )
     elif canonical_name == "builder-agent":
         brief_parts.append(
-            f"You are builder-agent in Wayne Custom Swarm. Load spec at {spec_file}. "
+            f"You are builder-agent in Wayne Custom Swarm. Load spec at {spec_file}. Model Tier: {effective_model}. "
             f"{slice_clause}Execute implementation strictly within an isolated Git worktree (.worktrees/worker-<id> on branch swarm/worker-<id>). "
             f"Strictly obey blackboard contracts in .agents/blackboard/ (pm_spec.md, design_tokens.md, arch_schema.md). "
             f"Zero design discovery: implement exact tokens and contracts provided. Apply minimal surgical diffs. "
@@ -332,7 +350,7 @@ def generate_brief(
         )
     elif canonical_name == "qa-adversary-agent":
         brief_parts.append(
-            f"You are qa-adversary-agent in Wayne Custom Swarm. Load spec at {spec_file}. Model Tier: pro (Cognitive Parity, High Thinking). "
+            f"You are qa-adversary-agent in Wayne Custom Swarm. Load spec at {spec_file}. Model Tier: {effective_model} (Cognitive Parity, High Thinking). "
             f"Enforce Zero Self-Auditing. Strictly obey blackboard contracts in .agents/blackboard/ (audit integrated feat/task branch against pm_spec.md using validate_blackboard.py and update code_qa_status.md). "
             f"{slice_clause}Communicate on channel '#{effective_channel}'. Always use explicit mentions ('@<agent_name>') and cite sequence numbers ('#<seq>'). "
             f"If failures exist, post '@builder-<id> [AC-xx FAIL] <reproduction trace and file:line>'. Track iterations (<= 3 loops) and enforce Regression Lock. "
@@ -340,33 +358,33 @@ def generate_brief(
         )
     elif canonical_name == "narrator":
         brief_parts.append(
-            "You are narrator in Wayne Custom Swarm. Maintain live UI overview of swarm progress across the 6-phase lifecycle. "
+            f"You are narrator in Wayne Custom Swarm. Model Tier: {effective_model}. Maintain live UI overview of swarm progress across the 6-phase lifecycle. "
             "Monitor .agents/blackboard/ and board channels (#council, #builders, #qa). "
             "Update Director UI in real time with active S_task score, passing/failing criteria counts, and healing iteration count (N/3). "
             "Report milestones and phase transitions to '@coordinator' with token telemetry (Model Used, Input Tokens, Output Tokens, Cache Read Tokens, Total Tokens)."
         )
     elif canonical_name == "monitor":
         brief_parts.append(
-            "You are monitor (stall watchdog) in Wayne Custom Swarm. Continuously track board activity and agent execution states across all channels. "
+            f"You are monitor (stall watchdog) in Wayne Custom Swarm. Model Tier: {effective_model}. Continuously track board activity and agent execution states across all channels. "
             "If an agent hangs, stops responding, or deadlocks during Phase 2 (Council debate), Phase 4 (build/test), or Phase 5 (QA healing), "
             "alert '@coordinator [STALL_DETECTED]' citing the stalled agent and last known sequence number (#<seq>)."
         )
     elif canonical_name == "research-agent":
         brief_parts.append(
-            f"You are research-agent in Wayne Custom Swarm. Load spec at {spec_file}. Model Tier: pro. "
+            f"You are research-agent in Wayne Custom Swarm. Load spec at {spec_file}. Model Tier: {effective_model}. "
             f"Lead the Hybrid Research Cluster on channel '#{effective_channel}'. "
             f"Strictly obey blackboard contracts in .agents/blackboard/ (author research_dossier.md with cross-lingual query matrix [EN/ZH/JA/KO/RU], platform provenance, and numbered findings [RES-01]..[RES-xx]). "
             f"Always use explicit mentions ('@<agent_name>'), cite sequence numbers ('#<seq>'), and report completion to '@coordinator [done]' with token telemetry (Model Used, Input Tokens, Output Tokens, Cache Read Tokens, Total Tokens)."
         )
     elif canonical_name == "design-agent":
         brief_parts.append(
-            f"You are design-agent in Wayne Custom Swarm. Load spec at {spec_file}. Model Tier: pro. "
+            f"You are design-agent in Wayne Custom Swarm. Load spec at {spec_file}. Model Tier: {effective_model}. "
             f"Strictly obey blackboard contracts in .agents/blackboard/ (author design_tokens.md with 3-tier CSS custom properties [primitive -> semantic -> component], OKLCH scales, and optical typography; zero runtime code). "
             f"Communicate on channel '#{effective_channel}'. Always use explicit mentions ('@<agent_name>'), cite sequence numbers ('#<seq>'), and report completion to '@coordinator [done]' with token telemetry (Model Used, Input Tokens, Output Tokens, Cache Read Tokens, Total Tokens)."
         )
     else:
         brief_parts.append(
-            f"You are {canonical_name} in Wayne Custom Swarm. Load spec at {spec_file}. "
+            f"You are {canonical_name} in Wayne Custom Swarm. Load spec at {spec_file}. Model Tier: {effective_model}. "
             f"Strictly obey blackboard contracts in .agents/blackboard/ ({contract_file}). "
             f"{slice_clause}Communicate on channel '#{effective_channel}'. Always use explicit mentions ('@<agent_name>'), cite sequence numbers ('#<seq>'), "
             f"and report completion to '@coordinator [done]' with deliverable summary and token telemetry (Model Used, Input Tokens, Output Tokens, Cache Read Tokens, Total Tokens)."
@@ -470,8 +488,12 @@ def record_qa_integration(
             f"{failed_ids}. Automated fixes halted; clean escalation to human Director."
         )
     elif state["status"] == "REPAIR_REQUIRED":
+        escalation_note = ""
+        if state.get("model_escalation"):
+            esc_str = state["model_escalation"].rstrip(".")
+            escalation_note = f" Model Escalation: {esc_str}."
         announcements.append(
-            f"@builder [HEALING-CYCLE {iteration}/{max_iter}] {seq_prefix}Target repair criteria: {failed_ids}. "
+            f"@builder [HEALING-CYCLE {iteration}/{max_iter}] {seq_prefix}Target repair criteria: {failed_ids}.{escalation_note} "
             f"Regression lock permanently active for locked criteria: {state['locked_passed']}."
         )
 
@@ -483,6 +505,7 @@ def record_qa_integration(
         "failed_criteria": failed_ids,
         "regression_violations": state.get("regression_violations", []),
         "escalated_to_architect": state.get("escalated_to_architect", False),
+        "model_escalation": state.get("model_escalation"),
         "board_announcements": announcements,
     }
 
@@ -508,7 +531,13 @@ def main():
     brief_parser.add_argument("agent", help="Agent name or alias (e.g. pm-agent, architect, builder, qa)")
     brief_parser.add_argument("--channel", type=str, default=None, help="Target topic channel (council, builders, qa, etc.)")
     brief_parser.add_argument("--slice", type=str, default=None, help="Assigned slice target (e.g. '[AC-01]..[AC-05]')")
-    brief_parser.add_argument("--model", type=str, default=None, choices=["pro", "flash"], help="Cognitive model tier override")
+    brief_parser.add_argument(
+        "--model",
+        type=str,
+        default=None,
+        choices=["gemini-3.8-flash-high", "gemini-3.8-flash-medium", "gemini-3.8-flash-low"],
+        help="Cognitive model tier override (gemini-3.8-flash-high, gemini-3.8-flash-medium, gemini-3.8-flash-low)",
+    )
     brief_parser.add_argument("--workspace", type=str, default=None, choices=["inherit", "share", "clone"], help="Workspace mode override")
     brief_parser.add_argument("--json", action="store_true", help="Output as JSON matching swarm{action: 'add'} parameters")
 

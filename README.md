@@ -30,9 +30,9 @@ flowchart TD
 
     subgraph Lifecycle ["Tier 3 Swarms Lifecycle & Topologies"]
         subgraph Research ["Phase 0: Hybrid Research Cluster (Optional / On-Demand)"]
-            Res_Lead["🔬 research-agent (Pro / High)<br/>Cross-Lingual Query Matrix"]
-            Forum["💬 social-forum-agent (Flash)<br/>Reddit / HN / Telegram / X"]
-            Media["🎬 media-intel-agent (Flash/Pro)<br/>Shorts / TikTok / Reels / ffmpeg"]
+            Res_Lead["🔬 research-agent (Flash High)<br/>Cross-Lingual Query Matrix"]
+            Forum["💬 social-forum-agent (Flash Medium)<br/>Reddit / HN / Telegram / X"]
+            Media["🎬 media-intel-agent (Flash Medium)<br/>Shorts / TikTok / Reels / ffmpeg"]
             Res_Lead --> Forum & Media
         end
 
@@ -200,13 +200,13 @@ To prevent token waste, context dilution, and role-bleed, every agent in the swa
 ### Core Pillars (Always Active in Tier 3 Swarms)
 | Agent | Dedicated Spec | Responsibility | Assigned "Good Enough" Skills | Excluded Skills (Anti-Bloat Boundary) | Model Tier | Thinking Effort |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **The Orchestrator** | *Root Master Blueprint* | Triage, sizing, dispatch, synthesis. Zero direct labor in Tier 3. | `dispatching-parallel-agents`, `brainstorming` | All direct implementation, UI styling, code editing | **Pro / Reasoning** | **High** |
-| **`pm-agent`** | [`agents/pm-agent.md`](agents/pm-agent.md) | PRD, acceptance criteria (`[AC-xx]`), user personas. | `writing-plans`, `brainstorming` | Code editing, UI styling, debugging | **`pro`** | **High** |
-| **`design-agent`** | [`agents/design-agent.md`](agents/design-agent.md) | Layout architecture, typography, responsive CSS tokens. | `impeccable`, `design-system` | `animate`, `animate-expo`, `emil-design-eng`, `ui-styling`, code implementation, `brand`, `slides`, `banner-design` | **`flash`** *(or `pro`)* | **Medium** |
-| **`architect-agent`** | [`agents/architect-agent.md`](agents/architect-agent.md) | System architecture, API contracts, schema consensus. | Architecture & schema design, API contracts | Frontend CSS, UI styling, browser test tools | **`pro`** | **High** |
-| **`council-challenger`** | [`agents/council-challenger.md`](agents/council-challenger.md) | Consensus challenger: STRIDE security, race conditions, scalability. | Threat modeling, scalability audit, edge-case challenge | Code editing, feature implementation | **`pro`** | **High** |
-| **`builder-agent`** | [`agents/builder-agent.md`](agents/builder-agent.md) | Feature construction, logic wiring, cyclic repair. | `ui-styling`, `modern-web-guidance`, `animate`, `systematic-debugging` | `brand`, `slides`, `canvas-design`, open-ended design discovery | **`pro`** *(or `flash`)* | **Medium** |
-| **`qa-adversary-agent`** | [`agents/qa-adversary-agent.md`](agents/qa-adversary-agent.md) | Independent auditor against `[AC-xx]` & anti-slop gate. | `a11y-debugging`, `chrome-devtools`, `verification-before-completion`, `impeccable detect (anti-slop audit)` | File writing, creative design, feature implementation | **`pro`** *(Tier 3 parity)* or `flash` | **High** *(Tier 3)* / **Low–Medium** |
+| **The Orchestrator** | *Root Master Blueprint* | Triage, sizing, dispatch, synthesis. Zero direct labor in Tier 3. | `dispatching-parallel-agents`, `brainstorming` | All direct implementation, UI styling, code editing | **`gemini-3.8-flash-high`** | **High** |
+| **`pm-agent`** | [`agents/pm-agent.md`](agents/pm-agent.md) | PRD, acceptance criteria (`[AC-xx]`), user personas. | `writing-plans`, `brainstorming` | Code editing, UI styling, debugging | **`gemini-3.8-flash-high`** | **High** |
+| **`design-agent`** | [`agents/design-agent.md`](agents/design-agent.md) | Layout architecture, typography, responsive CSS tokens. | `impeccable`, `design-system` | `animate`, `animate-expo`, `emil-design-eng`, `ui-styling`, code implementation, `brand`, `slides`, `banner-design` | **`gemini-3.8-flash-low`** | **Low** |
+| **`architect-agent`** | [`agents/architect-agent.md`](agents/architect-agent.md) | System architecture, API contracts, schema consensus. | Architecture & schema design, API contracts | Frontend CSS, UI styling, browser test tools | **`gemini-3.8-flash-high`** | **High** |
+| **`council-challenger`** | [`agents/council-challenger.md`](agents/council-challenger.md) | Consensus challenger: STRIDE security, race conditions, scalability. | Threat modeling, scalability audit, edge-case challenge | Code editing, feature implementation | **`gemini-3.8-flash-high`** | **High** |
+| **`builder-agent`** | [`agents/builder-agent.md`](agents/builder-agent.md) | Feature construction, logic wiring, cyclic repair. | `ui-styling`, `modern-web-guidance`, `animate`, `systematic-debugging` | `brand`, `slides`, `canvas-design`, open-ended design discovery | **`gemini-3.8-flash-medium`** *(promoted to `gemini-3.8-flash-high` on repair cycles)* | **Medium** *(promoted to `High`)* |
+| **`qa-adversary-agent`** | [`agents/qa-adversary-agent.md`](agents/qa-adversary-agent.md) | Independent auditor against `[AC-xx]` & anti-slop gate. | `a11y-debugging`, `chrome-devtools`, `verification-before-completion`, `impeccable detect (anti-slop audit)` | File writing, creative design, feature implementation | **`gemini-3.8-flash-high`** *(mandatory cognitive parity)* | **High** |
 
 ### 🎨 The Lean Design Trinity & Anti-Slop Architecture
 The frontend workflow leverages a streamlined, decoupled design stack to achieve bespoke visual quality without saturating prompt context:
@@ -218,19 +218,19 @@ The frontend workflow leverages a streamlined, decoupled design stack to achieve
 ### Dynamic Domain Plugins (Swarm Router)
 | Plugin Agent | Dedicated Spec | Responsibility | Assigned "Good Enough" Skills | Excluded Skills (Anti-Bloat Boundary) | Model Tier | Thinking Effort |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **`research-agent`** | [`agents/research-agent.md`](agents/research-agent.md) | Lead Research Strategist, cross-lingual query matrix, dossier compilation. | `research-intelligence`, `search_web`, `research_tools.py` | Implementation, UI styling, DB writes | **`pro`** | **High** |
-| **`social-forum-agent`** | [`agents/social-forum-agent.md`](agents/social-forum-agent.md) | Community sentiment, Reddit/HN/Telegram/X and non-English forums. | `forum-scraping`, `sentiment-analysis`, `research_tools.py` | Architecture design, code authoring | **`flash`** | **Medium** |
-| **`media-intel-agent`** | [`agents/media-intel-agent.md`](agents/media-intel-agent.md) | Short-form video (TikTok, Shorts, Reels, Bilibili), multi-subtitles, keyframe vision. | `yt-dlp-pipeline`, `ffmpeg-keyframes`, `multimodal-vision` | Video creation, code authoring | **`flash`** *(or `pro` for vision)* | **Medium** |
-| **`seo-agent`** | [`agents/seo-agent.md`](agents/seo-agent.md) | Public marketing, SEO meta tags, JSON-LD schemas. | Search console, metadata validators, JSON-LD | UI layout, CSS, backend database | **`flash`** | **Low** |
-| **`analytics-agent`** | [`agents/analytics-agent.md`](agents/analytics-agent.md) | Telemetry tracking, funnels, cohort indicators. | GA4 API, SQL adapters, event taxonomy | Visual design, application code | **`flash`** | **Low** |
-| **`image-agent`** | [`agents/image-agent.md`](agents/image-agent.md) | Web asset discovery and custom AI image generation. | `search_web`, `generate_image`, `banner-design`, `brand (visual assets)`, `canvas-design` | Code editing, refactoring | **`flash`** | **Low** |
-| **`docs-agent`** | [`agents/docs-agent.md`](agents/docs-agent.md) | Lead Technical Writer, Lean Documentation Trinity (Diátaxis, typed API contracts, C4 diagrams, SemVer changelogs, ADRs). | `diataxis-framework`, `api-documenter`, `c4-mermaid-diagrams` | `runtime execution`, `test runners`, `ui-styling`, `code implementation` | **`flash`** *(or `flash_lite`)* | **Medium** *(or `None–Low`)* |
+| **`research-agent`** | [`agents/research-agent.md`](agents/research-agent.md) | Lead Research Strategist, cross-lingual query matrix, dossier compilation. | `research-intelligence`, `search_web`, `research_tools.py` | Implementation, UI styling, DB writes | **`gemini-3.8-flash-high`** | **High** |
+| **`social-forum-agent`** | [`agents/social-forum-agent.md`](agents/social-forum-agent.md) | Community sentiment, Reddit/HN/Telegram/X and non-English forums. | `forum-scraping`, `sentiment-analysis`, `research_tools.py` | Architecture design, code authoring | **`gemini-3.8-flash-medium`** | **Medium** |
+| **`media-intel-agent`** | [`agents/media-intel-agent.md`](agents/media-intel-agent.md) | Short-form video (TikTok, Shorts, Reels, Bilibili), multi-subtitles, keyframe vision. | `yt-dlp-pipeline`, `ffmpeg-keyframes`, `multimodal-vision` | Video creation, code authoring | **`gemini-3.8-flash-medium`** | **Medium** |
+| **`seo-agent`** | [`agents/seo-agent.md`](agents/seo-agent.md) | Public marketing, SEO meta tags, JSON-LD schemas. | Search console, metadata validators, JSON-LD | UI layout, CSS, backend database | **`gemini-3.8-flash-low`** | **Low** |
+| **`analytics-agent`** | [`agents/analytics-agent.md`](agents/analytics-agent.md) | Telemetry tracking, funnels, cohort indicators. | GA4 API, SQL adapters, event taxonomy | Visual design, application code | **`gemini-3.8-flash-medium`** | **Medium** |
+| **`image-agent`** | [`agents/image-agent.md`](agents/image-agent.md) | Web asset discovery and custom AI image generation. | `search_web`, `generate_image`, `banner-design`, `brand (visual assets)`, `canvas-design` | Code editing, refactoring | **`gemini-3.8-flash-low`** | **Low** |
+| **`docs-agent`** | [`agents/docs-agent.md`](agents/docs-agent.md) | Lead Technical Writer, Lean Documentation Trinity (Diátaxis, typed API contracts, C4 diagrams, SemVer changelogs, ADRs). | `diataxis-framework`, `api-documenter`, `c4-mermaid-diagrams` | `runtime execution`, `test runners`, `ui-styling`, `code implementation` | **`gemini-3.8-flash-low`** | **Low** |
 
 ### 🔬 The Hybrid Research Cluster & Multimodal Architecture
 The research intelligence cluster operates during Phase 0 (Research Sprint) or whenever market/technical investigation is requested:
-- **`research-agent` (Pro / High)**: Formulates localized query matrices across 5 major language ecosystems (English, Chinese, Japanese, Korean, Russian). Translates technical concepts into native developer community jargon (`踩坑`, `实测`, `使ってみた`, `грабли`).
-- **`social-forum-agent` (Flash / Medium)**: Ingests Reddit threads via public JSON, queries the Hacker News Algolia API, parses public Telegram channels, and analyzes X/Twitter discourse without bloating prompt contexts.
-- **`media-intel-agent` (Flash/Pro / Medium)**: Processes short-form video (TikTok, YouTube Shorts, Instagram Reels, Bilibili, Douyin) through a 4-layer multimodal pipeline: metadata extraction, deduplicated subtitle parsing across multi-language tracks, top community comment mining, and `ffmpeg` keyframe sampling to inspect on-screen code or diagrams.
+- **`research-agent` (Gemini 3.8 Flash High / High)**: Formulates localized query matrices across 5 major language ecosystems (English, Chinese, Japanese, Korean, Russian). Translates technical concepts into native developer community jargon (`踩坑`, `实测`, `使ってみた`, `грабли`).
+- **`social-forum-agent` (Gemini 3.8 Flash Medium / Medium)**: Ingests Reddit threads via public JSON, queries the Hacker News Algolia API, parses public Telegram channels, and analyzes X/Twitter discourse without bloating prompt contexts.
+- **`media-intel-agent` (Gemini 3.8 Flash Medium / Medium)**: Processes short-form video (TikTok, YouTube Shorts, Instagram Reels, Bilibili, Douyin) through a 4-layer multimodal pipeline: metadata extraction, deduplicated subtitle parsing across multi-language tracks, top community comment mining, and `ffmpeg` keyframe sampling to inspect on-screen code or diagrams.
 - **`research_dossier.md`**: Machine blackboard contract synthesizing all findings, provenances, and evidence into structured inputs directly ingested by `pm-agent` (`pm_spec.md`) and `architect-agent` (`arch_schema.md`).
 
 ### 📚 The Lean Documentation Trinity & Technical Writing Architecture
@@ -245,6 +245,78 @@ Technical documentation is authored by `docs-agent` adhering strictly to the **L
 - **Token Economy**: Prevents prompt saturation by stripping unnecessary skills, minimizing latency and inference overhead.
 - **Attention Preservation**: Constrains agent reasoning strictly to its core domain, eliminating hallucinations or distractions from tangential toolsets.
 - **Zero Role-Bleed**: Guarantees distinct separation of concerns—planners plan, designers tokenize, builders code and style, adversaries audit and detect anti-patterns, and technical writers author Diátaxis documentation and C4 diagrams.
+
+---
+
+## 🧠 Exclusive Google Gemini Model Architecture & Thinking Tiers
+
+Wayne Custom Orchestra operates on an exclusive Google model architecture, standardizing on **Gemini 3.8 Flash** across three finely calibrated thinking tiers (with zero non-Google models). This guarantees state-of-the-art multi-turn reasoning and strict cognitive parity at critical verification gates while saving up to 80% quota on high-frequency auxiliary tasks:
+
+### 1. The 3 Thinking Tiers
+
+| Model Identifier | Display Name | Thinking Budget | Primary Characteristics | Cost / Quota Profile |
+| :--- | :--- | :---: | :--- | :--- |
+| **`gemini-3.8-flash-high`** | Gemini 3.8 Flash (High) | **Max / Deep** | Full reasoning scratchpad, multi-turn constraint tracking, formal logic verification, deep AST code analysis. | Highest quota burn per turn; reserved for critical gates and adversarial audit. |
+| **`gemini-3.8-flash-medium`** | Gemini 3.8 Flash (Medium) | **Moderate** | Balanced reasoning, fast component assembly, structured data formatting, standard unit test generation. | Balanced speed and token efficiency for code implementation and forum mining. |
+| **`gemini-3.8-flash-low`** | Gemini 3.8 Flash (Low) | **Minimal** | Ultra-low latency, direct deterministic instruction execution, text formatting, and template expansion. | Lowest quota burn; ideal for auxiliary roles, static metadata, and styling tokens. |
+
+### 2. Swarm Model Assignment Architecture
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│ TIER 1: DEEP REASONING & VERIFICATION (gemini-3.8-flash-high)          │
+│   ├── architect-agent       (Zod schemas, DB models, STRIDE security)  │
+│   ├── council-challenger    (STRIDE stress-tests, race conditions)     │
+│   ├── qa-adversary-agent    (Adversarial [AC-xx] line-by-line audit)   │
+│   ├── pm-agent              (Acceptance criteria, finite state tables) │
+│   ├── research-agent        (Cross-lingual query matrices, provenance) │
+│   └── builder-agent (Fix)   (Self-healing repair cycles: Iteration 2+) │
+├────────────────────────────────────────────────────────────────────────┤
+│ TIER 2: BALANCED EXECUTION & LOGIC (gemini-3.8-flash-medium)           │
+│   ├── builder-agent (Init)  (Initial feature implementation & logic)   │
+│   ├── social-forum-agent    (Reddit / HN / Telegram thread extraction)│
+│   ├── media-intel-agent     (Subtitles & ffmpeg keyframe inspection)   │
+│   └── analytics-agent       (Telemetry event schemas & SQL metrics)    │
+├────────────────────────────────────────────────────────────────────────┤
+│ TIER 3: HIGH-SPEED & QUOTA PRESERVATION (gemini-3.8-flash-low)         │
+│   ├── design-agent          (3-tier CSS custom properties, OKLCH scales)│
+│   ├── docs-agent            (Markdown formatting, link validation)     │
+│   ├── seo-agent             (Structured metadata, semantic HTML)       │
+│   ├── image-agent           (SVG optimization & image prompts)         │
+│   ├── narrator              (Live UI dashboard updates in Antigravity) │
+│   └── monitor               (Stall watchdog & deadlock breaker)        │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+### 3. Dynamic Gemini Self-Healing Escalation Ladder
+
+Rather than leaving `builder-agent` at a fixed thinking level during debugging, the self-healing feedback loop dynamically steps up the thinking budget:
+
+```mermaid
+stateDiagram-v2
+    [*] --> Iteration1: Initial Implementation
+    Iteration1: builder-agent on gemini-3.8-flash-medium<br/>(Fast construction)
+    
+    Iteration1 --> QA1: Code Submitted
+    QA1: qa-adversary-agent on gemini-3.8-flash-high<br/>(Rigorous Adversarial Audit)
+    
+    QA1 --> Done: ALL_PASS
+    QA1 --> Iteration2: Failures Detected [AC-xx FAIL]
+    
+    Iteration2: builder-agent PROMOTED to gemini-3.8-flash-high<br/>(Deep Root-Cause Analysis)
+    
+    Iteration2 --> QA2: Fix Submitted
+    QA2: qa-adversary-agent on gemini-3.8-flash-high
+    
+    QA2 --> Done: ALL_PASS
+    QA2 --> EscalationGate: Same Failure 2x
+    
+    EscalationGate: architect-agent on gemini-3.8-flash-high<br/>(Revise arch_schema.md before Iteration 3)
+```
+
+1. **Iteration 1**: Builder builds with `gemini-3.8-flash-medium` for rapid construction and low latency.
+2. **Iteration 2 (If Fail)**: `healing_tracker.py` promotes Builder to **`gemini-3.8-flash-high`** to perform deep algorithmic diagnosis and surgical repair under cognitive parity.
+3. **Consecutive Failure (Same Criterion Failed 2x)**: Triggers the Architectural Escalation Gate, pausing `builder-agent` and dispatching `architect-agent` (`gemini-3.8-flash-high`) to modify system schemas or API contracts before attempting Iteration 3.
 
 ---
 
@@ -283,9 +355,10 @@ To maintain complete transparency into inference economics, verify model routing
 
 | Agent / Level | Model Used | Input Tokens | Output Tokens | Cache Read Tokens | Total Tokens |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| Root Orchestrator | Gemini 3.8 Pro (High) | 20,870 | 4,058 | 1,398,943 | 1,423,871 |
+| Root Orchestrator | Gemini 3.8 Flash (High) | 20,870 | 4,058 | 1,398,943 | 1,423,871 |
 | Subagent (`System Architect`) | Gemini 3.8 Flash (High) | 162,722 | 26,517 | 3,320,513 | 3,509,752 |
-| **Total (Run Sum)** | **-** | **183,592** | **30,575** | **4,719,456** | **4,933,623** |
+| Subagent (`Builder`) | Gemini 3.8 Flash (Medium) | 88,410 | 12,204 | 1,840,110 | 1,940,724 |
+| **Total (Run Sum)** | **-** | **272,002** | **42,779** | **6,559,566** | **6,874,347** |
 
 ### 🛠️ CLI Telemetry Collator Utility
 

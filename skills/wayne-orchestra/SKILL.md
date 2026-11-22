@@ -98,7 +98,7 @@ To prevent context dilution and subagent noise, execution is decoupled across de
    - Workers communicate progress via targeted `@mention` syntax and complete tasks with standard `[done]` prefix markers.
 
 3. **`#qa` (Phase 5 — Adversarial Audit & Bounded Cyclic Self-Healing)**:
-   - Dedicated channel for `qa-adversary-agent` operating on cognitive parity (`Model: "pro"`).
+   - Dedicated channel for `qa-adversary-agent` operating on cognitive parity (`Model: "gemini-3.8-flash-high"`).
    - Mechanically verifies merged code on `feat/<task>` against every acceptance criterion in `pm_spec.md`.
    - On defects, posts targeted failure reports (criterion ID, reproduction command, stack trace) directly to `#qa` tagging the responsible builder.
    - Orchestrated via `scripts/healing_tracker.py` with maximum 3 repair iterations and Regression Lock enforcement.
@@ -107,15 +107,89 @@ To prevent context dilution and subagent noise, execution is decoupled across de
 1. **`narrator` (Live Visual Overview UI)**:
    - Maintains the real-time visual Overview dashboard in the Antigravity Swarm UI for the Director.
    - Synthesizes the active lifecycle phase, $S_{\text{task}}$ score, passing/failing `[AC-xx]` count, and healing iteration count ($N/3$) without clogging developer logs.
+   - Assigned Model: `gemini-3.8-flash-low` (minimal thinking budget saving up to 80% auxiliary quota).
 2. **`monitor` (Stall Watchdog & Deadlock Breaker)**:
    - Continuously monitors worker turn durations and message board liveness.
    - Alerts the Root Orchestrator if builds, test runs, or channel handoffs hang or exceed reasonable operational thresholds.
+   - Assigned Model: `gemini-3.8-flash-low` (high-frequency quota preservation).
 
 ### Brief Generator & Channel Manager (`scripts/swarm_orchestrator.py`)
-- Programmatic CLI helper that provisions topic channels (`#council`, `#builders`, `#qa`), formats standardized, persona-bound worker briefs, sets up channel subscriptions, model tier pinning (`pro` vs `flash`), and workspace sharing flags (`workspace: "share"`).
+- Programmatic CLI helper that provisions topic channels (`#council`, `#builders`, `#qa`), formats standardized, persona-bound worker briefs, sets up channel subscriptions, model tier pinning (`gemini-3.8-flash-high`, `gemini-3.8-flash-medium`, `gemini-3.8-flash-low`), and workspace sharing flags (`workspace: "share"`).
 - Automatically enforces safety ceilings, token spending limits, and clean teardown (`swarm{action: "kill", name: "all"}`) upon lifecycle completion.
 
-## 7. Mandatory Response Reporting Invariant
+## 7. Exclusive Google Gemini Model Architecture & Thinking Tiers
+
+The Wayne Custom Swarm operates exclusively on Google Gemini models (**Gemini 3.8 Flash** across 3 granular thinking tiers with zero non-Google models) to achieve elite cognitive reasoning while preserving operational quota:
+
+### The 3 Thinking Tiers
+
+| Model Identifier | Display Name | Thinking Budget | Primary Characteristics | Cost / Quota Profile |
+| :--- | :--- | :---: | :--- | :--- |
+| **`gemini-3.8-flash-high`** | Gemini 3.8 Flash (High) | **Max / Deep** | Full reasoning scratchpad, multi-turn constraint tracking, formal logic verification, deep AST code analysis. | Highest quota burn per turn; reserved for critical gates and adversarial audit. |
+| **`gemini-3.8-flash-medium`** | Gemini 3.8 Flash (Medium) | **Moderate** | Balanced reasoning, fast component assembly, structured data formatting, standard unit test generation. | Balanced speed and token efficiency for code implementation and forum mining. |
+| **`gemini-3.8-flash-low`** | Gemini 3.8 Flash (Low) | **Minimal** | Ultra-low latency, direct deterministic instruction execution, text formatting, and template expansion. | Lowest quota burn; ideal for auxiliary roles, static metadata, and styling tokens. |
+
+### Agent-to-Model Assignment Matrix
+
+All 13 specialized agents and auxiliary roles are mapped deterministically across the 3 tiers:
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│ TIER 1: DEEP REASONING & VERIFICATION (gemini-3.8-flash-high)          │
+│   ├── architect-agent       (Zod schemas, DB models, STRIDE security)  │
+│   ├── council-challenger    (STRIDE stress-tests, race conditions)     │
+│   ├── qa-adversary-agent    (Adversarial [AC-xx] line-by-line audit)   │
+│   ├── pm-agent              (Acceptance criteria, finite state tables) │
+│   ├── research-agent        (Cross-lingual query matrices, provenance) │
+│   └── builder-agent (Fix)   (Self-healing repair cycles: Iteration 2+) │
+├────────────────────────────────────────────────────────────────────────┤
+│ TIER 2: BALANCED EXECUTION & LOGIC (gemini-3.8-flash-medium)           │
+│   ├── builder-agent (Init)  (Initial feature implementation & logic)   │
+│   ├── social-forum-agent    (Reddit / HN / Telegram thread extraction)│
+│   ├── media-intel-agent     (Subtitles & ffmpeg keyframe inspection)   │
+│   └── analytics-agent       (Telemetry event schemas & SQL metrics)    │
+├────────────────────────────────────────────────────────────────────────┤
+│ TIER 3: HIGH-SPEED & QUOTA PRESERVATION (gemini-3.8-flash-low)         │
+│   ├── design-agent          (3-tier CSS custom properties, OKLCH scales)│
+│   ├── docs-agent            (Markdown formatting, link validation)     │
+│   ├── seo-agent             (Structured metadata, semantic HTML)       │
+│   ├── image-agent           (SVG optimization & image prompts)         │
+│   ├── narrator              (Live UI dashboard updates in Antigravity) │
+│   └── monitor               (Stall watchdog & deadlock breaker)        │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+### Dynamic Gemini Self-Healing Escalation Ladder
+
+Rather than leaving `builder-agent` at a fixed thinking level during debugging, the self-healing feedback loop dynamically steps up the thinking budget:
+
+```mermaid
+stateDiagram-v2
+    [*] --> Iteration1: Initial Implementation
+    Iteration1: builder-agent on gemini-3.8-flash-medium<br/>(Fast construction)
+    
+    Iteration1 --> QA1: Code Submitted
+    QA1: qa-adversary-agent on gemini-3.8-flash-high<br/>(Rigorous Adversarial Audit)
+    
+    QA1 --> Done: ALL_PASS
+    QA1 --> Iteration2: Failures Detected [AC-xx FAIL]
+    
+    Iteration2: builder-agent PROMOTED to gemini-3.8-flash-high<br/>(Deep Root-Cause Analysis)
+    
+    Iteration2 --> QA2: Fix Submitted
+    QA2: qa-adversary-agent on gemini-3.8-flash-high
+    
+    QA2 --> Done: ALL_PASS
+    QA2 --> EscalationGate: Same Failure 2x
+    
+    EscalationGate: architect-agent on gemini-3.8-flash-high<br/>(Revise arch_schema.md before Iteration 3)
+```
+
+1. **Iteration 1**: Builder builds with `gemini-3.8-flash-medium` for rapid construction and low latency.
+2. **Iteration 2 (If Fail)**: `healing_tracker.py` promotes Builder to **`gemini-3.8-flash-high`** to perform deep algorithmic diagnosis and surgical repair under cognitive parity.
+3. **Consecutive Failure (Same Criterion Failed 2x)**: Triggers the Architectural Escalation Gate, pausing `builder-agent` and dispatching `architect-agent` (`gemini-3.8-flash-high`) to modify system schemas or API contracts before attempting Iteration 3.
+
+## 8. Mandatory Response Reporting Invariant
 Every response summarizing execution or status updates must include:
 > **Execution Telemetry**:
 > - **Task Tier**: `Tier 1: Direct Solo` | `Tier 2: Targeted Specialist` | `Tier 3: Full Swarm` (with $S_{\text{task}}$ score)
