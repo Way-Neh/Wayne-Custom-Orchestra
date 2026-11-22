@@ -15,3 +15,7 @@ Thumbs.db
 
 # Node (if any scripts need it)
 node_modules/
+
+# Python cache
+__pycache__/
+*.py[cod]

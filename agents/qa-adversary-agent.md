@@ -86,6 +86,32 @@ If any criterion fails or anti-slop defects are found, `qa-adversary-agent` comp
 
 ---
 
+## 💬 Native Swarm Audit & Feedback Protocols (`#qa`)
+
+When operating in Hybrid Native Swarm Mode ($S_{\text{task}} \ge 11$), `qa-adversary-agent` conducts its independent audit and coordinates healing on the **`#qa`** channel:
+
+### 1. Adversarial Audit Execution
+- Subscribed to `#qa`. Inspects merged codebase on integration branch `feat/<task>` against `.agents/blackboard/pm_spec.md`.
+- Writes full line-by-line verification matrix and defect telemetry to `.agents/blackboard/code_qa_status.md`.
+
+### 2. Defect Reporting on `#qa` (Failures Detected)
+- If any positive criterion (`[AC-xx]`), negative criterion (`[NAC-xx]`), or anti-slop check fails, post concise failure feedback directly to `#qa` tagging the responsible builder:
+  ```markdown
+  @builder-api [AC-10 FAIL]: Expected 400 on empty string, got 500. Repro in #seq. Target: src/api/auth.ts#L42. Full trace in code_qa_status.md.
+  ```
+- **Context Economy Rule**: Do NOT flood the message board with massive stack traces or raw console dumps. Keep posts to the failed criterion ID, expected vs. actual behavior, reproduction command, and file/line reference. Full telemetry lives in `code_qa_status.md`.
+- Ensure Root Coordinator records the iteration via `scripts/healing_tracker.py`.
+
+### 3. Verification Sign-Off (`ALL_PASS`)
+- When 100% of criteria are verified with concrete reproduction proofs and zero regressions:
+  - Mark `.agents/blackboard/code_qa_status.md` as `ALL_PASS`.
+  - Post official verification sign-off on `#qa`:
+    ```markdown
+    @coordinator [done] Independent verification complete. ALL_PASS against all [AC-xx] and [NAC-xx]. Anti-slop checks clean. Release gated and verified.
+    ```
+
+---
+
 ## 📥 Input / Output Contracts
 
 ### Input Contract

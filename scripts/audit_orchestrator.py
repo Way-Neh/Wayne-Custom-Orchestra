@@ -127,7 +127,7 @@ def check_scripts_references():
             if m in {"audit_orchestrator.py", "collate_telemetry.py", "find_skill.py", 
                     "init_blackboard.py", "on_session_start.py", "research_tools.py", 
                     "retrospective_onboard.py", "worktree_helper.sh", "validate_blackboard.py",
-                    "healing_tracker.py"}:
+                    "healing_tracker.py", "swarm_orchestrator.py"}:
                 if m not in existing_scripts:
                     errors.append(f"{tf.name} references script '{m}' which does not exist in {scripts_dir}")
 

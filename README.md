@@ -1,6 +1,6 @@
 # Wayne Custom Orchestra 🎻
 
-Adaptive Multi-Agent Swarm Orchestrator Architecture & Operating Model (**Wayne Custom 2.0 2026-10-16 / Swarms Enhanced**).
+Adaptive Multi-Agent Swarm Orchestrator Architecture & Operating Model (**Wayne Custom 3.0 / Native Swarm Hybrid**).
 
 ---
 
@@ -109,6 +109,7 @@ flowchart TD
 | **Mixture of Agents (MoA)** | Layered contextual synthesis across blackboard | Outputs from PM, Design, and Architecture are synthesized into machine-readable blackboard contracts that guide `builder-agent` directly. |
 | **Concurrent Worker Worktrees** | Isolated Git worktrees (`.worktrees/worker-<id>`) on `swarm/worker-<id>` | Activates in Phase 4. Prevents git index contention, compiler cache locks, and file clobbering across concurrent builder instances before merging through the integration gate. |
 | **Bounded Cyclic Self-Healing** | Automated loop (`qa-adversary-agent` $\rightleftharpoons$ `builder-agent`) | If adversarial audit detects failing acceptance criteria (`[AC-xx]`), diffs and failure traces are automatically routed back to Builder for up to **3 iterations** before escalation. |
+| **Native Swarm Channels & Pub/Sub** | Pub/Sub topic channels (`#council`, `#builders`, `#qa`) via Antigravity Native Swarms | Decouples communications to prevent context dilution, facilitates live multi-agent debate, and exposes real-time visualization to the Director via `narrator` and `monitor`. |
 
 ---
 
@@ -133,10 +134,18 @@ $$S_{\text{task}} = D + F + A + C + V$$
 > **Automated Task Safety Rule**: For any scheduled or timer-triggered tasks (cron, background alarms), the Director approval gate is bypassed ONLY if $S_{\text{task}} \le 10$ (Tier 1 or Tier 2). Tier 3 swarms triggered via unattended timers are automatically constrained to a **50,000 token spend ceiling** and a **maximum of 1 self-healing repair cycle**; if unpassed criteria remain, execution safely halts for Director review.
 
 ### 3. The Zero Direct Labor Rule (Tier 3)
-For Tier 3 tasks, the root Orchestrator does **no direct code or asset implementation**. It exclusively handles triage, task sizing, LLM Council facilitation, Swarm Router dispatching (`invoke_subagent` with `Workspace: "share"`), self-healing orchestration, and final synthesis.
+For Tier 3 tasks, the root Orchestrator does **no direct code or asset implementation**. It exclusively handles triage, task sizing, LLM Council facilitation, Swarm Router dispatching (`invoke_subagent` or native `swarm` tools with `Workspace: "share"`), self-healing orchestration, and final synthesis.
 
 ### 4. Adversarial QA Integrity, Anti-Slop Gating & Cyclic Remediation
 `builder-agent` and `qa-adversary-agent` are strictly decoupled. The builder never audits its own code; the adversary validates line-by-line against numbered Acceptance Criteria (`[AC-xx]`) with concrete evidence and executes `impeccable detect (anti-slop audit)` to gate against visual anti-patterns, generic AI templates, and contrast defects. If an issue is flagged, the **Bounded Cyclic Self-Healing Loop** automatically routes the fix up to 3 times before involving the Director.
+
+### 5. Hybrid Native Swarm Execution Mode ($S_{\text{task}} \ge 11$)
+Couples Wayne's governance and machine blackboard contracts (`.agents/blackboard/`) with Antigravity Native Swarm's live message board engine:
+- **`#council`**: Staged spec review and STRIDE debate between `architect-agent` and `council-challenger`.
+- **`#builders`**: Parallel execution across isolated Git worktrees (`.worktrees/worker-<id>`) with shared workspace visibility and standard `[done]` milestone markers.
+- **`#qa`**: Adversarial verification against `pm_spec.md`, Regression Lock tracking via `healing_tracker.py`, and surgical remediation tags.
+- **Auxiliary Roles**: `narrator` powers the live visual Swarm Overview UI; `monitor` serves as a deadlock watchdog.
+- **Channel Controller**: Managed via `scripts/swarm_orchestrator.py`.
 
 ### 5. Concurrent Worker Worktree Protocol
 When parallel implementation spans multiple builders or independent modules, the Orchestrator enforces filesystem isolation:

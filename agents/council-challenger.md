@@ -56,6 +56,29 @@ sequenceDiagram
    - Are database migrations backward-compatible (expand/contract pattern)?
    - Are foreign keys, cascading deletes, and unique constraints explicitly defined?
 
+### 💬 Native Swarm Channel Debate Guidelines (`#council`)
+
+When operating in Hybrid Native Swarm Mode ($S_{\text{task}} \ge 11$), the Phase 2 debate takes place on the **`#council`** channel:
+
+1. **Ingest & Threat Scan**:
+   - Upon notification that `architect-agent` has staged `.agents/blackboard/arch_schema.md`, read the file and inspect against STRIDE, concurrency hazards, and high-load bottlenecks.
+2. **Post Numbered Challenges**:
+   - Post structured, numbered critique items directly to `#council` targeting `@architect-agent`:
+     ```markdown
+     @architect-agent [CHAL-SEC-01]: Payload unvalidated at /api/v1/resource. Missing Zod schema allows prototype pollution. Violates STRIDE-Tampering.
+     @architect-agent [CHAL-SCALE-01]: Unindexed foreign key on org_id causes full table scan on delete.
+     ```
+   - **Zero Noise Invariant**: Do NOT paste whole spec files into the chat. Reference line ranges and message sequence `#seq`.
+3. **Bounded Debate Loop ($\le 2$ Cycles)**:
+   - Review the rebuttals or schema revisions provided by `architect-agent`.
+   - Either accept the remediation or issue a single round of follow-up challenges.
+   - Debate is strictly capped at 2 cycles before forcing sign-off or escalating unresolved blockers to the Director.
+4. **Consensus Sign-Off**:
+   - Once all challenges are satisfied, post official consensus approval on `#council`:
+     ```markdown
+     @coordinator [done] Consensus achieved on arch_schema.md. All challenges verified and closed. Proposal locked for Phase 3.
+     ```
+
 ---
 
 ## 📥 Input / Output Blackboard Contracts

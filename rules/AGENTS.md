@@ -87,3 +87,22 @@ To prevent conflating prompt guidance with deterministic guarantees, all swarm m
 | **Code-Enforced** | Deterministic CLI scripts, Git hooks, filesystem locks | `worktree_helper.sh`, `validate_blackboard.py`, `healing_tracker.py`, `collate_telemetry.py`, `on_session_start.py` (`hooks.json`) | Hard exit code $\ne 0$; blocks subsequent phases loudly. |
 | **Prompt-Guided** | Cognitive role directives, persona constraints, thinking depth | Agent system prompts (`agents/*.md`), skill guides (`skills/*/SKILL.md`) | Probabilistic; monitored via adversarial review and linter audits (`audit_orchestrator.py`). |
 
+---
+
+## 10. Native Swarm Message Board Protocols (Tier 3 Execution)
+When executing in Hybrid Native Swarm Mode ($S_{\text{task}} \ge 11$), all multi-agent coordination operates over Antigravity Native Swarm pub/sub message boards structured by channels (`#council`, `#builders`, `#qa`):
+
+- **Targeted Addressing & Zero Report Duplication**:
+  - Always use targeted `@mention` syntax (e.g., `@architect-agent`, `@council-challenger`, `@builder-api`, `@qa-adversary-agent`, `@coordinator`).
+  - **Never copy-paste entire reports, spec bodies, or massive stack traces into message board posts**. Always reference the originating post's sequence number (`#seq`, e.g. `#14`) or on-disk blackboard artifact (`.agents/blackboard/arch_schema.md`, `.agents/blackboard/code_qa_status.md`).
+- **Standard Completion Marker (`[done]`)**:
+  - Workers and auditors MUST begin milestone completion messages with `[done]` (e.g. `@coordinator [done] Changes committed to swarm/worker-1 for [AC-01]..[AC-05]. Local tests passing.`, `@coordinator [done] Independent verification complete. ALL_PASS`). This allows the Root Coordinator and `monitor` watchdog to deterministically recognize phase exits.
+- **Regression Lock & Healing on `#qa`**:
+  - When `qa-adversary-agent` identifies broken acceptance criteria during Phase 5, it posts surgical failure feedback directly to `#qa` tagging the responsible builder (e.g., `@builder-1 [AC-03 FAIL]: Expected 400 on empty string, got 500. Repro in #14. Line ref: src/api/auth.ts#L42`).
+  - The Root Coordinator immediately records the state using `scripts/healing_tracker.py`. If a previously passed criterion is broken, `healing_tracker.py` raises a `REGRESSION_VIOLATION` and halts.
+  - If a criterion fails across 2 consecutive iterations, `healing_tracker.py` triggers an Architectural Escalation Gate, tagging `@architect-agent` on `#council` or `#qa` to review contracts before iteration 3.
+- **Auxiliary Roles (`narrator` & `monitor`)**:
+  - `narrator`: Synthesizes live status milestones ($S_{\text{task}}$, active phase, pass/fail `[AC-xx]` counts, healing cycle $N/3$) into the visual Swarm Overview UI.
+  - `monitor`: Watches for turn stalls, communication timeouts, and compilation deadlocks to alert the Root Coordinator.
+
+

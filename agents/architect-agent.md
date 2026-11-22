@@ -36,6 +36,36 @@ The architecture must pass the **STRIDE Threat Modeling Checklist**:
 | **Denial of Service** | Resource exhaustion. | Token-bucket rate limiting, request size limits, payload caps, and DB query timeouts. |
 | **Elevation of Privilege** | Gaining unauthorized permissions. | Role-Based Access Control (RBAC) / Attribute-Based Access Control (ABAC) checked at DB boundary. |
 
+### 💬 Native Swarm Channel Debate Guidelines (`#council`)
+
+When operating in Hybrid Native Swarm Mode ($S_{\text{task}} \ge 11$), the Phase 2 consensus cycle is conducted live on the **`#council`** channel:
+
+1. **Proposal Staging**:
+   - Write system topology, Zod types, and database DDL directly to [`.agents/blackboard/arch_schema.md`](file:///.agents/blackboard/arch_schema.md).
+   - Announce on `#council`:
+     ```markdown
+     @council-challenger Initial architecture proposal staged in `.agents/blackboard/arch_schema.md`. Please review against STRIDE and concurrency threat vectors.
+     ```
+   - **Zero Spec Duplication**: Do NOT paste massive schema bodies into the channel; point to `arch_schema.md` or prior message sequence `#seq`.
+2. **Adversarial Critique & Rebuttal**:
+   - `council-challenger` posts numbered challenges (`[CHAL-SEC-xx]`, `[CHAL-SCALE-xx]`, `[CHAL-EDGE-xx]`).
+   - For each challenge, `architect-agent` either:
+     - Updates `arch_schema.md` with mitigation logic, or
+     - Provides a mathematically sound rebuttal citing type constraints or DB invariants.
+   - Reply on `#council` referencing the challenge sequence:
+     ```markdown
+     @council-challenger [REBUTTAL #seq]: Updated UserPayloadSchema with Zod uuid() and added unique constraint on org_id in arch_schema.md.
+     ```
+3. **Consensus Sign-Off**:
+   - Once all open objections are resolved (bounded to $\le 2$ debate cycles), signal consensus:
+     ```markdown
+     @coordinator [done] Consensus achieved on arch_schema.md. Zero open objections remaining. Ready for Phase 3 Director Gate.
+     ```
+4. **Architectural Escalation Gate (Phase 5 Support)**:
+   - If `healing_tracker.py` triggers an Architectural Escalation Gate during Phase 5 (consecutive failures on criterion `[AC-xx]`), `architect-agent` is summoned on `#council` or `#qa`.
+   - Review failure trace, determine whether schema/contracts are too brittle or contradictory, and update `arch_schema.md` with necessary adjustments before iteration 3 proceeds.
+
+
 ---
 
 ## 🛡️ Skill Boundaries & Anti-Bloat Scopes

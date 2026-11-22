@@ -2,14 +2,23 @@
 """
 collate_telemetry.py - Token & Model Telemetry Collator for Wayne Custom Orchestrator.
 
-Parses transcript.jsonl files across the Root Orchestrator and all invoked Subagents,
+Parses transcript.jsonl files across the Root Orchestrator and all invoked Subagents
+as well as Native Swarm workers (located in <appDataDir>/brain/<conv_id>/.system_generated/logs/transcript.jsonl),
 extracting model details, input tokens, output tokens, cache read tokens, and total tokens,
 and outputs a formatted Markdown telemetry table with a run sum total row.
+
+Features:
+  - Multi-source auto-discovery:
+      * Filesystem discovery of subagents (.system_generated/subagents/*.json)
+      * Filesystem discovery of swarm workers (.system_generated/swarm/members.json)
+      * Step-level tool call extraction (invoke_subagent and swarm{action: 'add'})
+  - Unattended spending ceiling guard (e.g. 50,000 token limit) for Rule 8 compliance.
+  - JSON and Markdown output formats.
 
 Usage:
   python3 scripts/collate_telemetry.py [OPTIONS] [CONVERSATION_IDS_OR_PATHS...]
   python3 scripts/collate_telemetry.py --root <ROOT_CONVERSATION_ID>
-  python3 scripts/collate_telemetry.py <ROOT_ID> <SUBAGENT_1_ID> <SUBAGENT_2_ID>
+  python3 scripts/collate_telemetry.py --root <ROOT_ID> --ceiling 50000 --enforce-ceiling
 """
 
 import os
@@ -18,13 +27,16 @@ import json
 import re
 import argparse
 from pathlib import Path
-from typing import Dict, List, Optional, Any, Tuple
+from typing import Dict, List, Optional, Any, Tuple, Set
 
 DEFAULT_MODEL_MAP = {
     "inherit": "Gemini 3.8 Pro (High)",
     "flash": "Gemini 3.8 Flash (High)",
     "pro": "Gemini 3.8 Pro (High)",
     "flash_lite": "Gemini 3.8 Flash-Lite",
+    "gemini-3.8-flash-high": "Gemini 3.8 Flash (High)",
+    "gemini-3.8-pro-high": "Gemini 3.8 Pro (High)",
+    "gemini-3.8-flash-lite": "Gemini 3.8 Flash-Lite",
 }
 DEFAULT_ROOT_MODEL = "Gemini 3.8 Flash (High)"
 DEFAULT_FALLBACK_MODEL = "Gemini 3.8 Flash (High)"
@@ -35,12 +47,14 @@ def normalize_model_name(name: Optional[str], default: str = DEFAULT_FALLBACK_MO
         return default
     clean = name.strip()
     low = clean.lower()
-    if low in ["pro", "gemini pro", "gemini-pro"]:
-        return "Gemini 3.8 Pro (High)"
-    if low in ["flash", "gemini flash", "gemini-flash"]:
+    if low in DEFAULT_MODEL_MAP:
+        return DEFAULT_MODEL_MAP[low]
+    if "flash" in low:
+        if "lite" in low:
+            return "Gemini 3.8 Flash-Lite"
         return "Gemini 3.8 Flash (High)"
-    if low in ["flash_lite", "flash-lite", "gemini-flash-lite", "flashlite"]:
-        return "Gemini 3.8 Flash-Lite"
+    if "pro" in low:
+        return "Gemini 3.8 Pro (High)"
     if low == "inherit":
         return default
     return clean
@@ -59,16 +73,16 @@ def resolve_transcript_path(id_or_path: str, app_data_dir: Path) -> Optional[Pat
     p = Path(id_or_path).expanduser().resolve()
     if p.is_file():
         return p
-    
+
     # Try looking in app_data_dir/brain/<id>/.system_generated/logs/transcript.jsonl
     candidate = app_data_dir / "brain" / id_or_path / ".system_generated" / "logs" / "transcript.jsonl"
     if candidate.is_file():
         return candidate
-        
+
     candidate_alt = app_data_dir / "brain" / id_or_path / "transcript.jsonl"
     if candidate_alt.is_file():
         return candidate_alt
-        
+
     return None
 
 
@@ -91,9 +105,9 @@ def extract_model_from_text(text: str) -> Optional[str]:
 
 def parse_transcript(
     transcript_path: Path,
-    since_step: Optional[int] = None
+    since_step: Optional[int] = None,
 ) -> Dict[str, Any]:
-    """Parse transcript.jsonl and aggregate token counts and subagent invocations."""
+    """Parse transcript.jsonl and aggregate token counts, subagents, and swarm worker invocations."""
     input_tokens = 0
     output_tokens = 0
     cache_read_tokens = 0
@@ -115,7 +129,7 @@ def parse_transcript(
     with open(transcript_path, "r", encoding="utf-8", errors="replace") as f:
         lines = f.readlines()
 
-    conv_id_regex = re.compile(r'"conversationId":\s*"([0-9a-fA-F\-]{36})"')
+    conv_id_regex = re.compile(r'"conversation_?id":\s*"([0-9a-fA-F\-]{36})"', re.IGNORECASE)
 
     for idx, line in enumerate(lines):
         if not line.strip():
@@ -146,21 +160,40 @@ def parse_transcript(
                 type_name = args.get("TypeName") or "subagent"
                 role = args.get("Role") or type_name
                 sub_model = args.get("Model") or "inherit"
-                
-                # Check for conversationId in the next immediate response step
+
                 sub_id = None
                 if idx + 1 < len(lines):
                     next_line = lines[idx + 1]
                     cid_match = conv_id_regex.search(next_line)
                     if cid_match:
                         sub_id = cid_match.group(1)
-                
+
                 invocations.append({
                     "TypeName": type_name,
                     "Role": role,
                     "Model": sub_model,
-                    "conversationId": sub_id
+                    "conversationId": sub_id,
+                    "type": "subagent",
                 })
+            elif tc_name == "swarm":
+                action = args.get("action")
+                if action == "add":
+                    name = args.get("name") or "worker"
+                    model = args.get("model") or "inherit"
+                    sub_id = None
+                    if idx + 1 < len(lines):
+                        next_line = lines[idx + 1]
+                        cid_match = conv_id_regex.search(next_line)
+                        if cid_match:
+                            sub_id = cid_match.group(1)
+
+                    invocations.append({
+                        "TypeName": name,
+                        "Role": f"Swarm Worker: `{name}`",
+                        "Model": model,
+                        "conversationId": sub_id,
+                        "type": "swarm_worker",
+                    })
             elif tc_name == "send_message":
                 msg = args.get("Message", "")
                 if msg and not reported_model:
@@ -187,6 +220,64 @@ def parse_transcript(
     }
 
 
+def discover_subagents(root_conv_id: str, app_data_dir: Path) -> List[Dict[str, Any]]:
+    """Scan brain/<root_id>/.system_generated/subagents/*.json for all spawned subagents."""
+    discovered = []
+    subagents_dir = app_data_dir / "brain" / root_conv_id / ".system_generated" / "subagents"
+    if not subagents_dir.is_dir():
+        return discovered
+
+    for f in sorted(subagents_dir.glob("*.json")):
+        try:
+            data = json.loads(f.read_text(encoding="utf-8"))
+            cid = data.get("conversationId") or f.stem
+            descriptor = data.get("subagentDescriptor") or {}
+            type_name = descriptor.get("typeName") or "subagent"
+            role = descriptor.get("role") or type_name
+            state = data.get("state")
+            discovered.append({
+                "conversationId": cid,
+                "role": f"Subagent: `{role}`" if role != "subagent" else f"Subagent: `{type_name}`",
+                "typeName": type_name,
+                "type": "subagent",
+                "state": state,
+                "model": descriptor.get("model"),
+            })
+        except Exception:
+            continue
+    return discovered
+
+
+def discover_swarm_workers(root_conv_id: str, app_data_dir: Path) -> List[Dict[str, Any]]:
+    """Scan brain/<root_id>/.system_generated/swarm/members.json for all swarm workers."""
+    discovered = []
+    swarm_dir = app_data_dir / "brain" / root_conv_id / ".system_generated" / "swarm"
+    members_file = swarm_dir / "members.json"
+    if not members_file.is_file():
+        return discovered
+
+    try:
+        data = json.loads(members_file.read_text(encoding="utf-8"))
+        members = data.get("members") or {}
+        for name, m_info in members.items():
+            cid = m_info.get("conversation_id")
+            role_type = m_info.get("role")
+            if not cid or cid == root_conv_id or role_type == "coordinator":
+                continue
+            model = m_info.get("applied_model") or m_info.get("desired_model") or m_info.get("model")
+            discovered.append({
+                "conversationId": cid,
+                "role": f"Swarm Worker: `{name}`",
+                "typeName": name,
+                "type": "swarm_worker",
+                "model": model,
+                "killed": m_info.get("killed", False),
+            })
+    except Exception:
+        pass
+    return discovered
+
+
 def collate_telemetry(
     root_conv_id: Optional[str] = None,
     subagent_ids: Optional[List[str]] = None,
@@ -194,18 +285,23 @@ def collate_telemetry(
     turn_mode: str = "latest",
     root_model: Optional[str] = None,
     app_data_dir: Optional[str] = None,
+    spending_ceiling: Optional[int] = None,
 ) -> Dict[str, Any]:
-    """Collate telemetry data across root and subagents."""
+    """Collate telemetry data across root orchestrator, subagents, and swarm workers."""
     app_data = find_app_data_dir(app_data_dir)
     rows: List[Dict[str, Any]] = []
-    
+
     sum_input = 0
     sum_output = 0
     sum_cache = 0
     sum_total = 0
 
-    # 1. Process Root Orchestrator if provided
     role_map: Dict[str, str] = {}
+    model_map: Dict[str, str] = {}
+    discovered_workers: List[Dict[str, Any]] = []
+    discovered_ids: Set[str] = set()
+
+    # 1. Process Root Orchestrator if provided
     if root_conv_id:
         root_path = resolve_transcript_path(root_conv_id, app_data)
         if root_path and root_path.is_file():
@@ -213,11 +309,11 @@ def collate_telemetry(
             since_step = None
             if turn_mode == "latest" and initial_parse["user_steps"]:
                 since_step = initial_parse["user_steps"][-1]
-            
+
             root_stats = parse_transcript(root_path, since_step=since_step)
             model_used = normalize_model_name(
                 root_model or root_stats.get("reported_model"),
-                default=DEFAULT_ROOT_MODEL
+                default=DEFAULT_ROOT_MODEL,
             )
 
             rows.append({
@@ -234,42 +330,73 @@ def collate_telemetry(
             sum_cache += root_stats["cache_read_tokens"]
             sum_total += root_stats["total_tokens"]
 
-            # Auto-populate subagent targets from invocations
-            if not subagent_ids:
-                subagent_ids = []
-            for inv in root_stats.get("invocations", []):
+            # Multi-source discovery for subagents and swarm workers:
+            # Source A: Check filesystem .system_generated/subagents/*.json
+            for sub in discover_subagents(root_conv_id, app_data):
+                cid = sub["conversationId"]
+                if cid not in discovered_ids and cid != root_conv_id:
+                    discovered_ids.add(cid)
+                    discovered_workers.append(sub)
+                    role_map[cid] = sub["role"]
+                    if sub.get("model"):
+                        model_map[cid] = sub["model"]
+
+            # Source B: Check filesystem .system_generated/swarm/members.json
+            for swm in discover_swarm_workers(root_conv_id, app_data):
+                cid = swm["conversationId"]
+                if cid not in discovered_ids and cid != root_conv_id:
+                    discovered_ids.add(cid)
+                    discovered_workers.append(swm)
+                    role_map[cid] = swm["role"]
+                    if swm.get("model"):
+                        model_map[cid] = swm["model"]
+
+            # Source C: Check tool call invocations in root transcript
+            for inv in initial_parse.get("invocations", []):
                 cid = inv.get("conversationId")
-                if cid and cid not in subagent_ids:
-                    subagent_ids.append(cid)
+                if cid and cid not in discovered_ids and cid != root_conv_id:
+                    discovered_ids.add(cid)
+                    discovered_workers.append(inv)
                     role_map[cid] = inv.get("Role") or inv.get("TypeName")
+                    if inv.get("Model"):
+                        model_map[cid] = inv.get("Model")
 
-    # 2. Process Subagents
+    # If subagent_ids passed explicitly on CLI, include any that were not discovered
     if subagent_ids:
-        for sub_id in subagent_ids:
-            sub_path = resolve_transcript_path(sub_id, app_data)
-            if not sub_path:
-                continue
-            sub_stats = parse_transcript(sub_path, since_step=None)
-            
-            role_name = role_map.get(sub_id) or "Subagent"
-            model_used = normalize_model_name(
-                sub_stats.get("reported_model"),
-                default=DEFAULT_FALLBACK_MODEL
-            )
+        for sid in subagent_ids:
+            if sid not in discovered_ids and sid != root_conv_id:
+                discovered_ids.add(sid)
+                discovered_workers.append({
+                    "conversationId": sid,
+                    "role": role_map.get(sid) or f"Subagent `{sid[:8]}`",
+                    "type": "subagent",
+                })
 
-            rows.append({
-                "agent_level": f"Subagent: `{role_name}`",
-                "conversation_id": sub_id,
-                "model_used": model_used,
-                "input_tokens": sub_stats["input_tokens"],
-                "output_tokens": sub_stats["output_tokens"],
-                "cache_read_tokens": sub_stats["cache_read_tokens"],
-                "total_tokens": sub_stats["total_tokens"],
-            })
-            sum_input += sub_stats["input_tokens"]
-            sum_output += sub_stats["output_tokens"]
-            sum_cache += sub_stats["cache_read_tokens"]
-            sum_total += sub_stats["total_tokens"]
+    # 2. Process all discovered subagents and swarm workers
+    for worker in discovered_workers:
+        sub_id = worker["conversationId"]
+        sub_path = resolve_transcript_path(sub_id, app_data)
+        if not sub_path or not sub_path.is_file():
+            continue
+        sub_stats = parse_transcript(sub_path, since_step=None)
+
+        assigned_role = role_map.get(sub_id) or worker.get("Role") or f"Subagent: `{sub_id[:8]}`"
+        model_hint = sub_stats.get("reported_model") or model_map.get(sub_id) or worker.get("Model")
+        model_used = normalize_model_name(model_hint, default=DEFAULT_FALLBACK_MODEL)
+
+        rows.append({
+            "agent_level": assigned_role,
+            "conversation_id": sub_id,
+            "model_used": model_used,
+            "input_tokens": sub_stats["input_tokens"],
+            "output_tokens": sub_stats["output_tokens"],
+            "cache_read_tokens": sub_stats["cache_read_tokens"],
+            "total_tokens": sub_stats["total_tokens"],
+        })
+        sum_input += sub_stats["input_tokens"]
+        sum_output += sub_stats["output_tokens"]
+        sum_cache += sub_stats["cache_read_tokens"]
+        sum_total += sub_stats["total_tokens"]
 
     # 3. Process direct transcript paths if given
     if transcript_paths:
@@ -293,6 +420,17 @@ def collate_telemetry(
             sum_cache += stats["cache_read_tokens"]
             sum_total += stats["total_tokens"]
 
+    # Check spending ceiling (Rule 8: 50,000 token limit on unattended crons)
+    ceiling_breached = False
+    ceiling_msg = None
+    if spending_ceiling is not None:
+        ceiling_breached = sum_total > spending_ceiling
+        if ceiling_breached:
+            ceiling_msg = (
+                f"TOKEN SPENDING CEILING BREACHED: {sum_total:,} tokens consumed "
+                f"exceeds ceiling limit of {spending_ceiling:,} tokens!"
+            )
+
     return {
         "rows": rows,
         "totals": {
@@ -300,7 +438,10 @@ def collate_telemetry(
             "output_tokens": sum_output,
             "cache_read_tokens": sum_cache,
             "total_tokens": sum_total,
-        }
+        },
+        "spending_ceiling": spending_ceiling,
+        "ceiling_breached": ceiling_breached,
+        "ceiling_message": ceiling_msg,
     }
 
 
@@ -321,6 +462,14 @@ def format_markdown_table(data: Dict[str, Any]) -> str:
         f"**{tot['input_tokens']:,}** | **{tot['output_tokens']:,}** | "
         f"**{tot['cache_read_tokens']:,}** | **{tot['total_tokens']:,}** |"
     )
+
+    if data.get("ceiling_breached"):
+        lines.append("")
+        lines.append("> [!CAUTION]")
+        lines.append(f"> **TOKEN SPENDING CEILING BREACHED**: Total tokens ({tot['total_tokens']:,}) "
+                     f"exceeded limit of {data['spending_ceiling']:,} tokens!")
+        lines.append("> Swarm operations must halt immediately for Director review.")
+
     return "\n".join(lines)
 
 
@@ -335,6 +484,8 @@ def main():
     parser.add_argument("--model", type=str, default=None, help="Override model name.")
     parser.add_argument("--app-data-dir", type=str, default=None, help="Path to Antigravity app data directory.")
     parser.add_argument("--format", type=str, default="markdown", choices=["markdown", "json"], help="Output format.")
+    parser.add_argument("--ceiling", type=int, default=None, help="Spending ceiling in total tokens (e.g. 50000).")
+    parser.add_argument("--enforce-ceiling", action="store_true", help="Exit with non-zero status if ceiling is breached.")
 
     args = parser.parse_args()
 
@@ -352,7 +503,6 @@ def main():
                 subagents.append(t)
 
     if not root_id and not direct_transcripts:
-        app_data = find_app_data_dir(args.app_data_dir)
         env_conv = os.environ.get("ANTIGRAVITY_CONVERSATION_ID")
         root_id = env_conv
 
@@ -367,12 +517,17 @@ def main():
         turn_mode=args.turn,
         root_model=args.model,
         app_data_dir=args.app_data_dir,
+        spending_ceiling=args.ceiling,
     )
 
     if args.format == "json":
         print(json.dumps(result, indent=2))
     else:
         print(format_markdown_table(result))
+
+    if args.enforce_ceiling and result.get("ceiling_breached"):
+        print(f"\nError: {result.get('ceiling_message')}", file=sys.stderr)
+        sys.exit(2)
 
 
 if __name__ == "__main__":

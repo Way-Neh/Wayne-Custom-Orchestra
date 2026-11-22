@@ -96,6 +96,29 @@ sequenceDiagram
 
 ---
 
+## 💬 Native Swarm Message Board Protocols (`#builders` & `#qa`)
+
+When operating in Hybrid Native Swarm Mode ($S_{\text{task}} \ge 11$), builders subscribe to **`#builders`** (construction) and **`#qa`** (remediation feedback):
+
+### 1. Construction Progress on `#builders`
+- **Initial Acknowledgment**: When assigned criteria slices (e.g. `[AC-01]..[AC-05]`), acknowledge receipt on `#builders` with the isolated worktree path.
+- **Milestone Completion Marker (`[done]`)**: Once implementation is complete, local tests pass, and commits are ready on `swarm/worker-<id>`, post on `#builders`:
+  ```markdown
+  @coordinator [done] Changes committed to `swarm/worker-api` in `.worktrees/worker-api` for [AC-01]..[AC-05]. Local compilation clean. Ready for integration merge.
+  ```
+- **Context Economy**: Never dump full source files or verbose build logs into the message board. Refer to Git commit SHAs and file paths.
+
+### 2. Responding to QA Adversary on `#qa` (Bounded Cyclic Healing)
+- **Failure Notification**: Monitor `#qa` for mentions from `@qa-adversary-agent` (e.g. `@builder-api [AC-03 FAIL]: Expected 400 on empty string, got 500. Repro in #14`).
+- **Re-Sync Invariant**: Always execute `scripts/worktree_helper.sh sync <worker-id> feat/<task>` before making edits to guarantee fixes are applied against the exact audited integration branch.
+- **Surgical Remediation & Fix Notice**: Apply minimal root-cause fixes, run reproduction commands locally, commit to worktree branch, merge to `feat/<task>`, and post on `#qa`:
+  ```markdown
+  @qa-adversary-agent [fix-ready] Applied surgical fix for [AC-03] in commit abc1234. Repro test passing locally. Ready for re-audit (Iteration 2/3).
+  ```
+- **No Direct Debate on Rules**: If a criterion failure stems from an architectural ambiguity rather than code defect, notify `@coordinator` to invoke the Architectural Escalation Gate rather than debating QA on the board.
+
+---
+
 ## 📥 Input / Output Contracts
 
 ### Input Contract
