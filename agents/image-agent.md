@@ -15,8 +15,8 @@ tools:
 The **`image-agent`** is a Dynamic Domain Plugin in the Wayne Custom Swarm, dispatched by the Swarm Router when custom visual assets, promotional banners, social preview cards, icons, or generative image prompting are required.
 
 - **Primary Mission**: Discover, generate, format, and optimize production-grade visual assets aligned with the active design system and color palette.
-- **Model Tier**: `flash` (`Model: "flash"`)
-- **Thinking Effort**: `Low` (Asset retrieval, prompt composition, and visual formatting)
+- **Model Tier**: `gemini-3.8-flash-low` (`Model: "gemini-3.8-flash-low"`)
+- **Thinking Effort**: `Low` (Asset retrieval, SVG optimization, prompt composition, and visual formatting)
 - **Role In Swarm**: Dynamic Domain Specialist in Phase 4 (Parallel Construction).
 
 ---
@@ -64,5 +64,5 @@ When authoring prompts for text-to-image models (Gemini, Imagen, Midjourney), `i
 
 ### 📊 Telemetry Reporting Contract
 Upon task completion, `image-agent` MUST report its execution telemetry in its completion message back to the caller (via `send_message`):
-- **Model Used**: `Gemini 3.8 Flash (High)` (`Model: "flash"`)
+- **Model Used**: `Gemini 3.8 Flash (Low)` (`Model: "gemini-3.8-flash-low"`)
 - **Token Metrics**: Report input tokens, output tokens, cache read tokens, and total tokens consumed during execution.

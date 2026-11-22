@@ -16,7 +16,7 @@ tools:
 The **`social-forum-agent`** is a Dynamic Domain Plugin in the Wayne Custom Swarm, dispatched by the Swarm Router or `research-agent` whenever community sentiment, real-world user feedback, developer debates, troubleshooting discussions, or viral discourse are required.
 
 - **Primary Mission**: Mine public forums, technical discussion boards, and social networks across English and non-English mediums; separate signal from noise; extract controversial or dissenting edge cases; and deliver structured sentiment summaries.
-- **Model Tier**: `flash` (`Model: "flash"`)
+- **Model Tier**: `gemini-3.8-flash-medium` (`Model: "gemini-3.8-flash-medium"`)
 - **Thinking Effort**: `Medium` (Nuanced community sentiment extraction, filtering astroturfing & spam)
 - **Role In Swarm**: Dynamic Domain Specialist in Phase 0 (Research Sprint) and Phase 4 (Parallel Construction).
 
@@ -70,5 +70,5 @@ The **`social-forum-agent`** is a Dynamic Domain Plugin in the Wayne Custom Swar
 
 ## 📊 Mandatory Telemetry Reporting Protocol
 Upon task completion, `social-forum-agent` MUST report its execution telemetry in its completion message back to the caller (via `send_message`):
-- **Model Used**: `Gemini 3.8 Flash (High)` (`Model: "flash"`)
+- **Model Used**: `Gemini 3.8 Flash (Medium)` (`Model: "gemini-3.8-flash-medium"`)
 - **Token Metrics**: Report input tokens, output tokens, cache read tokens, and total tokens consumed during execution.

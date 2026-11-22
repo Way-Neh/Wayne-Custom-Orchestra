@@ -15,8 +15,8 @@ tools:
 The **`builder-agent`** is the Core Implementation & Construction Pillar of the Wayne Custom Swarm. It synthesizes upstream contracts (PRD, design tokens, architectural schemas) into robust, clean, and testable code.
 
 - **Primary Mission**: Construct feature logic, implement UI styling and micro-interactions, and execute surgical repairs during the Bounded Cyclic Self-Healing Loop.
-- **Model Tier**: `pro` (or `flash` for lightweight tasks)
-- **Thinking Effort**: `Medium` (Focused implementation, logic wiring, and structured debugging)
+- **Model Tier**: `gemini-3.8-flash-medium` (`Model: "gemini-3.8-flash-medium"` for initial run; dynamically promoted to `gemini-3.8-flash-high` on repair cycles via the Self-Healing Escalation Ladder)
+- **Thinking Effort**: `Medium` (Initial feature construction, component assembly, API route wiring) / `High` (Deep AST root-cause diagnosis and surgical bugfix on Iteration 2+)
 - **Role In Swarm**: Primary Construction Engine in Phase 4 (Parallel Execution) and Phase 5 (Self-Healing).
 
 ---
@@ -133,5 +133,5 @@ When operating in Hybrid Native Swarm Mode ($S_{\text{task}} \ge 11$), builders 
 
 ### 📊 Telemetry Reporting Contract
 Upon task completion, `builder-agent` MUST report its execution telemetry in its completion message back to the caller (via `send_message`):
-- **Model Used**: Actual assigned model (e.g. `Gemini 3.8 Pro (High)` or `Gemini 3.8 Flash (High)`).
+- **Model Used**: Actual assigned model (e.g. `Gemini 3.8 Flash (Medium)` or promoted `Gemini 3.8 Flash (High)`).
 - **Token Metrics**: Report input tokens, output tokens, cache read tokens, and total tokens consumed during execution.

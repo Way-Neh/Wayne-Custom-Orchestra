@@ -45,7 +45,7 @@ $$S_{\text{task}} = D + F + A + C + V$$
 
 ## 4. Adversarial Verification & Cognitive Parity Invariant
 - **Zero Self-Auditing**: Under no circumstances may the agent that authored the code audit its own implementation. `builder-agent` and `qa-adversary-agent` are strictly decoupled.
-- **Cognitive Parity**: On Tier 3 Swarms ($S_{\text{task}} \ge 11$), `qa-adversary-agent` MUST operate on cognitive parity with `builder-agent` (`Model: "pro"`, High thinking) to prevent shallow verification and unverified self-healing loops.
+- **Cognitive Parity**: On Tier 3 Swarms ($S_{\text{task}} \ge 11$), `qa-adversary-agent` MUST operate on cognitive parity with `builder-agent` (`Model: "gemini-3.8-flash-high"`, High thinking) to prevent shallow verification and unverified self-healing loops.
 - **Independent Evidence**: The adversary must execute deterministic reproduction commands and confirm line-by-line evidence before marking any `[AC-xx]` as passed.
 
 ---
@@ -60,16 +60,16 @@ $$S_{\text{task}} = D + F + A + C + V$$
 
 ## 6. Mandatory Telemetry Reporting Protocol
 Upon completing an assigned task, every subagent MUST report its assigned model and token consumption metrics in its final completion message to the caller via `send_message`:
-- **Model Used**: Actual assigned model identifier (e.g. `Gemini 3.8 Pro (High)`, `Gemini 3.8 Flash (High)`).
+- **Model Used**: Actual assigned model identifier (e.g. `Gemini 3.8 Flash (High)`, `Gemini 3.8 Flash (Medium)`, `Gemini 3.8 Flash (Low)`).
 - **Token Metrics**: `Input Tokens`, `Output Tokens`, `Cache Read Tokens`, `Total Tokens`.
 
 ---
 
 ## 7. Hybrid Research Cluster & Multimodal Protocol
 When exploratory, competitive, or cross-domain research is required:
-- **`research-agent` (Cognitive Lead: `pro`)**: Formulates the cross-lingual query matrix (EN, ZH, JA, KO, RU), coordinates platform investigations, calibrates bias, and stages `research_dossier.md`.
-- **`social-forum-agent` (Specialist: `flash`)**: Extracts community sentiment, edge cases, and practitioner experiences from Reddit, Hacker News, X/Twitter, Telegram, and non-English developer forums.
-- **`media-intel-agent` (Specialist: `flash`/`pro`)**: Ingests short-form video (TikTok, YouTube Shorts, Reels, Bilibili, Douyin), extracts deduplicated multi-lingual subtitles, mines top comments, and samples keyframes with `ffmpeg` for visual architecture/code inspection.
+- **`research-agent` (Cognitive Lead: `gemini-3.8-flash-high`)**: Formulates the cross-lingual query matrix (EN, ZH, JA, KO, RU), coordinates platform investigations, calibrates bias, and stages `research_dossier.md`.
+- **`social-forum-agent` (Specialist: `gemini-3.8-flash-medium`)**: Extracts community sentiment, edge cases, and practitioner experiences from Reddit, Hacker News, X/Twitter, Telegram, and non-English developer forums.
+- **`media-intel-agent` (Specialist: `gemini-3.8-flash-medium`)**: Ingests short-form video (TikTok, YouTube Shorts, Reels, Bilibili, Douyin), extracts deduplicated multi-lingual subtitles, mines top comments, and samples keyframes with `ffmpeg` for visual architecture/code inspection.
 
 ---
 

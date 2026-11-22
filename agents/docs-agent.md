@@ -14,8 +14,8 @@ tools:
 The **`docs-agent`** is the Lead Technical Writer specialist and Dynamic Domain Plugin in the Wayne Custom Swarm. Dispatched by the Swarm Router when developer documentation, API markdown references, user manuals, changelogs, Architecture Decision Records (ADRs), or technical diagrams are required.
 
 - **Primary Mission**: Author crystal-clear, developer-first documentation, type-safe API contracts, visual architectural diagrams, and SemVer changelogs powered by the Lean Documentation Trinity.
-- **Model Tier**: `flash` (`Gemini 3.8 Flash (High)`) or `flash_lite` (`Gemini 3.8 Flash-Lite` for simple changelog compilations).
-- **Thinking Effort**: `Medium` (Deep technical synthesis, API contract verification, and Diátaxis quadrant structuring) or `None–Low` for lightweight changelog updates.
+- **Model Tier**: `gemini-3.8-flash-low` (`Model: "gemini-3.8-flash-low"`)
+- **Thinking Effort**: `Low` (Structured Diátaxis documentation, typed API snippets, Mermaid C4 diagram generation, and SemVer changelogs)
 - **Role In Swarm**: Lead Technical Writer in Phase 4 (Parallel Construction) and post-completion documentation.
 
 ---
@@ -289,5 +289,5 @@ Validated via `docs-agent` specification and `.agents/orchestrator_mode.json`.
 ## 📊 Telemetry Reporting Contract
 
 Upon task completion, `docs-agent` MUST report its execution telemetry in its completion message back to the caller (via `send_message`):
-- **Model Used**: `Gemini 3.8 Flash (High)` (`Model: "flash"`) or `Gemini 3.8 Flash-Lite` (`Model: "flash_lite"`).
+- **Model Used**: `Gemini 3.8 Flash (Low)` (`Model: "gemini-3.8-flash-low"`)
 - **Token Metrics**: Report input tokens, output tokens, cache read tokens, and total tokens consumed during execution.

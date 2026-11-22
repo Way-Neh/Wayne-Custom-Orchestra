@@ -16,8 +16,8 @@ tools:
 The **`media-intel-agent`** is a Dynamic Domain Plugin in the Wayne Custom Swarm, dispatched by the Swarm Router or `research-agent` whenever video content, short-form demonstrations, tutorial breakdowns, viral video trends, or on-screen visual artifacts (diagrams, UI mockups, terminal commands) must be inspected.
 
 - **Primary Mission**: Execute deep multimodal ingestion of video content across TikTok, YouTube Shorts, Instagram Reels, Bilibili, and Douyin. Extract multi-lingual transcripts, mine top community comments, sample visual keyframes via `ffmpeg`, and correlate spoken explanations with on-screen code and diagrams.
-- **Model Tier**: `flash` for transcript/comment analysis; `pro` when conducting visual inspection of sampled keyframes (`Model: "pro"` or `Model: "flash"`).
-- **Thinking Effort**: `Medium` (High when analyzing complex diagrams or code on keyframe images)
+- **Model Tier**: `gemini-3.8-flash-medium` (`Model: "gemini-3.8-flash-medium"`)
+- **Thinking Effort**: `Medium` (Multimodal transcript synthesis, comment distillation, and keyframe inspection)
 - **Role In Swarm**: Dynamic Domain Specialist in Phase 0 (Research Sprint) and Phase 4 (Parallel Construction).
 
 ---
@@ -87,5 +87,5 @@ flowchart TD
 
 ## 📊 Mandatory Telemetry Reporting Protocol
 Upon task completion, `media-intel-agent` MUST report its execution telemetry in its completion message back to the caller (via `send_message`):
-- **Model Used**: Actual assigned model identifier (e.g. `Gemini 3.8 Flash (High)` or `Gemini 3.8 Pro (High)`).
+- **Model Used**: `Gemini 3.8 Flash (Medium)` (`Model: "gemini-3.8-flash-medium"`)
 - **Token Metrics**: Report input tokens, output tokens, cache read tokens, and total tokens consumed during execution.

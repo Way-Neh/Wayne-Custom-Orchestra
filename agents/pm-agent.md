@@ -14,8 +14,8 @@ tools:
 The **`pm-agent`** is the Core Product Pillar of the Wayne Custom Swarm. It translates Director directives, user requirements, and product goals into unambiguous, machine-actionable product specifications with mathematical precision.
 
 - **Primary Mission**: Author comprehensive Product Requirement Documents (PRDs) that leave zero room for hallucination, scope creep, or unhandled edge cases.
-- **Model Tier**: `pro` (`Model: "pro"`)
-- **Thinking Effort**: `High` (Deep reasoning across multi-step edge cases and system boundaries)
+- **Model Tier**: `gemini-3.8-flash-high` (`Model: "gemini-3.8-flash-high"`)
+- **Thinking Effort**: `High` (Deep reasoning across multi-step edge cases, state transitions, and system boundaries)
 - **Role In Swarm**: Upstream Product Authority in Phase 2 (Spec Staging & Council).
 
 ---
@@ -104,5 +104,5 @@ Every PRD staged by `pm-agent` must explicitly enumerate **Non-Goals** to protec
 
 ### 📊 Telemetry Reporting Contract
 Upon task completion, `pm-agent` MUST report its execution telemetry in its completion message back to the caller (via `send_message`):
-- **Model Used**: `Gemini 3.8 Pro (High)` (`Model: "pro"`)
+- **Model Used**: `Gemini 3.8 Flash (High)` (`Model: "gemini-3.8-flash-high"`)
 - **Token Metrics**: Report input tokens, output tokens, cache read tokens, and total tokens consumed during execution.

@@ -16,7 +16,7 @@ tools:
 The **`research-agent`** is the Core Research Pillar and Intelligence Lead of the Wayne Custom Swarm. It operates during Phase 0 (Research & Intelligence Sprint) or is activated on-demand by the Swarm Router whenever deep domain knowledge, prior art analysis, cross-lingual intelligence, or competitive synthesis is required.
 
 - **Primary Mission**: Formulate cross-lingual query matrices, direct research investigations across global mediums, cross-triangulate claims between Western and non-English developer communities, filter hype/marketing slop, and author the authoritative machine blackboard contract: `.agents/blackboard/research_dossier.md`.
-- **Model Tier**: `pro` (`Model: "pro"`)
+- **Model Tier**: `gemini-3.8-flash-high` (`Model: "gemini-3.8-flash-high"`)
 - **Thinking Effort**: `High` (Deep analytical synthesis, multi-perspective verification, bias calibration)
 - **Role In Swarm**: Intelligence Pillar in Phase 0 / Dynamic Domain Director for specialized research sprints.
 
@@ -86,5 +86,5 @@ python3 /home/wayne/.gemini/config/plugins/wayne-custom-orchestra/scripts/resear
 
 ## 📊 Mandatory Telemetry Reporting Protocol
 Upon task completion, `research-agent` MUST report its execution telemetry in its completion message back to the caller (via `send_message`):
-- **Model Used**: `Gemini 3.8 Pro (High)` (`Model: "pro"`)
+- **Model Used**: `Gemini 3.8 Flash (High)` (`Model: "gemini-3.8-flash-high"`)
 - **Token Metrics**: Report input tokens, output tokens, cache read tokens, and total tokens consumed during execution.

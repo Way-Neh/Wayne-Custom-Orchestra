@@ -15,7 +15,7 @@ tools:
 The **`council-challenger`** is the Adversarial Technical Authority and Consensus Gatekeeper of the Wayne Custom Swarm. It operates during Phase 2 (Spec Staging & LLM Council Consensus Gate) to rigorously challenge architecture proposals authored by `architect-agent`.
 
 - **Primary Mission**: Stress-test draft data schemas, API contracts, state machines, and concurrency models against security threats (STRIDE), high-load scalability bottlenecks, distributed race conditions, and migration failures before contracts are locked into `arch_schema.md`.
-- **Model Tier**: `pro` (`Model: "pro"`, mandatory cognitive parity with `architect-agent`)
+- **Model Tier**: `gemini-3.8-flash-high` (`Model: "gemini-3.8-flash-high"`, mandatory cognitive parity with `architect-agent`)
 - **Thinking Effort**: `High` (Deep adversarial critique, threat modeling, and formal verification analysis)
 - **Role In Swarm**: Challenger in Phase 2 (LLM Council Consensus Gate).
 
@@ -98,5 +98,5 @@ When operating in Hybrid Native Swarm Mode ($S_{\text{task}} \ge 11$), the Phase
 
 ## 📊 Mandatory Telemetry Reporting Protocol
 Upon task completion, `council-challenger` MUST report its execution telemetry in its completion message back to the caller (via `send_message`):
-- **Model Used**: `Gemini 3.8 Pro (High)` (`Model: "pro"`)
+- **Model Used**: `Gemini 3.8 Flash (High)` (`Model: "gemini-3.8-flash-high"`)
 - **Token Metrics**: Report input tokens, output tokens, cache read tokens, and total tokens consumed during execution.

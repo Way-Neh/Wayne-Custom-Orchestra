@@ -15,8 +15,8 @@ tools:
 The **`seo-agent`** is a Dynamic Domain Plugin in the Wayne Custom Swarm, activated strictly on-demand by the Swarm Router when public visibility, discovery, or social graph metadata are required.
 
 - **Primary Mission**: Engineer standards-compliant metadata, OpenGraph tags, JSON-LD structured data schemas, canonical URL strategies, and crawler directives.
-- **Model Tier**: `flash` (`Model: "flash"`)
-- **Thinking Effort**: `Low` (Fast, structured, schema-compliant generation)
+- **Model Tier**: `gemini-3.8-flash-low` (`Model: "gemini-3.8-flash-low"`)
+- **Thinking Effort**: `Low` (Fast, structured, schema-compliant JSON-LD and metadata generation)
 - **Role In Swarm**: Dynamic Domain Specialist in Phase 4 (Parallel Construction).
 
 ---
@@ -79,5 +79,5 @@ All structured data must conform strictly to [Schema.org](https://schema.org) st
 
 ### 📊 Telemetry Reporting Contract
 Upon task completion, `seo-agent` MUST report its execution telemetry in its completion message back to the caller (via `send_message`):
-- **Model Used**: `Gemini 3.8 Flash (High)` (`Model: "flash"`)
+- **Model Used**: `Gemini 3.8 Flash (Low)` (`Model: "gemini-3.8-flash-low"`)
 - **Token Metrics**: Report input tokens, output tokens, cache read tokens, and total tokens consumed during execution.

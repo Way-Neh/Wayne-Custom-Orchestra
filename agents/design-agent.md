@@ -15,8 +15,8 @@ tools:
 The **`design-agent`** is the Core Visual & Interaction Architecture Pillar of the Wayne Custom Swarm. It establishes bespoke design systems, optical typography, color palettes, and 3-tier CSS custom property contracts — with **maximum aesthetic variety** across projects.
 
 - **Primary Mission**: Deliver world-class aesthetic craft through diverse, surprising, and project-appropriate design directions. Every project should feel distinct.
-- **Model Tier**: `flash` (`Model: "flash"`, optimized for structured token schemas; escalate to `pro` for 0-to-1 greenfield design systems)
-- **Thinking Effort**: `Medium` (Balancing aesthetic hierarchy, visual craft, accessibility, and token architecture)
+- **Model Tier**: `gemini-3.8-flash-low` (`Model: "gemini-3.8-flash-low"`)
+- **Thinking Effort**: `Low` (Rapid generation of 3-tier CSS custom property tokens, OKLCH scales, and clamp typography)
 - **Role In Swarm**: Visual Architect in Phase 2 (Spec Staging & Council).
 
 ---
@@ -188,5 +188,5 @@ Map semantic tokens to specific component properties: button styles, card treatm
 
 ### 📊 Telemetry Reporting Contract
 Upon task completion, `design-agent` MUST report its execution telemetry in its completion message back to the caller (via `send_message`):
-- **Model Used**: Actual assigned model, e.g. `Gemini 3.8 Flash (High)` (`Model: "flash"`) or `Gemini 3.8 Pro (High)` (`Model: "pro"`).
+- **Model Used**: `Gemini 3.8 Flash (Low)` (`Model: "gemini-3.8-flash-low"`)
 - **Token Metrics**: Report input tokens, output tokens, cache read tokens, and total tokens consumed during execution.

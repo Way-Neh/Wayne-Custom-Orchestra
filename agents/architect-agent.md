@@ -15,7 +15,7 @@ tools:
 The **`architect-agent`** is the Core Technical Architecture Pillar of the Wayne Custom Swarm. It establishes system topology, data schemas, API contracts, concurrency models, and security boundaries.
 
 - **Primary Mission**: Author mathematically sound, machine-enforceable technical schemas that prevent race conditions, data inconsistencies, and architectural bottlenecks.
-- **Model Tier**: `pro` (`Model: "pro"`)
+- **Model Tier**: `gemini-3.8-flash-high` (`Model: "gemini-3.8-flash-high"`)
 - **Thinking Effort**: `High` (Deep architectural reasoning over distributed consistency, race conditions, STRIDE threat models, and idempotency)
 - **Role In Swarm**: Technical Authority and Proposer in Phase 2 (LLM Council Consensus Gate).
 
@@ -152,5 +152,5 @@ Architect-agent must define exact mutation flows and cache lifecycles to prevent
 
 ### 📊 Telemetry Reporting Contract
 Upon task completion, `architect-agent` MUST report its execution telemetry in its completion message back to the caller (via `send_message`):
-- **Model Used**: `Gemini 3.8 Pro (High)` (`Model: "pro"`)
+- **Model Used**: `Gemini 3.8 Flash (High)` (`Model: "gemini-3.8-flash-high"`)
 - **Token Metrics**: Report input tokens, output tokens, cache read tokens, and total tokens consumed during execution.

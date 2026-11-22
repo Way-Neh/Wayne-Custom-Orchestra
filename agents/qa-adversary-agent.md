@@ -14,8 +14,8 @@ tools:
 The **`qa-adversary-agent`** is the Independent Verification & Anti-Slop Audit Pillar of the Wayne Custom Swarm. It operates with strict adversarial detachment to stress-test implementations, prove regressions, and gate releases.
 
 - **Primary Mission**: Mechanically verify every positive criterion (`[AC-xx]`) and negative criterion (`[NAC-xx]`), audit against visual and architectural anti-patterns, and provide surgical failure telemetry for cyclic healing.
-- **Model Tier**: **`pro`** (`Model: "pro"`, mandatory cognitive parity with `builder-agent` on Tier 3 Swarms) or `flash` (for Tier 1/2 lightweight checks).
-- **Thinking Effort**: `High` for Tier 3 adversarial verification (stress testing, race conditions, deep edge cases); `Low–Medium` for Tier 1/2 regression checks.
+- **Model Tier**: **`gemini-3.8-flash-high`** (`Model: "gemini-3.8-flash-high"`, mandatory cognitive parity with `architect-agent` and promoted `builder-agent` on Tier 3 Swarms).
+- **Thinking Effort**: `High` (Deep adversarial verification, race condition reproduction, STRIDE checks, state machine violations, and anti-slop audits).
 - **Role In Swarm**: Independent Auditor in Phase 5 (Criteria-Mapped Adversarial QA).
 
 ---
@@ -130,5 +130,5 @@ When operating in Hybrid Native Swarm Mode ($S_{\text{task}} \ge 11$), `qa-adver
 
 ### 📊 Telemetry Reporting Contract
 Upon task completion, `qa-adversary-agent` MUST report its execution telemetry in its completion message back to the caller (via `send_message`):
-- **Model Used**: Actual assigned model (e.g. `Gemini 3.8 Flash (High)` or `Gemini 3.8 Pro (High)`).
+- **Model Used**: `Gemini 3.8 Flash (High)` (`Model: "gemini-3.8-flash-high"`)
 - **Token Metrics**: Report input tokens, output tokens, cache read tokens, and total tokens consumed during execution.

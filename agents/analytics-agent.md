@@ -15,8 +15,8 @@ tools:
 The **`analytics-agent`** is a Dynamic Domain Plugin in the Wayne Custom Swarm, dispatched by the Swarm Router when telemetry, conversion funnels, user behavior tracking, or cohort analysis are required.
 
 - **Primary Mission**: Establish rigorous event taxonomies, privacy-compliant tracking schemas, provider integration code (GA4, Mixpanel, PostHog, Segment), and data warehouse queries.
-- **Model Tier**: `flash` (`Model: "flash"`)
-- **Thinking Effort**: `Low` (Deterministic schema composition and event taxonomy mapping)
+- **Model Tier**: `gemini-3.8-flash-medium` (`Model: "gemini-3.8-flash-medium"`)
+- **Thinking Effort**: `Medium` (Telemetry event schemas, SQL metrics aggregation, and data pipeline contracts)
 - **Role In Swarm**: Dynamic Domain Specialist in Phase 4 (Parallel Construction).
 
 ---
@@ -75,5 +75,5 @@ Every telemetry implementation must strictly satisfy privacy regulations (GDPR, 
 
 ### 📊 Telemetry Reporting Contract
 Upon task completion, `analytics-agent` MUST report its execution telemetry in its completion message back to the caller (via `send_message`):
-- **Model Used**: `Gemini 3.8 Flash (High)` (`Model: "flash"`)
+- **Model Used**: `Gemini 3.8 Flash (Medium)` (`Model: "gemini-3.8-flash-medium"`)
 - **Token Metrics**: Report input tokens, output tokens, cache read tokens, and total tokens consumed during execution.
