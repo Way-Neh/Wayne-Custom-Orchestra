@@ -22,14 +22,29 @@ $$S_{\text{task}} = D + F + A + C + V$$
 - All cross-agent collaboration operates strictly via structured files in `.agents/blackboard/`:
 - **`research_dossier.md`**: Upstream technical, market, and competitive intelligence with numbered findings (`[RES-01]`, `[RES-02]`), cross-lingual query matrix, platform provenance matrix, multimodal video/comment extracts, and impact recommendations.
 - **`pm_spec.md`**: Numbered Acceptance Criteria (`[AC-01]`, `[AC-02]`), Edge Cases (`[AC-10]`), Failure Modes (`[AC-20]`), Negative Acceptance Criteria (`[NAC-01]`), finite state tables, and explicit non-goals.
-- **`design_tokens.md`**: 3-tier CSS custom property blocks (`primitive` &rarr; `semantic` &rarr; `component`), OKLCH scales, and clamp typography. No runtime code.
+- **`design_tokens.md`**: 3-tier CSS custom property blocks (`primitive` &rarr; `semantic` &rarr; `component`), OKLCH scales, clamp typography, and themed browser surfaces. Locked via `[DESIGN_CONSENSUS_LOCKED]` by the 2-Person Design Studio. No runtime code.
 - **`arch_schema.md`**: Machine-enforceable types (TypeScript / Zod), DB schemas, mutation lifecycles, and STRIDE threat models.
 - **`code_qa_status.md`**: Line-by-line verification matrix against every `[AC-xx]` ID with concrete reproduction proofs and diff telemetry.
 - **Contract Parity Validation**: Before builder hand-off, the blackboard MUST be validated using `scripts/validate_blackboard.py`.
 
 ---
 
-## 3. Worker Worktree Isolation & Re-Sync Invariant
+## 3. Pre-Build Design Craft Gate & 2-Person Design Studio
+- **2-Person Design Studio**: Visual architecture is governed by a dedicated Proposer $\rightleftharpoons$ Challenger dynamic (`design-agent` $\rightleftharpoons$ `design-critic`) on `#council` operating under cognitive parity on `gemini-3.8-flash-high`.
+- **3-Direction Exploration Mandate**: `design-agent` must explore 3 distinct aesthetic directions (e.g. Swiss Editorial, Industrial/Technical, Warm Analog) before choosing one authentically rooted in the product's subject matter.
+- **Anti-Slop Hard Bans**:
+  - Banned: Same-size 3-card grids as primary page structure.
+  - Banned: Gradient text and decorative floating colored blurred halos.
+  - Banned: Uppercase kicker/eyebrow badges floating above headings.
+  - Banned: Category-default purple/indigo (`#6366f1`) without brand mandate.
+  - Banned: Flat gray secondary text (must tint from surface hue).
+  - Banned: Ghost elevation (1px border under soft wide shadow).
+- **Mandatory Craft Invariants**: Enforces themed browser surfaces (`::selection`, `caret-color`, `:focus-visible`, custom scrollbars) and asymmetric layout hierarchy.
+- **Pre-Build Gate Invariant**: `design_tokens.md` requires explicit consensus sign-off (`[DESIGN_CONSENSUS_LOCKED]`) from `design-critic` before `builder-agent` initiates feature construction in Phase 4. Any UI implementation started without this lock is invalid and rejected at the integration gate.
+
+---
+
+## 4. Worker Worktree Isolation & Re-Sync Invariant
 - Concurrent builders MUST implement features strictly inside dedicated Git worktrees managed via `scripts/worktree_helper.sh {add|sync|merge|remove}`: `.worktrees/worker-<id>` on branch `swarm/worker-<id>`.
 - Never commit directly to `main`, `master`, or unmerged integration branches (`feat/<task>`).
 - **Self-Healing Re-Sync Protocol (Iterations 2 & 3)**:
@@ -43,14 +58,14 @@ $$S_{\text{task}} = D + F + A + C + V$$
 
 ---
 
-## 4. Adversarial Verification & Cognitive Parity Invariant
+## 5. Adversarial Verification & Cognitive Parity Invariant
 - **Zero Self-Auditing**: Under no circumstances may the agent that authored the code audit its own implementation. `builder-agent` and `qa-adversary-agent` are strictly decoupled.
 - **Cognitive Parity**: On Tier 3 Swarms ($S_{\text{task}} \ge 11$), `qa-adversary-agent` MUST operate on cognitive parity with `builder-agent` (`Model: "gemini-3.8-flash-high"`, High thinking) to prevent shallow verification and unverified self-healing loops.
 - **Independent Evidence**: The adversary must execute deterministic reproduction commands and confirm line-by-line evidence before marking any `[AC-xx]` as passed.
 
 ---
 
-## 5. Bounded Cyclic Self-Healing & Escalation Gate
+## 6. Bounded Cyclic Self-Healing & Escalation Gate
 - Automated feedback loop (`qa-adversary-agent` $\rightleftharpoons$ `builder-agent`): maximum **3 repair iterations**, tracked deterministically via `scripts/healing_tracker.py`.
 - **Regression Lock Rule**: Criteria verified as PASS (`[x]`) in iteration $N$ are permanently locked. Any subsequent fix breaking a passing criterion is flagged by `healing_tracker.py` as a `REGRESSION_VIOLATION`.
 - **Architectural Escalation Gate**: If the same criterion fails across 2 consecutive iterations, `healing_tracker.py` flags an architectural escalation. The Orchestrator pauses `builder-agent` and dispatches `architect-agent` to evaluate whether `arch_schema.md` or API contracts require revision before attempting iteration 3.
@@ -58,14 +73,14 @@ $$S_{\text{task}} = D + F + A + C + V$$
 
 ---
 
-## 6. Mandatory Telemetry Reporting Protocol
+## 7. Mandatory Telemetry Reporting Protocol
 Upon completing an assigned task, every subagent MUST report its assigned model and token consumption metrics in its final completion message to the caller via `send_message`:
 - **Model Used**: Actual assigned model identifier (e.g. `Gemini 3.8 Flash (High)`, `Gemini 3.8 Flash (Medium)`, `Gemini 3.8 Flash (Low)`).
 - **Token Metrics**: `Input Tokens`, `Output Tokens`, `Cache Read Tokens`, `Total Tokens`.
 
 ---
 
-## 7. Hybrid Research Cluster & Multimodal Protocol
+## 8. Hybrid Research Cluster & Multimodal Protocol
 When exploratory, competitive, or cross-domain research is required:
 - **`research-agent` (Cognitive Lead: `gemini-3.8-flash-high`)**: Formulates the cross-lingual query matrix (EN, ZH, JA, KO, RU), coordinates platform investigations, calibrates bias, and stages `research_dossier.md`.
 - **`social-forum-agent` (Specialist: `gemini-3.8-flash-medium`)**: Extracts community sentiment, edge cases, and practitioner experiences from Reddit, Hacker News, X/Twitter, Telegram, and non-English developer forums.
@@ -73,13 +88,13 @@ When exploratory, competitive, or cross-domain research is required:
 
 ---
 
-## 8. Unattended Execution Safety Ceiling
+## 9. Unattended Execution Safety Ceiling
 - For background scheduled/timer automations (cron jobs), the Director approval gate is bypassed ONLY if $S_{\text{task}} \le 10$ (Tier 1 or Tier 2).
 - Any unattended Tier 3 swarm ($S_{\text{task}} \ge 11$) is strictly capped at a **50,000 total token spend limit** and a **maximum of 1 self-healing repair cycle** before halting and demanding Director authorization.
 
 ---
 
-## 9. Programmatic vs. Heuristic Architecture Taxonomy (Code-Enforced vs. Prompt-Guided)
+## 10. Programmatic vs. Heuristic Architecture Taxonomy (Code-Enforced vs. Prompt-Guided)
 To prevent conflating prompt guidance with deterministic guarantees, all swarm mechanisms are strictly classified:
 
 | Class | Mechanism Type | Enforcing Artifact / Tool | Failure Behavior |
@@ -89,14 +104,17 @@ To prevent conflating prompt guidance with deterministic guarantees, all swarm m
 
 ---
 
-## 10. Native Swarm Message Board Protocols (Tier 3 Execution)
+## 11. Native Swarm Message Board Protocols (Tier 3 Execution)
 When executing in Hybrid Native Swarm Mode ($S_{\text{task}} \ge 11$), all multi-agent coordination operates over Antigravity Native Swarm pub/sub message boards structured by channels (`#council`, `#builders`, `#qa`):
 
 - **Targeted Addressing & Zero Report Duplication**:
-  - Always use targeted `@mention` syntax (e.g., `@architect-agent`, `@council-challenger`, `@builder-api`, `@qa-adversary-agent`, `@coordinator`).
-  - **Never copy-paste entire reports, spec bodies, or massive stack traces into message board posts**. Always reference the originating post's sequence number (`#seq`, e.g. `#14`) or on-disk blackboard artifact (`.agents/blackboard/arch_schema.md`, `.agents/blackboard/code_qa_status.md`).
+  - Always use targeted `@mention` syntax (e.g., `@architect-agent`, `@council-challenger`, `@design-agent`, `@design-critic`, `@builder-api`, `@qa-adversary-agent`, `@coordinator`).
+  - **Never copy-paste entire reports, spec bodies, or massive stack traces into message board posts**. Always reference the originating post's sequence number (`#seq`, e.g. `#14`) or on-disk blackboard artifact (`.agents/blackboard/arch_schema.md`, `.agents/blackboard/design_tokens.md`, `.agents/blackboard/code_qa_status.md`).
 - **Standard Completion Marker (`[done]`)**:
-  - Workers and auditors MUST begin milestone completion messages with `[done]` (e.g. `@coordinator [done] Changes committed to swarm/worker-1 for [AC-01]..[AC-05]. Local tests passing.`, `@coordinator [done] Independent verification complete. ALL_PASS`). This allows the Root Coordinator and `monitor` watchdog to deterministically recognize phase exits.
+  - Workers and auditors MUST begin milestone completion messages with `[done]` (e.g. `@coordinator [done] Changes committed to swarm/worker-1 for [AC-01]..[AC-05]. Local tests passing.`, `@coordinator [done] Independent verification complete. ALL_PASS`, `@coordinator [done] Pre-Build Design Craft Gate passed. [DESIGN_CONSENSUS_LOCKED] recorded.`). This allows the Root Coordinator and `monitor` watchdog to deterministically recognize phase exits.
+- **Phase 2 Council Gates on `#council`**:
+  - Both Technical Architecture (`architect-agent` vs. `council-challenger`) and the 2-Person Design Studio (`design-agent` vs. `design-critic`) execute on `#council`.
+  - Feature construction on `#builders` cannot begin until both `[CONSENSUS_ACHIEVED]` (architecture) and `[DESIGN_CONSENSUS_LOCKED]` (design tokens) are recorded.
 - **Regression Lock & Healing on `#qa`**:
   - When `qa-adversary-agent` identifies broken acceptance criteria during Phase 5, it posts surgical failure feedback directly to `#qa` tagging the responsible builder (e.g., `@builder-1 [AC-03 FAIL]: Expected 400 on empty string, got 500. Repro in #14. Line ref: src/api/auth.ts#L42`).
   - The Root Coordinator immediately records the state using `scripts/healing_tracker.py`. If a previously passed criterion is broken, `healing_tracker.py` raises a `REGRESSION_VIOLATION` and halts.
@@ -104,5 +122,3 @@ When executing in Hybrid Native Swarm Mode ($S_{\text{task}} \ge 11$), all multi
 - **Auxiliary Roles (`narrator` & `monitor`)**:
   - `narrator`: Synthesizes live status milestones ($S_{\text{task}}$, active phase, pass/fail `[AC-xx]` counts, healing cycle $N/3$) into the visual Swarm Overview UI.
   - `monitor`: Watches for turn stalls, communication timeouts, and compilation deadlocks to alert the Root Coordinator.
-
-

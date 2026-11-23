@@ -47,7 +47,9 @@ All capabilities are delineated into two operational classes:
 
 ## 3. Swarms Architectural Primitives & Topologies
 - **Hierarchical Swarm**: Root Orchestrator (Zero Direct Labor) directs and routes; specialized core pillars execute; domain plugins handle discrete tasks.
-- **LLM Council / Consensus Gate**: Proposer (`architect-agent`) vs. Challenger (`council-challenger`). Schemas and contracts achieve consensus before commit.
+- **LLM Council / Consensus Gates**:
+  - **Technical Architecture Council**: Proposer (`architect-agent`) vs. Challenger (`council-challenger`). Schemas, DB models, and API contracts achieve consensus (`[CONSENSUS_ACHIEVED]`) before commit into `arch_schema.md`.
+  - **2-Person Design Studio (Pre-Build Craft Gate)**: Proposer (`design-agent`) vs. Art Director Challenger (`design-critic`). Draft design tokens must explore 3 directions, eradicate AI slop, and achieve sign-off (`[DESIGN_CONSENSUS_LOCKED]`) into `design_tokens.md` before builder implementation.
 - **Hybrid Research Cluster**: Dynamic intelligence sprint (`research-agent` lead, `social-forum-agent` for Reddit/HN/X/Telegram, `media-intel-agent` for Shorts/TikTok/Bilibili/Reels).
 - **Swarm Router**: Semantic, on-demand dispatching to domain plugins (`research-agent`, `social-forum-agent`, `media-intel-agent`, `seo-agent`, `analytics-agent`, `image-agent`, `docs-agent`).
 - **Mixture of Agents (MoA)**: Upstream specs (`research_dossier.md`, `pm_spec.md`, `design_tokens.md`, `arch_schema.md`) are synthesized and injected into `builder-agent`.
@@ -59,8 +61,8 @@ For Tier 3 tasks, the root Orchestrator does **zero direct code or asset impleme
 ## 5. Shared Blackboard Contracts (`.agents/blackboard/`)
 - `research_dossier.md`: Cross-lingual intelligence, native query matrices, video transcripts/comments, and empirical findings.
 - `pm_spec.md`: Numbered Acceptance Criteria matrix (`[AC-xx]`), user personas, edge cases.
-- `design_tokens.md`: Drop-in CSS variables, color palettes, spacing scales, component hierarchy.
-- `arch_schema.md`: System architecture, API contracts, DB schemas, state trees approved by LLM Council.
+- `design_tokens.md`: Drop-in CSS variables, color palettes, spacing scales, themed browser surfaces, locked via `[DESIGN_CONSENSUS_LOCKED]` by the 2-Person Design Studio.
+- `arch_schema.md`: System architecture, API contracts, DB schemas, state trees approved by LLM Council (`[CONSENSUS_ACHIEVED]`).
 - `code_qa_status.md`: Line-by-line audit proof against `[AC-xx]` with concrete verification evidence.
 
 ## 6. Hybrid Native Swarm Execution Mode ($S_{\text{task}} \ge 11$)
@@ -78,8 +80,11 @@ To prevent context dilution and subagent noise, execution is decoupled across de
 │   ┌──────────────┐    ┌─────────────────────────┐     ┌──────────────┐ │
 │   │ architect    │    │ builder-api (worktree)  │     │ qa-adversary │ │
 │   │ challenger   │    │ builder-ui  (worktree)  │     │ (audit &     │ │
-│   │ (STRIDE &    │    │ (shared workspace &     │     │  healing)    │ │
-│   │  consensus)  │    │  [done] markers)        │     │              │ │
+│   │ (STRIDE)     │    │ (shared workspace &     │     │  healing)    │ │
+│   │ ──────────── │    │  [done] markers)        │     │              │ │
+│   │ design-agent │    │                         │     │              │ │
+│   │ design-critic│    │                         │     │              │ │
+│   │ (Craft Gate) │    │                         │     │              │ │
 │   └──────────────┘    └─────────────────────────┘     └──────────────┘ │
 │                               ▲                              │         │
 │                               └─────── repair feedback ──────┘         │
@@ -87,10 +92,10 @@ To prevent context dilution and subagent noise, execution is decoupled across de
 ```
 
 1. **`#council` (Phases 1 & 2 — Spec Staging & LLM Council Debate)**:
-   - Dedicated channel for `pm-agent`, `architect-agent`, and `council-challenger`.
-   - Proposer (`architect-agent`) stages system topology and Zod schemas against `pm_spec.md`.
-   - Challenger (`council-challenger`) conducts adversarial STRIDE threat modeling, concurrency hazard scans, and scalability stress tests.
-   - Debate is strictly bounded ($\le 2$ exchanges) to prevent circular argument; locks into `arch_schema.md` upon consensus (`[CONSENSUS_ACHIEVED]`).
+   - Dedicated channel for `pm-agent`, `architect-agent`, `council-challenger`, `design-agent`, and `design-critic`.
+   - **Technical Council**: Proposer (`architect-agent`) stages system topology and Zod schemas against `pm_spec.md`; Challenger (`council-challenger`) conducts adversarial STRIDE threat modeling, concurrency hazard scans, and scalability stress tests. Debate is strictly bounded ($\le 2$ exchanges) to prevent circular argument; locks into `arch_schema.md` upon consensus (`[CONSENSUS_ACHIEVED]`).
+   - **2-Person Design Studio (Pre-Build Craft Gate)**: Proposer (`design-agent`) formulates 3 distinct aesthetic directions and stages token architecture; Art Director Challenger (`design-critic`) strictly audits Anti-Slop Hard Bans, mandatory craft invariants (themed browser surfaces, asymmetric layout hierarchy), and WCAG AAA/AA contrast. Locks into `design_tokens.md` upon consensus (`[DESIGN_CONSENSUS_LOCKED]`).
+   - **Pre-Build Gate Invariant**: `builder-agent` in Phase 4 is blocked from beginning implementation until both `[CONSENSUS_ACHIEVED]` and `[DESIGN_CONSENSUS_LOCKED]` are confirmed on disk.
 
 2. **`#builders` (Phase 4 — Concurrent Worker Implementation)**:
    - Dedicated channel for parallel builder workers (`builder-api`, `builder-ui`, etc.).
@@ -125,13 +130,13 @@ The Wayne Custom Swarm operates exclusively on Google Gemini models (**Gemini 3.
 
 | Model Identifier | Display Name | Thinking Budget | Primary Characteristics | Cost / Quota Profile |
 | :--- | :--- | :---: | :--- | :--- |
-| **`gemini-3.8-flash-high`** | Gemini 3.8 Flash (High) | **Max / Deep** | Full reasoning scratchpad, multi-turn constraint tracking, formal logic verification, deep AST code analysis. | Highest quota burn per turn; reserved for critical gates and adversarial audit. |
+| **`gemini-3.8-flash-high`** | Gemini 3.8 Flash (High) | **Max / Deep** | Full reasoning scratchpad, multi-turn constraint tracking, formal logic verification, deep AST code analysis, aesthetic craft exploration & critique. | Highest quota burn per turn; reserved for critical consensus gates, design studio, and adversarial audit. |
 | **`gemini-3.8-flash-medium`** | Gemini 3.8 Flash (Medium) | **Moderate** | Balanced reasoning, fast component assembly, structured data formatting, standard unit test generation. | Balanced speed and token efficiency for code implementation and forum mining. |
-| **`gemini-3.8-flash-low`** | Gemini 3.8 Flash (Low) | **Minimal** | Ultra-low latency, direct deterministic instruction execution, text formatting, and template expansion. | Lowest quota burn; ideal for auxiliary roles, static metadata, and styling tokens. |
+| **`gemini-3.8-flash-low`** | Gemini 3.8 Flash (Low) | **Minimal** | Ultra-low latency, direct deterministic instruction execution, text formatting, and template expansion. | Lowest quota burn; ideal for auxiliary roles, static metadata, and documentation formatting. |
 
 ### Agent-to-Model Assignment Matrix
 
-All 13 specialized agents and auxiliary roles are mapped deterministically across the 3 tiers:
+All 14 specialized agents and auxiliary roles are mapped deterministically across the 3 tiers:
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
@@ -141,6 +146,8 @@ All 13 specialized agents and auxiliary roles are mapped deterministically acros
 │   ├── qa-adversary-agent    (Adversarial [AC-xx] line-by-line audit)   │
 │   ├── pm-agent              (Acceptance criteria, finite state tables) │
 │   ├── research-agent        (Cross-lingual query matrices, provenance) │
+│   ├── design-agent          (3-direction exploration, anti-slop craft) │
+│   ├── design-critic         (Art Director adversarial craft gate)      │
 │   └── builder-agent (Fix)   (Self-healing repair cycles: Iteration 2+) │
 ├────────────────────────────────────────────────────────────────────────┤
 │ TIER 2: BALANCED EXECUTION & LOGIC (gemini-3.8-flash-medium)           │
@@ -150,8 +157,7 @@ All 13 specialized agents and auxiliary roles are mapped deterministically acros
 │   └── analytics-agent       (Telemetry event schemas & SQL metrics)    │
 ├────────────────────────────────────────────────────────────────────────┤
 │ TIER 3: HIGH-SPEED & QUOTA PRESERVATION (gemini-3.8-flash-low)         │
-│   ├── design-agent          (3-tier CSS custom properties, OKLCH scales)│
-│   ├── docs-agent            (Markdown formatting, link validation)     │
+│   ├── docs-agent            (Diátaxis docs, API contracts, C4 diagrams)│
 │   ├── seo-agent             (Structured metadata, semantic HTML)       │
 │   ├── image-agent           (SVG optimization & image prompts)         │
 │   ├── narrator              (Live UI dashboard updates in Antigravity) │

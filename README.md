@@ -9,7 +9,7 @@ Adaptive Multi-Agent Swarm Orchestrator Architecture & Operating Model (**Wayne 
 **Wayne Custom Orchestra** provides an intelligent, tier-based multi-agent coordination system for autonomous software development. It fuses high-level architectural direction with decoupled execution through **dynamic task sizing**, **machine-actionable blackboard contracts**, **criteria-mapped adversarial QA**, and architectural primitives from Kye Gomez's **Swarms framework**:
 
 - **Hierarchical Swarms**: Structured delegation from Root Orchestrator to Core Pillars and Worker Plugins.
-- **LLM Council (Consensus Gate)**: Adversarial debate (Proposer vs. Security/Scalability Challenger) before locking architectural contracts.
+- **LLM Council & 2-Person Design Studio (Consensus Gates)**: Adversarial debate across architecture (Proposer vs. Security/Scalability Challenger) and visual design (Design Proposer vs. Art Director Challenger) before locking contracts.
 - **Swarm Router**: Semantic and capability-driven router dynamically activating specialized domain plugins on-demand.
 - **Cold Catalog & JIT Skill Retrieval**: Curated foundational catalog (`skills/catalog/`) of 16 indexed skills with offline packages for DOCX, PDF, PPTX, and XLSX, dynamically searchable and mountable via `find_skill.py` with zero root token overhead.
 - **Mixture of Agents (MoA)**: Context synthesis flowing downstream from PM, Design, and Architecture directly into Builder.
@@ -40,11 +40,18 @@ flowchart TD
         
         subgraph Council ["Phase 2: Spec Staging & LLM Council"]
             PM_Spec["📋 pm-agent<br/>pm_spec.md ([AC-xx] Matrix)"]
-            Design_Spec["🎨 design-agent (Lean Design Trinity)<br/>design_tokens.md (3-Tier Tokens)"]
-            Arch_Prop["🏛️ architect-agent<br/>Architecture Proposal"]
-            Challenger["🛡️ council-challenger<br/>Security & Scalability Lens"]
-            Arch_Prop <-->|"Consensus Gate"| Challenger
-            Arch_Prop --> Arch_Spec["arch_schema.md<br/>Validated Schema Contract"]
+            subgraph Studio ["2-Person Design Studio (Pre-Build Craft Gate)"]
+                Design_Prop["🎨 design-agent (Flash High)<br/>3-Direction Exploration"]
+                Design_Crit["🧐 design-critic (Flash High)<br/>Art Director Anti-Slop Gate"]
+                Design_Prop <-->|"Craft Consensus"| Design_Crit
+                Design_Prop --> Design_Spec["design_tokens.md<br/>[DESIGN_CONSENSUS_LOCKED]"]
+            end
+            subgraph Tech_Council ["Technical Architecture Council"]
+                Arch_Prop["🏛️ architect-agent<br/>Architecture Proposal"]
+                Challenger["🛡️ council-challenger<br/>Security & Scalability Lens"]
+                Arch_Prop <-->|"Schema Consensus"| Challenger
+                Arch_Prop --> Arch_Spec["arch_schema.md<br/>[CONSENSUS_ACHIEVED]"]
+            end
         end
         
         P3["Phase 3: Director Gate<br/>(Auto-Bypassed for Scheduled Tasks)"]
@@ -103,7 +110,7 @@ flowchart TD
 | Swarm Topology | Implementation Mechanism | Workflow Impact |
 | :--- | :--- | :--- |
 | **Hierarchical Swarm** | `The Orchestrator` $\rightarrow$ Core Pillars $\rightarrow$ Dynamic Plugins | Enforces strict executive oversight with zero direct labor on the root orchestrator. Core pillars lead specialized tracks while dynamic plugins serve as worker nodes. |
-| **LLM Council (Consensus Gate)** | Proposer (`architect-agent`) vs. Challenger (`council-challenger`) | Activates during Phase 2. System schemas, data models, and API interfaces must withstand rigorous challenge and reach multi-perspective consensus before locking into `arch_schema.md`. |
+| **LLM Council & Design Studio (Consensus Gates)** | Technical: `architect-agent` vs. `council-challenger`<br/>Visual: `design-agent` vs. `design-critic` | Activates during Phase 2. Technical contracts (`arch_schema.md`) and visual token contracts (`design_tokens.md`) must withstand rigorous adversarial challenge (STRIDE security and Pre-Build Anti-Slop Craft Gate) to achieve consensus sign-off before builder implementation. |
 | **Hybrid Research Cluster** | Phase 0 Intelligence Sprint (`research-agent`, `social-forum-agent`, `media-intel-agent`) | Ingests cross-lingual technical discourse, developer forums (Reddit, HN, Telegram), and short-form video (Shorts, TikTok, Bilibili) into `research_dossier.md` before planning. |
 | **Swarm Router** | Semantic / capability-based dispatcher with Cold Catalog JIT Retrieval | Dynamically provisions plugin subagents (`research-agent`, `social-forum-agent`, `media-intel-agent`, `seo-agent`, `analytics-agent`, `image-agent`, `docs-agent`) and queries `find_skill.py` to mount specialized domain skills just-in-time, keeping root context at 0 token overhead. |
 | **Mixture of Agents (MoA)** | Layered contextual synthesis across blackboard | Outputs from PM, Design, and Architecture are synthesized into machine-readable blackboard contracts that guide `builder-agent` directly. |
@@ -136,18 +143,20 @@ $$S_{\text{task}} = D + F + A + C + V$$
 ### 3. The Zero Direct Labor Rule (Tier 3)
 For Tier 3 tasks, the root Orchestrator does **no direct code or asset implementation**. It exclusively handles triage, task sizing, LLM Council facilitation, Swarm Router dispatching (`invoke_subagent` or native `swarm` tools with `Workspace: "share"`), self-healing orchestration, and final synthesis.
 
-### 4. Adversarial QA Integrity, Anti-Slop Gating & Cyclic Remediation
-`builder-agent` and `qa-adversary-agent` are strictly decoupled. The builder never audits its own code; the adversary validates line-by-line against numbered Acceptance Criteria (`[AC-xx]`) with concrete evidence and executes `impeccable detect (anti-slop audit)` to gate against visual anti-patterns, generic AI templates, and contrast defects. If an issue is flagged, the **Bounded Cyclic Self-Healing Loop** automatically routes the fix up to 3 times before involving the Director.
+### 4. Pre-Build Design Craft Gate & Adversarial QA Integrity
+- **Pre-Build Craft Gate**: Visual tokens authored in `design_tokens.md` must pass rigorous adversarial review by `design-critic` and achieve consensus sign-off (`[DESIGN_CONSENSUS_LOCKED]`) before `builder-agent` touches frontend code.
+- **Decoupled Verification**: `builder-agent` and `qa-adversary-agent` are strictly decoupled. The builder never audits its own code; the adversary validates line-by-line against numbered Acceptance Criteria (`[AC-xx]`) with concrete evidence and executes `impeccable detect (anti-slop audit)` to gate against visual regressions.
+- **Bounded Cyclic Self-Healing**: Automatically routes diffs and failure traces back to Builder for up to 3 repair iterations before escalating to the Director.
 
 ### 5. Hybrid Native Swarm Execution Mode ($S_{\text{task}} \ge 11$)
 Couples Wayne's governance and machine blackboard contracts (`.agents/blackboard/`) with Antigravity Native Swarm's live message board engine:
-- **`#council`**: Staged spec review and STRIDE debate between `architect-agent` and `council-challenger`.
+- **`#council`**: Staged spec review and debate: Technical Council (`architect-agent` vs. `council-challenger`) and 2-Person Design Studio (`design-agent` vs. `design-critic`).
 - **`#builders`**: Parallel execution across isolated Git worktrees (`.worktrees/worker-<id>`) with shared workspace visibility and standard `[done]` milestone markers.
 - **`#qa`**: Adversarial verification against `pm_spec.md`, Regression Lock tracking via `healing_tracker.py`, and surgical remediation tags.
 - **Auxiliary Roles**: `narrator` powers the live visual Swarm Overview UI; `monitor` serves as a deadlock watchdog.
 - **Channel Controller**: Managed via `scripts/swarm_orchestrator.py`.
 
-### 5. Concurrent Worker Worktree Protocol
+### 6. Concurrent Worker Worktree Protocol
 When parallel implementation spans multiple builders or independent modules, the Orchestrator enforces filesystem isolation:
 1. **Spec-Driven Task Partitioning**: Numbered acceptance criteria (`[AC-xx]`) are partitioned into orthogonal domains (API, UI, Auth, etc.).
 2. **Worktree Provisioning**: Each concurrent builder instance is allocated a dedicated worktree under `.worktrees/worker-<id>` on branch `swarm/worker-<id>`.
@@ -155,7 +164,7 @@ When parallel implementation spans multiple builders or independent modules, the
 4. **Automated Swarm Integration Gate**: Worker branches are merged or rebased into the integration branch `feat/<task>`, ensuring structural and integration integrity.
 5. **Phase 5 QA & Teardown**: `qa-adversary-agent` audits the integrated branch. Once all criteria pass, worktrees are automatically cleaned up (`git worktree remove --force`).
 
-### 6. Cold Catalog & Just-in-Time (JIT) Skill Retrieval
+### 7. Cold Catalog & Just-in-Time (JIT) Skill Retrieval
 To prevent prompt context bloat while supporting thousands of specialized file formats, protocols, and workflows (e.g. Word `.docx`, PDF forms, Excel `.xlsx`, EPUB publishing, OpenAPI schemas, GitHub Actions, Kubernetes), the workspace implements a two-tier **Cold Catalog & Just-in-Time (JIT) Retrieval Architecture**:
 
 1. **Cold Storage Catalog (`.agents/skills/catalog/`)**:
@@ -182,7 +191,7 @@ To prevent prompt context bloat while supporting thousands of specialized file f
 4. **Zero Direct Root Token Overhead**:
    - Root Orchestrator and Core Pillars maintain **0 token overhead** from specialized skills, ensuring full cognitive capacity and attention preservation for coordination.
 
-### 7. Programmatic vs. Heuristic Architecture Taxonomy
+### 8. Programmatic vs. Heuristic Architecture Taxonomy
 
 To maintain engineering rigor and avoid conflating prompt suggestions with code guarantees, the orchestrator delineates all capabilities into two distinct operational classes:
 
@@ -195,25 +204,54 @@ To maintain engineering rigor and avoid conflating prompt suggestions with code 
 
 ## 👥 Agent Roster & Codified Skill Boundaries
 
-To prevent token waste, context dilution, and role-bleed, every agent in the swarm operates within codified **"Good Enough" skill boundaries** and strict **anti-bloat scopes**.
+To prevent token waste, context dilution, and role-bleed, every agent in the swarm operates within codified **"Good Enough" skill boundaries** and strict **anti-bloat scopes** across **14 specialized agents** and 2 auxiliary roles.
 
 ### Core Pillars (Always Active in Tier 3 Swarms)
 | Agent | Dedicated Spec | Responsibility | Assigned "Good Enough" Skills | Excluded Skills (Anti-Bloat Boundary) | Model Tier | Thinking Effort |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **The Orchestrator** | *Root Master Blueprint* | Triage, sizing, dispatch, synthesis. Zero direct labor in Tier 3. | `dispatching-parallel-agents`, `brainstorming` | All direct implementation, UI styling, code editing | **`gemini-3.8-flash-high`** | **High** |
 | **`pm-agent`** | [`agents/pm-agent.md`](agents/pm-agent.md) | PRD, acceptance criteria (`[AC-xx]`), user personas. | `writing-plans`, `brainstorming` | Code editing, UI styling, debugging | **`gemini-3.8-flash-high`** | **High** |
-| **`design-agent`** | [`agents/design-agent.md`](agents/design-agent.md) | Layout architecture, typography, responsive CSS tokens. | `impeccable`, `design-system` | `animate`, `animate-expo`, `emil-design-eng`, `ui-styling`, code implementation, `brand`, `slides`, `banner-design` | **`gemini-3.8-flash-low`** | **Low** |
+| **`design-agent`** | [`agents/design-agent.md`](agents/design-agent.md) | 2-Person Design Studio Proposer: 3-direction exploration, bespoke tokens, craft invariants. | `impeccable`, `design-system` | `animate`, `animate-expo`, `emil-design-eng`, `ui-styling`, code implementation, `brand`, `slides`, `banner-design` | **`gemini-3.8-flash-high`** | **High** |
+| **`design-critic`** | [`agents/design-critic.md`](agents/design-critic.md) | 2-Person Design Studio Challenger: Art Director audit, Anti-Slop Hard Bans, Pre-Build Craft Gate sign-off (`[DESIGN_CONSENSUS_LOCKED]`). | `impeccable critique`, `design-system`, visual craft audit | Code implementation, file writing, runtime styling | **`gemini-3.8-flash-high`** | **High** |
 | **`architect-agent`** | [`agents/architect-agent.md`](agents/architect-agent.md) | System architecture, API contracts, schema consensus. | Architecture & schema design, API contracts | Frontend CSS, UI styling, browser test tools | **`gemini-3.8-flash-high`** | **High** |
 | **`council-challenger`** | [`agents/council-challenger.md`](agents/council-challenger.md) | Consensus challenger: STRIDE security, race conditions, scalability. | Threat modeling, scalability audit, edge-case challenge | Code editing, feature implementation | **`gemini-3.8-flash-high`** | **High** |
 | **`builder-agent`** | [`agents/builder-agent.md`](agents/builder-agent.md) | Feature construction, logic wiring, cyclic repair. | `ui-styling`, `modern-web-guidance`, `animate`, `systematic-debugging` | `brand`, `slides`, `canvas-design`, open-ended design discovery | **`gemini-3.8-flash-medium`** *(promoted to `gemini-3.8-flash-high` on repair cycles)* | **Medium** *(promoted to `High`)* |
 | **`qa-adversary-agent`** | [`agents/qa-adversary-agent.md`](agents/qa-adversary-agent.md) | Independent auditor against `[AC-xx]` & anti-slop gate. | `a11y-debugging`, `chrome-devtools`, `verification-before-completion`, `impeccable detect (anti-slop audit)` | File writing, creative design, feature implementation | **`gemini-3.8-flash-high`** *(mandatory cognitive parity)* | **High** |
 
-### 🎨 The Lean Design Trinity & Anti-Slop Architecture
-The frontend workflow leverages a streamlined, decoupled design stack to achieve bespoke visual quality without saturating prompt context:
-- **`impeccable`**: Provides taste, aesthetic direction, optical typography scales, OKLCH color palettes, and anti-AI slop heuristics.
-- **`design-system`**: Emits strict 3-tier token contracts (`primitive` &rarr; `semantic` &rarr; `component`) into `design_tokens.md`.
-- **`impeccable (CLI & Heuristics)`**: On-demand CLI lookup (`impeccable detect`, `impeccable critique`) for aesthetic archetypes and anti-slop rules, keeping massive style guides out of the model prompt context.
-- **Zero Role-Bleed**: Runtime markup and animations are strictly owned by `builder-agent` (`ui-styling`, `animate`), while `qa-adversary-agent` runs `impeccable detect` to mechanically catch AI design slop and visual regressions.
+### 🎨 The Lean Design Trinity, 2-Person Design Studio & Pre-Build Craft Gate
+Frontend visual craft is governed by the **Lean Design Trinity** coupled with an adversarial **2-Person Design Studio** operating during Phase 2 on `#council`:
+
+```mermaid
+flowchart TD
+    subgraph Studio ["2-Person Design Studio (Phase 2 #council)"]
+        DA["🎨 design-agent (Proposer)<br/>gemini-3.8-flash-high"]
+        DC["🧐 design-critic (Art Director Challenger)<br/>gemini-3.8-flash-high"]
+        DA <-->|"Adversarial Craft Debate (&le; 2 exchanges)"| DC
+        DC -->|"Consensus Sign-Off"| Gate["🔒 Pre-Build Craft Gate<br/>[DESIGN_CONSENSUS_LOCKED]"]
+    end
+    Gate --> BA["👷 builder-agent (Phase 4)<br/>Implementation Barred Without Lock"]
+```
+
+1. **The 2-Person Design Studio (`design-agent` $\rightleftharpoons$ `design-critic`)**:
+   - **Cognitive Parity**: Both operate on `gemini-3.8-flash-high` with High thinking effort to explore authentic aesthetic depths and enforce design rigor.
+   - **3-Direction Exploration Mandate**: Before committing to tokens, `design-agent` must explore at least 3 distinct aesthetic directions (e.g. Swiss Editorial, Industrial/Technical, Warm Analog) authentically rooted in the product's subject matter.
+2. **The Pre-Build Craft Gate (`[DESIGN_CONSENSUS_LOCKED]`)**:
+   - `builder-agent` is strictly barred from beginning frontend implementation until `design-critic` signs off on `design_tokens.md`.
+   - **Anti-Slop Hard Bans**:
+     - 🚫 **Banned: Same-size 3-card grids as primary page structure**. Primary layout must be asymmetric and content-driven.
+     - 🚫 **Banned: Gradient text and decorative floating colored blurred halos** (radial blur blobs / ambient backdrops).
+     - 🚫 **Banned: Uppercase kicker/eyebrow badges floating above headings** (`[FEATURE]` pills above titles).
+     - 🚫 **Banned: Category-default purple/indigo (`#6366f1`) without brand mandate**. Palette must reflect product essence.
+     - 🚫 **Banned: Flat gray secondary text**. Secondary and tertiary text must tint from surface hue.
+     - 🚫 **Banned: Ghost elevation (1px border under soft wide shadow)**. Elevation must be crisp and structural.
+   - **Mandatory Craft Invariants**:
+     - ✨ **Themed Browser Surfaces**: Full tokens for `::selection`, `caret-color`, `:focus-visible` (2px outline with 2px offset), and custom scrollbars.
+     - ✨ **Asymmetric Layout Hierarchy**: Breaking symmetrical monotony with content-driven whitespace rhythm (60/40 splits, lead-in editorial anchors, variable densities).
+3. **The Lean Design Trinity**:
+   - **`impeccable`**: Provides taste, optical sizing, color palettes, harmonious spatial rhythms, and craft heuristics.
+   - **`design-system`**: Emits strict 3-tier token contracts (`primitive` &rarr; `semantic` &rarr; `component`) into `design_tokens.md`.
+   - **`impeccable (CLI & Heuristics)`**: On-demand CLI lookup (`impeccable detect`, `impeccable critique`) keeping monolithic style guides out of prompt context.
+   - **Zero Role-Bleed**: Designers tokenize and critique; `builder-agent` implements runtime markup and CSS classes; `qa-adversary-agent` executes `impeccable detect (anti-slop audit)` during Phase 5 verification.
 
 ### Dynamic Domain Plugins (Swarm Router)
 | Plugin Agent | Dedicated Spec | Responsibility | Assigned "Good Enough" Skills | Excluded Skills (Anti-Bloat Boundary) | Model Tier | Thinking Effort |
@@ -244,7 +282,7 @@ Technical documentation is authored by `docs-agent` adhering strictly to the **L
 - **75% Prompt Context Reduction**: By replacing bloated style dumps and unstructured doc dumps with the Lean Design Trinity (`impeccable` + `design-system` + `ui-ux-pro-max (query-only)`) and Lean Documentation Trinity (`diataxis-framework` + `api-documenter` + `c4-mermaid-diagrams`), token overhead is reduced by ~75%.
 - **Token Economy**: Prevents prompt saturation by stripping unnecessary skills, minimizing latency and inference overhead.
 - **Attention Preservation**: Constrains agent reasoning strictly to its core domain, eliminating hallucinations or distractions from tangential toolsets.
-- **Zero Role-Bleed**: Guarantees distinct separation of concerns—planners plan, designers tokenize, builders code and style, adversaries audit and detect anti-patterns, and technical writers author Diátaxis documentation and C4 diagrams.
+- **Zero Role-Bleed**: Guarantees distinct separation of concerns—planners plan, designers tokenize and critique, builders code and style, adversaries audit and detect anti-patterns, and technical writers author Diátaxis documentation and C4 diagrams.
 
 ---
 
@@ -256,11 +294,13 @@ Wayne Custom Orchestra operates on an exclusive Google model architecture, stand
 
 | Model Identifier | Display Name | Thinking Budget | Primary Characteristics | Cost / Quota Profile |
 | :--- | :--- | :---: | :--- | :--- |
-| **`gemini-3.8-flash-high`** | Gemini 3.8 Flash (High) | **Max / Deep** | Full reasoning scratchpad, multi-turn constraint tracking, formal logic verification, deep AST code analysis. | Highest quota burn per turn; reserved for critical gates and adversarial audit. |
+| **`gemini-3.8-flash-high`** | Gemini 3.8 Flash (High) | **Max / Deep** | Full reasoning scratchpad, multi-turn constraint tracking, formal logic verification, deep AST code analysis, aesthetic craft exploration & critique. | Highest quota burn per turn; reserved for critical consensus gates, design studio, and adversarial audit. |
 | **`gemini-3.8-flash-medium`** | Gemini 3.8 Flash (Medium) | **Moderate** | Balanced reasoning, fast component assembly, structured data formatting, standard unit test generation. | Balanced speed and token efficiency for code implementation and forum mining. |
-| **`gemini-3.8-flash-low`** | Gemini 3.8 Flash (Low) | **Minimal** | Ultra-low latency, direct deterministic instruction execution, text formatting, and template expansion. | Lowest quota burn; ideal for auxiliary roles, static metadata, and styling tokens. |
+| **`gemini-3.8-flash-low`** | Gemini 3.8 Flash (Low) | **Minimal** | Ultra-low latency, direct deterministic instruction execution, text formatting, and template expansion. | Lowest quota burn; ideal for auxiliary roles, static metadata, and documentation formatting. |
 
 ### 2. Swarm Model Assignment Architecture
+
+All 14 specialized agents and auxiliary roles are mapped deterministically across the 3 tiers:
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
@@ -270,6 +310,8 @@ Wayne Custom Orchestra operates on an exclusive Google model architecture, stand
 │   ├── qa-adversary-agent    (Adversarial [AC-xx] line-by-line audit)   │
 │   ├── pm-agent              (Acceptance criteria, finite state tables) │
 │   ├── research-agent        (Cross-lingual query matrices, provenance) │
+│   ├── design-agent          (3-direction exploration, anti-slop craft) │
+│   ├── design-critic         (Art Director adversarial craft gate)      │
 │   └── builder-agent (Fix)   (Self-healing repair cycles: Iteration 2+) │
 ├────────────────────────────────────────────────────────────────────────┤
 │ TIER 2: BALANCED EXECUTION & LOGIC (gemini-3.8-flash-medium)           │
@@ -279,8 +321,7 @@ Wayne Custom Orchestra operates on an exclusive Google model architecture, stand
 │   └── analytics-agent       (Telemetry event schemas & SQL metrics)    │
 ├────────────────────────────────────────────────────────────────────────┤
 │ TIER 3: HIGH-SPEED & QUOTA PRESERVATION (gemini-3.8-flash-low)         │
-│   ├── design-agent          (3-tier CSS custom properties, OKLCH scales)│
-│   ├── docs-agent            (Markdown formatting, link validation)     │
+│   ├── docs-agent            (Diátaxis docs, API contracts, C4 diagrams)│
 │   ├── seo-agent             (Structured metadata, semantic HTML)       │
 │   ├── image-agent           (SVG optimization & image prompts)         │
 │   ├── narrator              (Live UI dashboard updates in Antigravity) │
@@ -345,7 +386,7 @@ Supported modes:
 
 ## 📈 Mandatory Token & Model Telemetry Protocol
 
-To maintain complete transparency into inference economics, verify model routing integrity, and measure token velocity, Wayne Custom 2.0 2026-10-16 enforces a multi-level **Token & Model Telemetry Reporting Protocol**:
+To maintain complete transparency into inference economics, verify model routing integrity, and measure token velocity, Wayne Custom Swarms enforces a multi-level **Token & Model Telemetry Reporting Protocol**:
 
 1. **Subagent Level**: Every subagent reports its actual assigned Model and token consumption metrics (`Input Tokens`, `Output Tokens`, `Cache Read Tokens`, `Total Tokens`) in its final completion message to the caller via `send_message`.
 2. **Root Orchestrator Level**: The Root Orchestrator executes [`scripts/collate_telemetry.py`](scripts/collate_telemetry.py) (or `.agents/scripts/collate_telemetry.py` in target projects) to parse all active session transcripts, aggregating token metrics across all active subagents and the root orchestrator.
@@ -383,7 +424,8 @@ python3 .agents/scripts/collate_telemetry.py --format json
 .
 ├── agents/                           # Codified Agent Specifications & Boundaries
 │   ├── pm-agent.md                   # Core Product Pillar & Acceptance Criteria
-│   ├── design-agent.md               # Visual Architecture & Lean Design Trinity
+│   ├── design-agent.md               # Visual Architecture & 2-Person Design Studio Proposer
+│   ├── design-critic.md              # Art Director & Anti-Slop Design Challenger
 │   ├── architect-agent.md            # Technical Architecture & Schema Consensus
 │   ├── council-challenger.md         # Consensus Challenger & STRIDE Gatekeeper
 │   ├── builder-agent.md              # Implementation & Cyclic Repair Engine

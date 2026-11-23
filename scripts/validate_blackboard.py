@@ -6,7 +6,7 @@ Validates:
 1. Syntax and uniqueness of Acceptance Criteria [AC-xx] and Negative Criteria [NAC-xx] in pm_spec.md.
 2. 1:1 Parity between pm_spec.md and code_qa_status.md.
 3. Structural integrity of arch_schema.md (Data Models & Council Consensus Resolution).
-4. Token block structure in design_tokens.md.
+4. Token block structure in design_tokens.md and Art Director critique resolution gate.
 """
 
 import sys
@@ -64,6 +64,8 @@ def validate_blackboard(bb_dir: Path):
         design_content = design_path.read_text(encoding="utf-8")
         if "--" not in design_content and ":root" not in design_content:
             warnings.append("design_tokens.md: No CSS custom properties (variables) detected.")
+        if not re.search(r"##\s*.*(?:Art Director|Anti-Slop|Critique Resolution)", design_content, re.IGNORECASE) and "DESIGN_CONSENSUS_LOCKED" not in design_content:
+            warnings.append("design_tokens.md: Missing 'Art Director & Anti-Slop Critique Resolution' section or DESIGN_CONSENSUS_LOCKED gate.")
 
     # 4. Validate code_qa_status.md and check parity with pm_spec.md
     if not qa_path.exists():

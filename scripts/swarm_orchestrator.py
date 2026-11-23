@@ -38,7 +38,7 @@ CHANNELS = {
         "name": "council",
         "description": "Spec staging, architectural threat modeling, STRIDE verification, and consensus locking.",
         "phases": ["Phase 1: PM Spec Staging", "Phase 2: LLM Council Consensus Gate"],
-        "default_participants": ["pm-agent", "architect-agent", "council-challenger", "design-agent"],
+        "default_participants": ["pm-agent", "architect-agent", "council-challenger", "design-agent", "design-critic"],
         "primary_contracts": [
             ".agents/blackboard/pm_spec.md",
             ".agents/blackboard/arch_schema.md",
@@ -174,10 +174,19 @@ PERSONA_CONFIGS = {
         "canonical_name": "design-agent",
         "spec_file": "agents/design-agent.md",
         "default_channel": "council",
-        "default_model": "gemini-3.8-flash-low",
+        "default_model": "gemini-3.8-flash-high",
         "default_workspace": "inherit",
         "primary_contract": ".agents/blackboard/design_tokens.md",
         "summary": "Anti-Slop Design Trinity lead; authors 3-tier CSS tokens and typography.",
+    },
+    "design-critic": {
+        "canonical_name": "design-critic",
+        "spec_file": "agents/design-critic.md",
+        "default_channel": "council",
+        "default_model": "gemini-3.8-flash-high",
+        "default_workspace": "inherit",
+        "primary_contract": ".agents/blackboard/design_tokens.md",
+        "summary": "Art Director and Anti-Slop Design Challenger; audits design_tokens.md in Phase 2 #council.",
     },
     "docs-agent": {
         "canonical_name": "docs-agent",
@@ -245,6 +254,8 @@ ALIASES = {
     "media-intel-agent": "media-intel-agent",
     "design": "design-agent",
     "design-agent": "design-agent",
+    "critic": "design-critic",
+    "design-critic": "design-critic",
     "docs": "docs-agent",
     "docs-agent": "docs-agent",
     "analytics": "analytics-agent",
@@ -378,9 +389,18 @@ def generate_brief(
         )
     elif canonical_name == "design-agent":
         brief_parts.append(
-            f"You are design-agent in Wayne Custom Swarm. Load spec at {spec_file}. Model Tier: {effective_model}. "
-            f"Strictly obey blackboard contracts in .agents/blackboard/ (author design_tokens.md with 3-tier CSS custom properties [primitive -> semantic -> component], OKLCH scales, and optical typography; zero runtime code). "
-            f"Communicate on channel '#{effective_channel}'. Always use explicit mentions ('@<agent_name>'), cite sequence numbers ('#<seq>'), and report completion to '@coordinator [done]' with token telemetry (Model Used, Input Tokens, Output Tokens, Cache Read Tokens, Total Tokens)."
+            f"You are design-agent in Wayne Custom Swarm. Load spec at {spec_file}. Model Tier: {effective_model} (High Thinking). "
+            f"Mandate: Explore 3 distinct, project-appropriate aesthetic directions and author bespoke 3-tier CSS custom properties [primitive -> semantic -> component], OKLCH scales, and optical typography in .agents/blackboard/design_tokens.md; zero runtime code. "
+            f"Collaborate with and defend aesthetic choices against design-critic on channel '#{effective_channel}'. "
+            f"Always use explicit mentions ('@<agent_name>'), cite sequence numbers ('#<seq>'), and report completion to '@coordinator [done]' with token telemetry (Model Used, Input Tokens, Output Tokens, Cache Read Tokens, Total Tokens)."
+        )
+    elif canonical_name == "design-critic":
+        brief_parts.append(
+            f"You are design-critic in Wayne Custom Swarm. Load spec at {spec_file}. Model Tier: {effective_model} (High Thinking). "
+            f"Act as Ruthless Art Director and Anti-Slop Design Challenger on channel '#{effective_channel}'. "
+            f"Audit .agents/blackboard/design_tokens.md authored by design-agent against the 4 Ruthless Filters (Domain Specificity, Card Grid Syndrome, OKLCH Color Physics & Perceptual Contrast, Themed Browser Surfaces) and enforce the craft floor. "
+            f"Issue structured challenge tags ([CRIT-SLOP-xx], [CRIT-COLOR-xx], [CRIT-TYPE-xx], [CRIT-SURF-xx]). "
+            f"Enforce the 2-turn debate limit. When all objections are resolved, verify DESIGN_CONSENSUS_LOCKED in design_tokens.md and report to '@coordinator [done] Consensus achieved on design_tokens.md' with token telemetry (Model Used, Input Tokens, Output Tokens, Cache Read Tokens, Total Tokens)."
         )
     else:
         brief_parts.append(
