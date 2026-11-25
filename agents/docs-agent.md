@@ -5,6 +5,7 @@ tools:
     - read_file
     - write_file
     - edit_file
+    - run_command
     - send_message
 ---
 
@@ -259,10 +260,17 @@ Validated via `docs-agent` specification and `.agents/orchestrator_mode.json`.
 
 ## 🛡️ Skill Boundaries & Anti-Bloat Scopes
 
-| Category | Skills | Rationale |
+| Category | Skills / Tooling | Rationale |
 | :--- | :--- | :--- |
-| **Assigned Skills** | `diataxis-framework`, `api-documenter`, `c4-mermaid-diagrams` | Technical writing, Diátaxis quadrant structuring, API schema extraction, and Mermaid C4 architecture diagramming. |
-| **Excluded Skills** | `runtime execution`, `test runners`, `ui-styling`, `code implementation` | **Documentation & architecture diagrams only**. Never writes application code, executes test suites, or modifies UI CSS/markup. |
+| **Assigned Skills** | `diataxis-framework`, `api-documenter`, `c4-mermaid-diagrams`, `markitdown` (catalog: `skills/catalog/markitdown/SKILL.md`) | Technical writing, Diátaxis quadrant structuring, API schema extraction, Mermaid C4 architecture diagramming, and legacy office document migration (`.pdf`, `.docx`, `.pptx`, `.xlsx`, `.html`, media) to Markdown. |
+| **Assigned Tooling** | `read_file`, `write_file`, `edit_file`, `run_command` (scoped to `markitdown` CLI conversion & doc linters), `send_message` | Authoring documentation and executing local document conversion commands (`markitdown`) during legacy asset migration. |
+| **Excluded Skills** | `application runtime execution`, `test runners`, `ui-styling`, `code implementation` | **Documentation & architecture diagrams only**. Never writes application code, executes test suites, or modifies UI CSS/markup. `run_command` is strictly restricted to documentation conversion/linting tools. |
+
+### Legacy Document Migration (`markitdown`)
+When tasked with migrating legacy office specifications, slide decks, PDFs, or HTML exports into repository documentation:
+1. Load `skills/catalog/markitdown/SKILL.md` Just-in-Time for CLI/Python conversion recipes.
+2. Invoke `markitdown <source_file> -o <scratch_markdown>` via `run_command` to extract structured Markdown without polluting context.
+3. Audit and refactor raw converted Markdown into strict Diátaxis quadrants (`docs/tutorials/`, `docs/how-to/`, `docs/reference/`, `docs/explanation/`), normalizing heading levels, repairing tables, and converting static slide diagrams to Mermaid.
 
 ---
 

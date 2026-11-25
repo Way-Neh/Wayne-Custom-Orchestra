@@ -2,7 +2,7 @@
   "version": "1.0.0",
   "catalog": "Wayne Custom Cold Catalog",
   "description": "Curated Cold Storage catalog of specialized agentic skills from awesome-claude-skills / agentic-awesome-skills for Just-in-Time (JIT) retrieval with zero context bloat.",
-  "updatedAt": "2026-10-16",
+  "updatedAt": "2026-11-25",
   "skills": [
     {
       "id": "docx",
@@ -179,6 +179,18 @@
       "status": "active",
       "local_path": ".agents/skills/impeccable/SKILL.md",
       "source_url": "local"
+    },
+    {
+      "id": "markitdown",
+      "name": "markitdown",
+      "category": "documentation",
+      "description": "Unified multi-format document conversion to Markdown (PDF, DOCX, PPTX, XLSX, HTML, CSV, JSON, images, audio) using Microsoft MarkItDown.",
+      "tags": ["markdown", "pdf", "docx", "pptx", "xlsx", "conversion", "ingestion", "ocr", "multimodal"],
+      "target_subagent": "docs-agent",
+      "status": "local",
+      "local_path": ".agents/skills/catalog/markitdown/SKILL.md",
+      "source_url": "https://github.com/microsoft/markitdown",
+      "url": "https://github.com/microsoft/markitdown"
     }
   ]
 }
